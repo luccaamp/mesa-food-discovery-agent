@@ -21,3 +21,13 @@ services:
         value: "20"
       - key: GEMINI_API_KEY
         sync: false
+      - key: LLM_FALLBACK_PROVIDERS
+        value: groq
+      - key: GROQ_MODEL
+        value: openai/gpt-oss-120b
+      - key: GROQ_CALLS_PER_MINUTE
+        value: "10"
+      - key: GROQ_CALLS_PER_DAY
+        value: "300"
+      - key: GROQ_API_KEY
+        sync: false

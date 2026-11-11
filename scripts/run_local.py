@@ -14,6 +14,8 @@ ROOT = Path(__file__).resolve().parents[1]
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--no-llm", action="store_true", help="Use explicit glossary fallback only")
+    parser.add_argument("--cloud", action="store_true",
+                        help="Plan with Gemini, falling back to Groq (keys read from the environment); no local model")
     parser.add_argument("--port", type=int, default=8000)
     parser.add_argument("--stop-after", type=float, help="Stop after this many seconds for a lifecycle smoke check")
     args = parser.parse_args()
@@ -28,7 +30,15 @@ if __name__ == "__main__":
     children = []
     env = dict(os.environ)
     try:
-        if not args.no_llm:
+        if args.cloud:
+            available = [name for name, key in (("gemini", "GEMINI_API_KEY"), ("groq", "GROQ_API_KEY")) if env.get(key)]
+            if not available:
+                parser.error("Set GEMINI_API_KEY and/or GROQ_API_KEY first (see the key setup guide)")
+            env["LLM_PROVIDER"] = available[0]
+            env["LLM_MODEL"] = "gemini-3.1-flash-lite" if available[0] == "gemini" else ""
+            env["LLM_FALLBACK_PROVIDERS"] = ",".join(available[1:])
+            print("Providers: " + " -> ".join(available), flush=True)
+        elif not args.no_llm:
             if not runtime.is_file() or not model.is_file():
                 parser.error("Run scripts/fetch_local_llm.py first, or use --no-llm")
             from meal_discovery.dataset import file_hash

@@ -8,7 +8,8 @@ RUN npm run build
 FROM python:3.13-slim-bookworm
 ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 \
     MEAL_PUBLIC_MODE=1 LLM_PROVIDER=gemini LLM_MODEL=gemini-3.1-flash-lite \
-    GEMINI_CALLS_PER_MINUTE=4 GEMINI_CALLS_PER_DAY=20 PORT=10000 \
+    GEMINI_CALLS_PER_MINUTE=4 GEMINI_CALLS_PER_DAY=20 LLM_FALLBACK_PROVIDERS=groq \
+    GROQ_MODEL=openai/gpt-oss-120b GROQ_CALLS_PER_MINUTE=10 GROQ_CALLS_PER_DAY=300 PORT=10000 \
     MEAL_WEB_DIST=/app/apps/web/dist MEAL_EVALUATIONS_DIR=/app/evaluations/results \
     MEAL_CATALOG_INDEX=/app/data/processed/singapore-catalog-v1.sqlite \
     MEAL_SERVING_INDEX=/app/data/processed/singapore-serving-v1.sqlite

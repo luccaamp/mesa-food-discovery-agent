@@ -13,7 +13,8 @@ except ImportError as error:
 
 from meal_discovery.api import CatalogReader, create_app, get_reader
 from meal_discovery.api_models import AssistantRequest, IntentPlan
-from meal_discovery.assistant import PlannerUnavailable, run_assistant
+from meal_discovery.assistant import run_assistant
+from meal_discovery.llm import ProviderUnavailable
 from meal_discovery.catalog import build_catalog
 from meal_discovery.discovery import discover, expand_query
 from meal_discovery.serving import build_serving, recommend
@@ -121,7 +122,7 @@ class ProductTests(unittest.TestCase):
 
     def test_model_failure_is_disclosed_without_fake_llm_execution(self):
         planner = FixturePlanner()
-        with patch.object(planner,"plan",side_effect=PlannerUnavailable()):
+        with patch.object(planner,"plan",side_effect=ProviderUnavailable()):
             result = run_assistant(AssistantRequest(message="pizza"), self.reader, self.recommendations, planner=planner)
         self.assertEqual(result["planner"], "glossary_fallback")
         self.assertIsNone(result["model"])
@@ -149,7 +150,7 @@ class ProductTests(unittest.TestCase):
     def test_fallback_strips_structured_price_from_new_dish_keywords(self):
         planner = FixturePlanner()
         request = AssistantRequest(message="Quero chá com leite até 2 unidades normalizadas", context={"last_query": "chicken rice"})
-        with patch.object(planner, "plan", side_effect=PlannerUnavailable("network_error")):
+        with patch.object(planner, "plan", side_effect=ProviderUnavailable("network_error")):
             result = run_assistant(request, self.reader, self.recommendations, planner=planner)
         self.assertEqual(result["planner"], "glossary_fallback")
         self.assertEqual(result["tools"][0]["arguments"]["query"], "tea milk")

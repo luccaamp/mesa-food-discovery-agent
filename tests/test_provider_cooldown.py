@@ -4,7 +4,8 @@ import unittest
 from unittest.mock import patch
 from urllib.request import Request
 
-from meal_discovery.assistant import PlannerUnavailable, request_gemini
+from meal_discovery.llm import ProviderUnavailable
+from meal_discovery.llm.resilience import RetryPolicy, send
 from meal_discovery.cloud_limits import CallBudget, ProviderCooldown
 
 
@@ -46,16 +47,15 @@ class CooldownTests(unittest.TestCase):
     def test_blocked_call_does_not_spend_quota_or_contact_provider(self):
         state, budget = ProviderCooldown(), CallBudget()
         request = Request("https://example.invalid", data=b"{}")
-        with patch("meal_discovery.assistant.GEMINI_COOLDOWN", state), patch(
-                "meal_discovery.assistant.GEMINI_BUDGET", budget), patch(
-                "meal_discovery.assistant.urlopen", side_effect=TimeoutError()) as transport, patch(
-                "meal_discovery.assistant.sleep"):
+        with patch.dict("meal_discovery.llm.resilience.COOLDOWNS", {"gemini": state}), patch.dict("meal_discovery.llm.resilience.BUDGETS", {"gemini": budget}), patch(
+                "meal_discovery.llm.resilience.urlopen", side_effect=TimeoutError()) as transport, patch(
+                "meal_discovery.llm.resilience.sleep"):
             for _ in range(2):
-                with self.assertRaises(PlannerUnavailable) as error:
-                    request_gemini(request, 10, 20)
+                with self.assertRaises(ProviderUnavailable) as error:
+                    send("gemini", request, RetryPolicy(per_minute=10, per_day=20))
                 self.assertEqual(error.exception.attempts, 2)
-            with self.assertRaises(PlannerUnavailable) as error:
-                request_gemini(request, 10, 20)
+            with self.assertRaises(ProviderUnavailable) as error:
+                send("gemini", request, RetryPolicy(per_minute=10, per_day=20))
             self.assertEqual(error.exception.reason, "provider_cooldown")
             self.assertEqual(error.exception.attempts, 0)
             self.assertEqual(transport.call_count, 4)
@@ -64,12 +64,11 @@ class CooldownTests(unittest.TestCase):
     def test_success_breaks_failure_streak_and_quota_denial_is_neutral(self):
         state = ProviderCooldown()
         state.record("failure")
-        with patch("meal_discovery.assistant.GEMINI_COOLDOWN", state), patch(
-                "meal_discovery.assistant.GEMINI_BUDGET", CallBudget()), patch(
-                "meal_discovery.assistant.urlopen", return_value=BytesIO(b"{}")):
-            request_gemini(Request("https://example.invalid"), 1, 1)
-            with self.assertRaises(PlannerUnavailable):
-                request_gemini(Request("https://example.invalid"), 1, 1)
+        with patch.dict("meal_discovery.llm.resilience.COOLDOWNS", {"gemini": state}), patch.dict("meal_discovery.llm.resilience.BUDGETS", {"gemini": CallBudget()}), patch(
+                "meal_discovery.llm.resilience.urlopen", return_value=BytesIO(b"{}")):
+            send("gemini", Request("https://example.invalid"), RetryPolicy(per_minute=1, per_day=1))
+            with self.assertRaises(ProviderUnavailable):
+                send("gemini", Request("https://example.invalid"), RetryPolicy(per_minute=1, per_day=1))
         self.assertEqual(state.snapshot()["consecutive_failures"], 0)
         self.assertFalse(state.snapshot()["paused"])
 

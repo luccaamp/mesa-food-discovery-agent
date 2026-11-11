@@ -1,141 +1,143 @@
 # Mesa — food discovery agent
 
-Recomendação de refeições e busca conversacional com dados reais da Delivery Hero.
+[![CI](https://github.com/luccaamp/mesa-food-discovery-agent/actions/workflows/ci.yml/badge.svg)](https://github.com/luccaamp/mesa-food-discovery-agent/actions/workflows/ci.yml)
+[![Demo](https://img.shields.io/badge/demo-online-2e7d5b)](https://mesa-meal-discovery.onrender.com)
 
-**Entrega de 10/11:** assistente público passou em 10/10 contratos, com três
-inferências reais Gemini e 36 ocorrências de itens conferidas. Contingência:
-52/52 cenários com timeout injetado. As configurações testadas do avaliador de relevância
-reprovaram; a última parou em 15/16 controles, antes dos 32 exigidos.
-[Correções e novos experimentos](docs/RELEVANCE_REASONING_2026-11-10.md). [Entrega e reprodução](docs/RELEASE_1.md).
+**Mesa ajuda quem não sabe o que pedir a decidir mais rápido.** Combina o
+histórico real de pedidos, um catálogo de **1.066.840 produtos** e um assistente
+com LLM que entende pedidos em português e inglês, consulta o catálogo por
+ferramentas e mostra a evidência de cada sugestão. Nenhum item, preço ou
+explicação é inventado pelo modelo.
 
-[Avaliação automatizada: base científica, Inspect AI e calibração do juiz](docs/AUTOMATED_EVALUATION.md).
+Construído sobre o [Delivery Hero Recommendation Dataset](https://github.com/deliveryhero/dh-reco-dataset)
+(DHRD, RecSys 2023), dados reais de Singapura: 4,4 milhões de pedidos nas três
+cidades do dataset, com procedência verificada por hash.
 
-**Avaliação executável sem participantes humanos:** 40 cenários de desenvolvimento
-em oito perfis, três repetições, 120/120 episódios após correções; 20 contratos
-reservados congelados antes da execução, 60/60 naquela versão. Identidade, preços,
-filtros, contexto e sementes são conferidos por código no catálogo oficial.
-Simulação por outro modelo e calibração de juízes têm resultados e limitações
-separados; concordância de IA não é tratada como satisfação humana.
+[Abrir a demo](https://mesa-meal-discovery.onrender.com) (a primeira abertura
+pode levar cerca de um minuto, porque o servidor gratuito hiberna) ·
+[Arquitetura](docs/ARCHITECTURE.md) · [Avaliação](docs/AUTOMATED_EVALUATION.md) ·
+[Roadmap](docs/ROADMAP.md) · [API](apps/api/README.md)
 
-**[Abrir o Mesa](https://mesa-meal-discovery.onrender.com): catálogo real, assistente e laboratório.** Explore 1.066.840 produtos de Singapura e selecione referências. Recomendações usam associações em pedidos reais, com fallback explícito de popularidade. A versão local usa Qwen; a pública usa Gemini 3.1 Flash-Lite, verificado com chamadas reais. [Evidência Gemini](evaluations/results/gemini-live-v1.json). O n8n já consolidou os experimentos em uma execução real. [Executar localmente](docs/PRODUCT_GUIDE.md) · [Estado e limites](docs/PROJECT_STATUS.md) · [API](apps/api/README.md).
+## O que ele faz
 
-**Nesta máquina, dados, modelos e build já estão preparados.** Para abrir:
+- **Busca conversacional:** "quero um café gelado até 0,005" vira uma busca no
+  catálogo com filtro de preço; "agora chá com leite" troca o prato e mantém o filtro.
+- **Recomendação:** a partir dos itens escolhidos, sugere o que costuma ser
+  pedido junto em cestas reais, com fallback explícito para popularidade.
+- **Evidência à vista:** cada card mostra de onde veio (busca, coocorrência em
+  cestas ou popularidade) e os limites do dado histórico.
+- **Guardrails:** recusa garantir alergênicos ou dieta, ignora instruções
+  embutidas em mensagens e nunca converte o preço normalizado em moeda.
 
-```powershell
-.venv\Scripts\python scripts/run_local.py
+## Arquitetura
+
+```mermaid
+flowchart LR
+  UI[React + TypeScript] -->|HTTP| API[FastAPI]
+  API --> SVC[Assistente<br/>políticas + planejamento]
+  SVC --> PORT{{Porta ChatModel}}
+  PORT --> GEM[Gemini]
+  PORT --> GROQ[Groq<br/>gpt-oss-120b]
+  PORT --> QWEN[Qwen local<br/>llama.cpp]
+  SVC --> TOOLS[Ferramentas somente leitura]
+  TOOLS --> CAT[(Catálogo<br/>SQLite FTS5/BM25)]
+  TOOLS --> REC[(Recomendador<br/>coocorrência + popularidade)]
+  PIPE[Pipeline de dados<br/>hashes, quarentena, cortes temporais] --> CAT
+  PIPE --> REC
+  EVAL[Avaliação automatizada<br/>contratos, simulação, juízes] -.-> API
 ```
 
-Acessar [Mesa local](http://127.0.0.1:8000). Ctrl+C encerra o modelo e a API.
+- **Hexagonal no núcleo de IA:** o assistente depende de uma porta `ChatModel`.
+  Gemini, Groq, Qwen local e OpenAI são adaptadores intercambiáveis
+  ([`src/meal_discovery/llm/`](src/meal_discovery/llm/)), com tool calling e
+  saída estruturada no mesmo contrato.
+- **Resiliência por provedor:** no máximo duas tentativas dentro de um
+  orçamento de tempo, cota local, pausa após falhas seguidas e **fallback
+  automático Gemini → Groq** antes de cair no glossário sem LLM.
+- **Respostas ancoradas:** o LLM só escolhe uma ação permitida e palavras-chave;
+  itens, preços e motivos vêm das ferramentas. Políticas determinísticas
+  (restrição alimentar, injeção, moeda) rodam antes de qualquer modelo.
+- **Dados com procedência:** ZIPs oficiais conferidos por SHA-256, pedidos
+  inconsistentes em quarentena, treino até o dia 61 e teste oficial separado.
 
-**Publicado no Render Free:** interface, API e os dois artefatos reais somente
-leitura, verificados por HTTP. Sem a chave Gemini, a conversa informa o uso do
-glossário explícito. A primeira abertura após ociosidade pode demorar cerca de um
-minuto. Qwen, preparação e n8n continuam locais.
-[Arquitetura, reprodução e limites](docs/CLOUD_DEPLOYMENT.md).
+## Resultados
 
-A avaliação de recomendação compara três modelos em 175.358 clientes. O piloto semântico/híbrido cobre 10.000 produtos e permanece experimental. Nenhuma métrica foi calculada nos pedidos de teste oficial. A [avaliação do assistente](evaluations/results/product-flow-v2.json) verifica contratos de desenvolvimento, sem comprovar qualidade humana ou generalização.
+**Recomendação** (validação interna, 175.358 clientes, primeira cesta futura):
 
-**Como usar:** busque um prato → abra suas evidências → marque até cinco referências
-→ clique em “Descobrir sugestões”. A conversa também aceita “Recomende algo” sem
-modelo externo. Preços pequenos são preservados (`0,002 u.n.`); “Zero na fonte”
-não significa gratuito. [Critérios verificados e pendências](docs/PRODUCT_ACCEPTANCE.md).
-
-[Quais arquivos usar, comparação e plano de migração](docs/OFFICIAL_DATA_MIGRATION.md).
-
-| Referência | Recall@10 | NDCG@10 |
+| Modelo | Recall@10 | NDCG@10 |
 | --- | ---: | ---: |
-| Popularidade global | 0,2606% | 0,001243 |
-| Repetição pessoal | **14,4442%** | **0,115707** |
-| Similaridade por cesta | 6,2262% | 0,039786 |
+| Popularidade global | 0,26% | 0,0012 |
+| Similaridade por cesta | 6,23% | 0,0398 |
+| Repetição pessoal | **14,44%** | **0,1157** |
 
-Métricas offline sobre a primeira cesta futura de cada cliente: treino 0–61, validação 62–75. Sem filtro geográfico e sem comprovação de impacto comercial. [Protocolo e limitações](docs/EXPERIMENT_002.md). O [Experimento 001](docs/EXPERIMENT_001.md) preserva resultados históricos do espelho, com outra janela de validação.
+**Assistente:**
 
-## Produto proposto
+| Avaliação | Resultado |
+| --- | --- |
+| Cenários de desenvolvimento (8 perfis × 3 repetições) | 120/120 |
+| Contratos reservados, congelados antes da execução | 60/60 |
+| Aceitação pública com Gemini real | 10/10, 36 itens conferidos no catálogo |
+| Contingência com provedor fora do ar | 52/52 cenários, 282 itens conferidos |
 
-Explorar um catálogo histórico, receber recomendações e refinar preferências por conversa, com explicações ligadas às evidências disponíveis. Um laboratório apresenta comparações de modelos, qualidade do assistente, custo e latência. Projeto independente, sem vínculo com a Delivery Hero.
+Cada item citado é conferido por código contra o catálogo oficial. Os
+resultados negativos ficam registrados: o piloto de embeddings E5 não superou
+a busca lexical com glossário e não foi promovido
+([Experimento 003](docs/EXPERIMENT_003.md)), e os juízes LLM de relevância não
+passaram na calibração ([decisão](docs/RELEVANCE_REASONING_2026-11-10.md)).
 
-## Começar
+## Stack
 
-Python 3.11 ou superior. O auditor inicial usa somente a biblioteca padrão.
+Python 3.11+, FastAPI, Pydantic, SQLite FTS5 · React, TypeScript, Vite ·
+Gemini, Groq, llama.cpp (Qwen 2.5), ONNX Runtime (E5) · Inspect AI, n8n ·
+Docker, Render, GitHub Actions.
 
-```sh
-python -m venv .venv
-# Windows PowerShell
-.venv\Scripts\Activate.ps1
-# Linux/macOS: source .venv/bin/activate
-python -m pip install -e .
-python -m meal_discovery --help
-python -m unittest discover -s tests -v
-```
+## Rodar localmente
 
-Com os ZIPs oficiais na raiz do projeto:
-
-```sh
-python scripts/verify_official_archives.py
-python scripts/audit_official_data.py
-```
-
-O primeiro comando confere os hashes e extrai os quinze CSVs `.txt` para `data/raw/dhrd-official-v1/`. O segundo audita os três splits e compara Singapura com a cópia histórica local. O relatório oficial já executado está versionado em `evaluations/results/`. Não usa o teste para medir ou ajustar modelos. [Fontes e papéis](configs/official-source-selection-v1.json).
-
-Para reproduzir a aquisição e o Experimento 001 históricos:
+Pré-requisitos: Python 3.11+, Node 20+ e os artefatos de dados (o download é
+automático no Docker; veja [o guia do produto](docs/PRODUCT_GUIDE.md)).
 
 ```sh
-python scripts/fetch_hyperhawkes.py
-python scripts/fetch_nearbite_sg.py
-python scripts/audit_nearbite_sg.py
-python -m meal_discovery prepare-singapore --output data/processed/singapore-v1.sqlite
-python -m meal_discovery validate-singapore --database data/processed/singapore-v1.sqlite --output reports/singapore-validation-v1.json
+python -m venv .venv && .venv/Scripts/activate   # Linux/macOS: source .venv/bin/activate
+pip install -e ".[api,test]"
+npm --prefix apps/web ci && npm --prefix apps/web run build
+
+python scripts/run_local.py --cloud    # Gemini -> Groq, chaves lidas do ambiente
+python scripts/run_local.py            # Qwen local via llama.cpp
+python scripts/run_local.py --no-llm   # só glossário, sem LLM
 ```
 
-O primeiro downloader fixa revisão e hash Git do derivado HyperHawkes. O segundo obtém as três tabelas públicas de Singapura (419.360.922 bytes), confere tamanho/cabeçalho e registra SHA-256. Os arquivos ficam em `data/raw/`, ignorado pelo Git. O auditor examina todas as linhas e relações, sem publicar registros individuais. Escolha outro `--output` para repetir uma auditoria já salva.
+Abra http://127.0.0.1:8000. Com Docker: `docker build -t mesa . && docker run -p 10000:10000 -e GEMINI_API_KEY -e GROQ_API_KEY mesa`.
 
-A cópia de Singapura tem pedidos dos dias relativos 0–75 e inclui preço normalizado, categoria de culinária e geohash; coordenadas adicionais foram derivadas do geohash pelo autor do espelho. As 41 linhas de itens sem cadastro levaram à quarentena dos 35 pedidos afetados por inteiro. Fontes brutas permanecem intactas. Não afirmar equivalência byte a byte ao pacote original. Ver [procedência e limites](docs/DATA_ACCESS.md) e [busca pela distribuição completa](docs/SOURCE_SEARCH_2026-11-06.md).
-
-O protocolo versionado usa treino nos dias 0–61, validação nos dias 62–68 e reserva 69–75 para teste. Os comandos protegem saídas existentes; para repetir, escolha novos nomes de banco e relatório.
-
-**Política de dados reais:** comandos públicos de preparação e benchmark rejeitam fontes marcadas como sintéticas. O comando `demo` foi removido. Pequenas fixtures inventadas ficam exclusivamente em `tests/`; não há fallback sintético no produto.
+Testes:
 
 ```sh
-python -m meal_discovery audit --input-dir data/raw --output reports/data-audit.json
+python -m unittest discover -s tests          # aplicação
+npm --prefix apps/web test                    # interface
 ```
-
-O comando registra hashes, cabeçalhos, linhas, células vazias e larguras inconsistentes, sem exportar valores das linhas. Use `--delimiter` e `--encoding` se necessário. Não substitui auditoria relacional ou temporal. Nenhum CSV encontrado resulta em erro explícito, sem relatório de sucesso vazio.
-
-A preparação relacional usa um mapeamento explícito de colunas, preserva produtos por estabelecimento e rejeita pedidos inconsistentes ou referências ausentes. O benchmark compara popularidade, repetição e similaridade colaborativa, com Recall@K, NDCG@K e análise de clientes novos. Consulte [comandos, contratos e limites](docs/DATA_PIPELINE.md) antes de configurar uma base real. Relatórios e bancos existentes não são sobrescritos.
 
 ## Estrutura
 
 ```text
-apps/api/           instruções e contrato OpenAPI da API de catálogo
-apps/web/           interface React/TypeScript: catálogo, assistente e laboratório
-src/meal_discovery/ auditoria, importação, recomendação e avaliação
-configs/           exemplo de mapeamento explícito de CSVs
-data/              obtenção e armazenamento local, ignorado no Git
-models/            documentação de artefatos futuros
-evaluations/       protocolo e exemplos de casos de desenvolvimento
-prompts/           documentação do prompt de planejamento implementado
-workflows/n8n/     workflow real de consolidação de experimentos
-docs/              plano, arquitetura, design e evidências
-reports/           relatórios locais, ignorados no Git
-tests/             verificações de integridade do auditor
+src/meal_discovery/
+  llm/            porta ChatModel, adaptadores, resiliência e roteamento entre provedores
+  assistant.py    serviço do assistente: políticas, planejamento e ferramentas
+  planner.py      planejamento de intenção com saída estruturada
+  api.py          FastAPI: catálogo, recomendação, assistente e operações
+  catalog.py      índice FTS5/BM25 do catálogo
+  serving.py      recomendação por coocorrência e popularidade
+  singapore.py    preparação dos dados oficiais
+apps/web/         interface React/TypeScript
+evaluations/      suítes de conversa, simulação de usuários e calibração de juízes
+scripts/          preparação, verificação e execução
+docs/             arquitetura, experimentos, decisões e roadmap
 ```
 
-## Documentação
+## Limitações
 
-- [Roadmap da versão 2](docs/ROADMAP.md)
-- [Primeiro experimento real e análise de erros](docs/EXPERIMENT_001.md)
-- [Arquitetura e decisões](docs/ARCHITECTURE.md)
-- [Experiência e direção visual](docs/DESIGN.md)
-- [Protocolo de avaliação](evaluations/README.md)
-- [Dados, procedência e limitações](data/README.md)
-- [Pipeline e benchmark executáveis](docs/DATA_PIPELINE.md)
-- [Explicação da implementação para estudo](docs/LEARNING.md)
-- [Registro de decisões](docs/DECISIONS.md)
+O catálogo é histórico: não há estoque, entrega ou compra. Preços são
+normalizados pelo dataset, sem moeda. Nomes de produtos não comprovam
+ingredientes ou alergênicos, e o Mesa não faz essa garantia. As avaliações são
+automatizadas; satisfação de pessoas reais não foi medida.
 
-As funcionalidades são registradas com execução e evidência. O produto público usa busca textual com glossário explícito e planejamento por Gemini, com alternativa por glossário em falhas. O Qwen foi executado localmente; o piloto de embeddings não foi promovido. A implantação pública foi concluída. Julgamento semântico calibrado e comparação comercial entre provedores continuam pendentes; não há alegação de validação humana.
-
-## Fontes
-
-[DHRD e instruções de acesso](https://github.com/deliveryhero/dh-reco-dataset) · [Artigo RecSys 2023](https://doi.org/10.1145/3604915.3610242)
-
-Código sob MIT; dados e modelos de terceiros mantêm seus próprios termos. Nenhum dataset acompanha este repositório.
+Projeto independente, sem vínculo com a Delivery Hero. Código sob licença MIT;
+dados e modelos de terceiros mantêm seus próprios termos.

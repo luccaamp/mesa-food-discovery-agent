@@ -1,38 +1,76 @@
-# Arquitetura e evolução
+# Arquitetura
 
-Produto atual: React/TypeScript servido pelo FastAPI, com o mesmo catálogo SQLite usado pelas ferramentas. Descoberta aplica glossário PT/EN explícito. O assistente usa uma chamada estruturada ao Qwen local via llama.cpp, valida um plano limitado e executa busca ou recomendação somente leitura. A resposta factual é montada pelos campos reais, sem geração livre de itens. O artefato de recomendação foi ajustado até o dia 61 e sua origem é conferida contra a do catálogo. A automação n8n consulta resultados versionados e produz Markdown. [Guia e limites](PRODUCT_GUIDE.md).
+## Visão geral
 
-Dados e modelos: auditoria oficial, preparação de Singapura em SQLite, contexto/quarentena, validação de três recomendadores, FTS5/BM25 e API FastAPI. A validação interna oficial usou 175.358 clientes. Embeddings E5 via ONNX e busca híbrida RRF permanecem em piloto de 10.000 produtos, separados da busca do produto. Fixtures sintéticas existem somente em testes.
+O Mesa é um monólito modular em Python servido por FastAPI, com uma interface
+React/TypeScript empacotada no mesmo container. O núcleo de IA segue
+portas e adaptadores: o assistente depende de contratos, não de provedores.
 
-Origem: a distribuição oficial completa foi recebida, verificada e auditada em 7/11/2026. `official-source-selection-v1.json` registra os papéis dos quinze arquivos. O novo adaptador lê os originais com teste oficial fisicamente separado. O adaptador histórico continua disponível para reproduzir o Experimento 001. [Migração](OFFICIAL_DATA_MIGRATION.md) e [Experimento 002](EXPERIMENT_002.md).
-
-Fluxo executável atual: CSVs reais fixados por SHA-256 → normalização e quarentena por pedido → SQLite somente leitura para análise → perfis de treino congelados → popularidade/repetição/cosseno por cesta → relatório de validação. Contextos preservam geohash, rede e dia da semana para próximas etapas; ainda não são filtros de candidatos. SQLite foi escolhido para integridade e transações sem dependência de execução adicional; a arquitetura abaixo permanece a visão de evolução.
-
-```mermaid
-flowchart LR
-  D[DHRD obtido da fonte] --> A[Auditoria e contratos]
-  A --> P[Parquet e DuckDB]
-  P --> T[Treino e avaliação temporal]
-  P --> S[Índices lexical e semântico]
-  T --> R[Recomendador versionado]
-  S --> F[Funções de domínio]
-  R --> F
-  F --> API[FastAPI]
-  F --> AG[Agente com ferramentas]
-  AG --> API
-  API --> UI[React e TypeScript]
-  T --> E[Artefatos de avaliação]
-  AG --> E
-  E --> N[n8n: validação e relatório]
-  F -. extensão .-> MCP[Adaptador MCP]
+```text
+Interface (React)        apps/web
+      │ HTTP/JSON
+Entrada (FastAPI)        api.py, api_models.py, cloud_limits.py
+      │
+Aplicação                assistant.py   políticas → planejamento → ferramentas
+                         planner.py     intenção com saída estruturada
+      │ porta ChatModel           │ ferramentas somente leitura
+Adaptadores LLM          llm/      Catálogo e recomendação
+  gemini.py                          catalog.py   SQLite FTS5/BM25
+  openai_compatible.py               serving.py   coocorrência + popularidade
+    (Groq, Qwen local, OpenAI)       discovery.py glossário PT/EN e políticas
+  resilience.py, registry.py
+      │
+Dados offline            dataset.py, singapore.py, benchmark.py, deployment.py
 ```
 
-Python para dados e modelos; DuckDB/Parquet são opções futuras; FastAPI/Pydantic já servem os contratos de catálogo. React/TypeScript e tokens CSS permanecem previstos para interface. O diagrama mostra a evolução proposta, incluindo partes futuras. As dependências de API e testes estão fixadas em `requirements-api.lock` como constraints de versões, sem hashes de distribuição.
+## Fluxo de uma mensagem
 
-A API compartilha funções de domínio com a CLI, abre conexões SQLite somente leitura por operação e serve busca, detalhe, culinárias e procedência. Validação rejeita parâmetros desconhecidos, limites inválidos e valores de preço não finitos. Base ausente, inválida ou sintética retorna 503. A prontidão verifica estrutura e metadados declarados, sem recalcular todo o hash por requisição. Logs locais omitem texto da busca, com IDs de requisição e duração. [Execução e limites](../apps/api/README.md).
+1. **Políticas determinísticas** rodam primeiro: pedidos de garantia alimentar,
+   tentativas de injeção, saudações e refinamentos de preço não chegam ao modelo.
+2. **Planejamento:** uma chamada com saída estruturada (`PLAN_SCHEMA`) escolhe
+   `search_catalog`, `recommend_items` ou `clarify` e palavras-chave em inglês.
+   O texto do usuário é tratado como dado, não como instrução.
+3. **Ferramentas:** a busca e a recomendação leem o catálogo em modo somente
+   leitura. A resposta é montada a partir desses resultados.
+4. **Rastro:** a resposta inclui ferramentas chamadas, argumentos, duração,
+   provedor que respondeu, tokens e, se houve, o motivo do fallback.
 
-Contratos candidatos: `search_catalog(query, filters, limit)`, `recommend(profile_id, filters, limit)`, `get_item(item_id)`, `get_evaluation(run_id)`. Saídas terão IDs, metadados, origem, versão e avisos de cobertura. Nunca aceitar SQL, código arbitrário ou URLs fornecidas pelo LLM para execução.
+## Camada de LLM
 
-Separar os modelos de recuperação/ranking do modelo de linguagem. A interface consulta o mesmo serviço usado pelo agente, permitindo comparar filtros convencionais com conversa. Pontuação de ranking não será apresentada como probabilidade de satisfação.
+- `types.py` define a porta `ChatModel` e o formato neutro de mensagens,
+  `ToolSpec` e `ToolCall`. Tool calling e saída estruturada usam o mesmo contrato
+  em todos os provedores.
+- `gemini.py` traduz para a API do Gemini, incluindo as *thought signatures*
+  que o Gemini 3 exige devolver entre turnos com ferramentas.
+- `openai_compatible.py` atende Groq, o servidor llama.cpp local (Qwen) e a
+  OpenAI pela API Chat Completions. O endpoint local só aceita loopback.
+- `resilience.py` aplica, por provedor: no máximo duas tentativas dentro de 45
+  segundos, retry só para HTTP transitório e um timeout, cota local por minuto
+  e por dia, e pausa de 60 segundos após duas falhas seguidas (com uma única
+  sonda de recuperação). Cada tentativa conta na cota, porque uma tentativa
+  interrompida pode ter sido cobrada.
+- `registry.py` monta o provedor principal e os fallbacks a partir do ambiente
+  (`LLM_PROVIDER`, `LLM_FALLBACK_PROVIDERS`). Se todos falharem, o assistente
+  usa o glossário explícito e informa o motivo sanitizado.
 
-Registrar run_id, versões, ferramenta, duração, tokens/custo quando disponíveis e erros. Remover credenciais e limitar persistência do conteúdo de conversa. Incluir modo sem LLM para falhas ou orçamento esgotado. Resultados sintéticos de desenvolvimento serão identificados e separados dos resultados com DHRD.
+Nenhum log contém corpo de resposta do provedor, URL com parâmetros ou chave.
+
+## Dados
+
+ZIPs oficiais do DHRD conferidos por SHA-256 → normalização com quarentena
+por pedido → SQLite somente leitura → perfis de treino (dias 0–61) → índices de
+serviço. O teste oficial (dias 76–90) fica fisicamente separado e não foi usado
+para ajustar modelos. Os artefatos públicos contêm só catálogo, popularidade e
+vizinhança entre itens: nenhuma tabela individual de pedido ou cliente.
+
+## Decisões
+
+| Decisão | Motivo |
+| --- | --- |
+| SQLite FTS5 em vez de banco vetorial | A busca lexical com glossário venceu o piloto E5 no mesmo protocolo |
+| Monólito modular | Um container cabe na camada gratuita; as portas permitem extrair serviços depois |
+| LLM só planeja, não responde fatos | Elimina itens e preços inventados; a resposta é verificável |
+| Fallback entre provedores gratuitos | A camada gratuita tem cotas e quedas; um segundo provedor mantém a inferência |
+
+A evolução planejada (agente com várias etapas, canal WhatsApp, observabilidade)
+está no [roadmap](ROADMAP.md).

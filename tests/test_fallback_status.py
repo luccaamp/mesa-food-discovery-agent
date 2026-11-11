@@ -1,7 +1,8 @@
 import unittest
 from types import SimpleNamespace
 from meal_discovery.api_models import AssistantRequest, AssistantResponse
-from meal_discovery.assistant import PlannerUnavailable, run_assistant
+from meal_discovery.assistant import run_assistant
+from meal_discovery.llm import ProviderUnavailable
 
 
 class FallbackStatusTests(unittest.TestCase):
@@ -16,7 +17,7 @@ class FallbackStatusTests(unittest.TestCase):
                 provider = "gemini"
                 model = "fixture"
                 def plan(self, *args):
-                    raise PlannerUnavailable(reason)
+                    raise ProviderUnavailable(reason)
             with self.subTest(reason=reason):
                 result = run_assistant(AssistantRequest(message="pizza"), reader, lambda args: {}, planner=Planner())
                 parsed = AssistantResponse.model_validate(result)

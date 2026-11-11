@@ -24,7 +24,9 @@ from .api_models import (CuisinesResult, ErrorResponse, Health, ItemResult, Prov
 from .catalog import (CatalogUnavailable, catalog_cuisines, catalog_item,
                       catalog_metadata, search_catalog)
 from .discovery import discover
-from .assistant import GEMINI_COOLDOWN, GEMINI_MAX_ATTEMPTS, GEMINI_TOTAL_TIMEOUT, HttpPlanner, run_assistant
+from .assistant import run_assistant
+from .llm import describe, resilience
+from .planner import IntentPlanner
 from .serving import recommend
 from .cloud_limits import PublicDemoGuard
 
@@ -161,27 +163,31 @@ def create_app(index: Path | None = None) -> FastAPI:
     def system():
         from urllib.request import urlopen
         from urllib.parse import urlsplit
-        planner = HttpPlanner()
+        planner = IntentPlanner()
+        primary = planner.chat_model.models[0] if hasattr(planner.chat_model, "models") else planner.chat_model
+        providers = describe(planner.chat_model) if planner.chat_model else []
         available = False
-        if planner.provider == "local" and urlsplit(planner.endpoint).hostname in {"localhost", "127.0.0.1", "::1"}:
+        if planner.provider == "local" and urlsplit(primary.endpoint).hostname in {"localhost", "127.0.0.1", "::1"}:
             try:
-                with urlopen(planner.endpoint.rstrip("/") + "/health", timeout=1) as response:
+                with urlopen(primary.endpoint + "/health", timeout=1) as response:
                     available = response.status == 200
             except OSError:
                 pass
-        remote = planner.provider in {"gemini", "openai"}
+        remote = planner.provider in {"gemini", "groq", "openai"}
         status = "configured_unverified" if remote and planner.configured else "ready" if available else "unavailable"
-        cooldown = GEMINI_COOLDOWN.snapshot() if planner.provider == "gemini" else None
+        cooldown = providers[0].get("cooldown") if providers else None
+        configured_fallbacks = [entry for entry in providers[1:] if entry["configured"]]
         if cooldown and cooldown["paused"]:
-            status = "temporarily_unavailable"
+            status = "degraded" if configured_fallbacks else "temporarily_unavailable"
+        policy = resilience.RetryPolicy()
         commit = os.environ.get("RENDER_GIT_COMMIT", "")
-        return {"api_version": "0.8.0", "deployment_commit": commit if re.fullmatch(r"[0-9a-f]{40}", commit) else None,
+        return {"api_version": "0.9.0", "deployment_commit": commit if re.fullmatch(r"[0-9a-f]{40}", commit) else None,
                 "assistant": {"provider": planner.provider, "model": planner.model,
                 "available": available, "configured": planner.configured, "status": status,
-                "reliability": {"max_attempts": GEMINI_MAX_ATTEMPTS, "total_budget_seconds": GEMINI_TOTAL_TIMEOUT,
-                                "cooldown": cooldown}
-                               if planner.provider == "gemini" else None,
-                "openai_configured": bool(planner.key and planner.model and planner.provider == "openai")},
+                "reliability": {"max_attempts": policy.max_attempts, "total_budget_seconds": policy.total_timeout,
+                                "cooldown": cooldown} if remote else None,
+                "providers": providers,
+                "openai_configured": any(entry["provider"] == "openai" and entry["configured"] for entry in providers)},
                 "recommendations_ready": application.state.serving_index.is_file(),
                 "semantic_status": "experimental_pilot_not_used_by_product"}
 

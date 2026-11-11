@@ -13,7 +13,8 @@ sys.path.insert(0, str(ROOT / "evaluations"))
 from conversation_suite import verify_turn, validate_suite
 from meal_discovery.api import CatalogReader
 from meal_discovery.api_models import AssistantRequest
-from meal_discovery.assistant import PlannerUnavailable, run_assistant
+from meal_discovery.assistant import run_assistant
+from meal_discovery.llm import ProviderUnavailable
 from meal_discovery.catalog import catalog_item
 from meal_discovery.dataset import file_hash
 from meal_discovery.serving import recommend
@@ -24,7 +25,7 @@ class TimedOutPlanner:
     model = "injected-timeout-not-live-inference"
 
     def plan(self, message, context):
-        raise PlannerUnavailable("provider_timeout", attempts=2)
+        raise ProviderUnavailable("provider_timeout", attempts=2)
 
 
 def run(suite_path, output):

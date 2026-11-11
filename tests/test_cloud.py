@@ -15,7 +15,10 @@ from starlette.responses import JSONResponse
 from starlette.routing import Route
 
 from meal_discovery.api_models import AssistantContext, AssistantRequest
-from meal_discovery.assistant import HttpPlanner, PlannerUnavailable, retry_delay, run_assistant
+from meal_discovery.assistant import run_assistant
+from meal_discovery.llm import ProviderUnavailable
+from meal_discovery.llm.resilience import retry_delay
+from meal_discovery.planner import IntentPlanner
 from meal_discovery.cloud_limits import CallBudget, ProviderCooldown, PublicDemoGuard
 
 
@@ -25,10 +28,10 @@ class GeminiTests(unittest.TestCase):
             "GEMINI_API_KEY": "test-only-not-a-secret", "GEMINI_CALLS_PER_MINUTE": "4", "GEMINI_CALLS_PER_DAY": "20"})
         environment.start()
         self.addCleanup(environment.stop)
-        budget = patch("meal_discovery.assistant.GEMINI_BUDGET", CallBudget())
+        budget = patch.dict("meal_discovery.llm.resilience.BUDGETS", {"gemini": CallBudget()})
         budget.start()
         self.addCleanup(budget.stop)
-        cooldown = patch("meal_discovery.assistant.GEMINI_COOLDOWN", ProviderCooldown())
+        cooldown = patch.dict("meal_discovery.llm.resilience.COOLDOWNS", {"gemini": ProviderCooldown()})
         cooldown.start()
         self.addCleanup(cooldown.stop)
 
@@ -37,8 +40,8 @@ class GeminiTests(unittest.TestCase):
                 "usageMetadata": {"promptTokenCount": 12, "candidatesTokenCount": 8, "totalTokenCount": 20}}
 
     def test_key_in_header_bounded_schema_and_usage(self):
-        with patch("meal_discovery.assistant.urlopen", return_value=BytesIO(json.dumps(self.result()).encode())) as transport:
-            plan, usage = HttpPlanner().plan("arroz com frango", AssistantContext())
+        with patch("meal_discovery.llm.resilience.urlopen", return_value=BytesIO(json.dumps(self.result()).encode())) as transport:
+            plan, usage = IntentPlanner().plan("arroz com frango", AssistantContext())
         self.assertEqual(plan.query, "chicken rice")
         self.assertEqual(usage["total_tokens"], 20)
         request = transport.call_args.args[0]
@@ -54,13 +57,13 @@ class GeminiTests(unittest.TestCase):
     def test_incomplete_invalid_and_blocked_responses_fail_closed(self):
         for result in (self.result(finishReason="MAX_TOKENS"), self.result(finishReason="SAFETY"),
                        {"candidates": []}, {"candidates": None}, self.result(content={"parts": [{"text": "invalid"}]})):
-            with self.subTest(result=result), patch("meal_discovery.assistant.urlopen", return_value=BytesIO(json.dumps(result).encode())):
-                with self.assertRaises(PlannerUnavailable):
-                    HttpPlanner().plan("pizza", AssistantContext())
+            with self.subTest(result=result), patch("meal_discovery.llm.resilience.urlopen", return_value=BytesIO(json.dumps(result).encode())):
+                with self.assertRaises(ProviderUnavailable):
+                    IntentPlanner().plan("pizza", AssistantContext())
 
     def test_current_lite_model_does_not_receive_legacy_thinking_budget(self):
-        with patch.dict(os.environ, {"LLM_MODEL": "gemini-3.1-flash-lite"}), patch("meal_discovery.assistant.urlopen", return_value=BytesIO(json.dumps(self.result()).encode())) as transport:
-            plan, usage = HttpPlanner().plan("pizza", AssistantContext())
+        with patch.dict(os.environ, {"LLM_MODEL": "gemini-3.1-flash-lite"}), patch("meal_discovery.llm.resilience.urlopen", return_value=BytesIO(json.dumps(self.result()).encode())) as transport:
+            plan, usage = IntentPlanner().plan("pizza", AssistantContext())
         request = transport.call_args.args[0]
         self.assertIn("gemini-3.1-flash-lite:generateContent", request.full_url)
         self.assertEqual(json.loads(request.data)["generationConfig"]["thinkingConfig"], {"thinkingLevel": "minimal"})
@@ -69,17 +72,17 @@ class GeminiTests(unittest.TestCase):
 
     def test_provider_429_is_sanitized_and_no_secret_in_error(self):
         error = HTTPError("https://example.invalid", 429, "quota", {}, None)
-        with patch("meal_discovery.assistant.urlopen", side_effect=error):
-            with self.assertRaises(PlannerUnavailable) as raised:
-                HttpPlanner().plan("pizza", AssistantContext())
+        with patch("meal_discovery.llm.resilience.urlopen", side_effect=error):
+            with self.assertRaises(ProviderUnavailable) as raised:
+                IntentPlanner().plan("pizza", AssistantContext())
         self.assertNotIn("test-only", str(raised.exception))
         self.assertEqual(raised.exception.reason, "provider_http_429")
 
     def test_transient_503_recovers_once_and_counts_both_attempts(self):
         error = HTTPError("https://example.invalid", 503, "unavailable", {}, None)
         response = BytesIO(json.dumps(self.result()).encode())
-        with patch("meal_discovery.assistant.urlopen", side_effect=[error, response]) as transport, patch("meal_discovery.assistant.sleep") as pause:
-            plan, usage = HttpPlanner().plan("arroz com frango", AssistantContext())
+        with patch("meal_discovery.llm.resilience.urlopen", side_effect=[error, response]) as transport, patch("meal_discovery.llm.resilience.sleep") as pause:
+            plan, usage = IntentPlanner().plan("arroz com frango", AssistantContext())
         self.assertEqual(plan.query, "chicken rice")
         self.assertEqual(transport.call_count, 2)
         self.assertEqual(usage["provider_attempts"], 2)
@@ -88,51 +91,51 @@ class GeminiTests(unittest.TestCase):
         pause.assert_called_once_with(1)
 
     def test_repeated_transient_error_stops_at_two_attempts(self):
-        with patch("meal_discovery.assistant.urlopen", side_effect=HTTPError("https://example.invalid", 503, "unavailable", {}, None)) as transport, patch("meal_discovery.assistant.sleep"):
-            with self.assertRaises(PlannerUnavailable) as raised:
-                HttpPlanner().plan("pizza", AssistantContext())
+        with patch("meal_discovery.llm.resilience.urlopen", side_effect=HTTPError("https://example.invalid", 503, "unavailable", {}, None)) as transport, patch("meal_discovery.llm.resilience.sleep"):
+            with self.assertRaises(ProviderUnavailable) as raised:
+                IntentPlanner().plan("pizza", AssistantContext())
         self.assertEqual(raised.exception.reason, "provider_http_503")
         self.assertEqual(raised.exception.attempts, 2)
         self.assertEqual(transport.call_count, 2)
 
     def test_retry_cannot_bypass_daily_budget(self):
-        with patch.dict(os.environ, {"GEMINI_CALLS_PER_DAY": "1"}), patch("meal_discovery.assistant.urlopen", side_effect=HTTPError("https://example.invalid", 503, "unavailable", {}, None)) as transport, patch("meal_discovery.assistant.sleep"):
-            with self.assertRaises(PlannerUnavailable) as raised:
-                HttpPlanner().plan("pizza", AssistantContext())
+        with patch.dict(os.environ, {"GEMINI_CALLS_PER_DAY": "1"}), patch("meal_discovery.llm.resilience.urlopen", side_effect=HTTPError("https://example.invalid", 503, "unavailable", {}, None)) as transport, patch("meal_discovery.llm.resilience.sleep"):
+            with self.assertRaises(ProviderUnavailable) as raised:
+                IntentPlanner().plan("pizza", AssistantContext())
         self.assertEqual(raised.exception.reason, "local_quota")
         self.assertEqual(raised.exception.attempts, 1)
         self.assertEqual(transport.call_count, 1)
 
     def test_quota_and_auth_failures_never_retry(self):
         for code in (400, 401, 403, 404, 429):
-            with self.subTest(code=code), patch("meal_discovery.assistant.GEMINI_BUDGET", CallBudget()), patch("meal_discovery.assistant.urlopen", side_effect=HTTPError("https://example.invalid", code, "private body", {"Retry-After": "1"}, None)) as transport, patch("meal_discovery.assistant.sleep") as pause:
-                with self.assertRaises(PlannerUnavailable) as raised:
-                    HttpPlanner().plan("pizza", AssistantContext())
+            with self.subTest(code=code), patch.dict("meal_discovery.llm.resilience.BUDGETS", {"gemini": CallBudget()}), patch("meal_discovery.llm.resilience.urlopen", side_effect=HTTPError("https://example.invalid", code, "private body", {"Retry-After": "1"}, None)) as transport, patch("meal_discovery.llm.resilience.sleep") as pause:
+                with self.assertRaises(ProviderUnavailable) as raised:
+                    IntentPlanner().plan("pizza", AssistantContext())
                 self.assertEqual(raised.exception.attempts, 1)
                 self.assertEqual(transport.call_count, 1)
                 pause.assert_not_called()
 
     def test_retry_after_beyond_total_deadline_is_not_shortened(self):
         for header in ("120", "9" * 5000):
-            with self.subTest(header=header[:10]), patch("meal_discovery.assistant.urlopen", side_effect=HTTPError("https://example.invalid", 503, "unavailable", {"Retry-After": header}, None)) as transport, patch("meal_discovery.assistant.sleep") as pause:
-                with self.assertRaises(PlannerUnavailable):
-                    HttpPlanner().plan("pizza", AssistantContext())
+            with self.subTest(header=header[:10]), patch("meal_discovery.llm.resilience.urlopen", side_effect=HTTPError("https://example.invalid", 503, "unavailable", {"Retry-After": header}, None)) as transport, patch("meal_discovery.llm.resilience.sleep") as pause:
+                with self.assertRaises(ProviderUnavailable):
+                    IntentPlanner().plan("pizza", AssistantContext())
                 self.assertEqual(transport.call_count, 1)
                 pause.assert_not_called()
 
     def test_repeated_timeout_is_distinguished_and_bounded(self):
         from urllib.error import URLError
-        with patch("meal_discovery.assistant.urlopen", side_effect=URLError(TimeoutError("private details"))) as transport, patch("meal_discovery.assistant.sleep"):
-            with self.assertRaises(PlannerUnavailable) as raised:
-                HttpPlanner().plan("pizza", AssistantContext())
+        with patch("meal_discovery.llm.resilience.urlopen", side_effect=URLError(TimeoutError("private details"))) as transport, patch("meal_discovery.llm.resilience.sleep"):
+            with self.assertRaises(ProviderUnavailable) as raised:
+                IntentPlanner().plan("pizza", AssistantContext())
         self.assertEqual(raised.exception.reason, "provider_timeout")
         self.assertEqual(raised.exception.attempts, 2)
         self.assertEqual(transport.call_count, 2)
 
     def test_timeout_recovers_and_preserves_unknown_usage(self):
         response = BytesIO(json.dumps(self.result()).encode())
-        with patch("meal_discovery.assistant.urlopen", side_effect=[TimeoutError(), response]) as transport, patch("meal_discovery.assistant.sleep"):
-            plan, usage = HttpPlanner().plan("pizza", AssistantContext())
+        with patch("meal_discovery.llm.resilience.urlopen", side_effect=[TimeoutError(), response]) as transport, patch("meal_discovery.llm.resilience.sleep"):
+            plan, usage = IntentPlanner().plan("pizza", AssistantContext())
         self.assertEqual(plan.action, "search_catalog")
         self.assertEqual(usage["provider_attempts"], 2)
         self.assertEqual(usage["failed_attempts_usage_unknown"], 1)
@@ -143,29 +146,29 @@ class GeminiTests(unittest.TestCase):
         def stalled(*args, **kwargs):
             now[0] = 25.0
             raise TimeoutError()
-        with patch("meal_discovery.assistant.monotonic", side_effect=lambda: now[0]), patch("meal_discovery.assistant.urlopen", side_effect=stalled) as transport:
-            with self.assertRaises(PlannerUnavailable) as raised:
-                HttpPlanner().plan("pizza", AssistantContext())
+        with patch("meal_discovery.llm.resilience.monotonic", side_effect=lambda: now[0]), patch("meal_discovery.llm.resilience.urlopen", side_effect=stalled) as transport:
+            with self.assertRaises(ProviderUnavailable) as raised:
+                IntentPlanner().plan("pizza", AssistantContext())
         self.assertEqual(raised.exception.attempts, 1)
         self.assertEqual(transport.call_count, 1)
 
     def test_retry_honors_date_header_and_remaining_time(self):
-        with patch("meal_discovery.assistant.time", return_value=0):
+        with patch("meal_discovery.llm.resilience.time", return_value=0):
             self.assertEqual(retry_delay({"Retry-After": "Thu, 01 Jan 1970 00:00:05 GMT"}), 5)
         now = [0.0]
         def first_failure(*args, **kwargs):
             now[0] = 44.5  # Almost all of the total request budget has elapsed.
             raise HTTPError("https://example.invalid", 503, "unavailable", {}, None)
-        with patch("meal_discovery.assistant.monotonic", side_effect=lambda: now[0]), patch("meal_discovery.assistant.urlopen", side_effect=first_failure) as transport, patch("meal_discovery.assistant.sleep") as pause:
-            with self.assertRaises(PlannerUnavailable):
-                HttpPlanner().plan("pizza", AssistantContext())
+        with patch("meal_discovery.llm.resilience.monotonic", side_effect=lambda: now[0]), patch("meal_discovery.llm.resilience.urlopen", side_effect=first_failure) as transport, patch("meal_discovery.llm.resilience.sleep") as pause:
+            with self.assertRaises(ProviderUnavailable):
+                IntentPlanner().plan("pizza", AssistantContext())
         self.assertEqual(transport.call_count, 1)
         pause.assert_not_called()
 
     def test_fallback_logs_only_sanitized_failure_code(self):
         error = HTTPError("https://example.invalid?secret=test-only-not-a-secret", 404, "sensitive provider detail", {}, None)
         reader = SimpleNamespace(search=lambda params: {"items": [], "total_matches": 0})
-        with patch("meal_discovery.assistant.urlopen", side_effect=error), self.assertLogs("meal_discovery.assistant", level="WARNING") as logs:
+        with patch("meal_discovery.llm.resilience.urlopen", side_effect=error), self.assertLogs("meal_discovery.assistant", level="WARNING") as logs:
             result = run_assistant(AssistantRequest(message="pizza"), reader, lambda args: {})
         self.assertEqual(result["planner"], "glossary_fallback")
         self.assertIn("provider_http_404", " ".join(logs.output))
@@ -174,15 +177,15 @@ class GeminiTests(unittest.TestCase):
         self.assertNotIn("sensitive provider detail", " ".join(logs.output))
 
     def test_missing_key_invalid_model_and_exhausted_budget_never_send(self):
-        with patch("meal_discovery.assistant.urlopen") as transport:
+        with patch("meal_discovery.llm.resilience.urlopen") as transport:
             for values in ({"GEMINI_API_KEY": ""}, {"LLM_MODEL": "../../invalid"}, {"GEMINI_CALLS_PER_DAY": "0"}):
-                with patch.dict(os.environ, values), self.assertRaises(PlannerUnavailable):
-                    HttpPlanner().plan("pizza", AssistantContext())
+                with patch.dict(os.environ, values), self.assertRaises(ProviderUnavailable):
+                    IntentPlanner().plan("pizza", AssistantContext())
             transport.assert_not_called()
-        with patch.dict(os.environ, {"GEMINI_CALLS_PER_DAY": "1"}), patch("meal_discovery.assistant.urlopen", return_value=BytesIO(json.dumps(self.result()).encode())) as transport:
-            HttpPlanner().plan("pizza", AssistantContext())
-            with self.assertRaises(PlannerUnavailable) as raised:
-                HttpPlanner().plan("pizza", AssistantContext())
+        with patch.dict(os.environ, {"GEMINI_CALLS_PER_DAY": "1"}), patch("meal_discovery.llm.resilience.urlopen", return_value=BytesIO(json.dumps(self.result()).encode())) as transport:
+            IntentPlanner().plan("pizza", AssistantContext())
+            with self.assertRaises(ProviderUnavailable) as raised:
+                IntentPlanner().plan("pizza", AssistantContext())
             self.assertEqual(raised.exception.reason, "local_quota")
             self.assertEqual(transport.call_count, 1)
 
@@ -191,8 +194,8 @@ class LocalSchemaTests(unittest.TestCase):
     def test_local_schema_uses_wrapper_understood_by_pinned_runtime(self):
         response = {"choices": [{"message": {"content": '{"action":"clarify","query":null}'}}]}
         with patch.dict(os.environ, {"LLM_PROVIDER": "local", "LLM_MODEL": "meal-local"}), patch(
-                "meal_discovery.assistant.urlopen", return_value=BytesIO(json.dumps(response).encode())) as transport:
-            HttpPlanner().plan("oi", AssistantContext())
+                "meal_discovery.llm.resilience.urlopen", return_value=BytesIO(json.dumps(response).encode())) as transport:
+            IntentPlanner().plan("oi", AssistantContext())
         payload = json.loads(transport.call_args.args[0].data)
         schema = payload["response_format"]["json_schema"]["schema"]
         self.assertEqual(schema["properties"]["action"]["enum"], ["search_catalog", "recommend_items", "clarify"])
