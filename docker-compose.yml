@@ -1,0 +1,32 @@
+# Full local stack: web app + API + agent, WhatsApp gateway and the queue.
+#   docker compose up --build
+# Secrets come from your shell environment (see .env.example); none are stored here.
+services:
+  redis:
+    image: redis:7.4-alpine
+    command: ["redis-server", "--save", "", "--appendonly", "no"]  # queue only, nothing persisted
+    ports: ["6379:6379"]
+
+  gateway:
+    build: ./services/whatsapp-gateway
+    environment:
+      PORT: "8090"
+      REDIS_URL: redis://redis:6379/0
+      WHATSAPP_APP_SECRET: ${WHATSAPP_APP_SECRET:-}
+      WHATSAPP_VERIFY_TOKEN: ${WHATSAPP_VERIFY_TOKEN:-}
+    ports: ["8090:8090"]
+    depends_on: [redis]
+
+  app:
+    build: .
+    environment:
+      REDIS_URL: redis://redis:6379/0
+      WHATSAPP_WORKER: "1"
+      WHATSAPP_ACCESS_TOKEN: ${WHATSAPP_ACCESS_TOKEN:-}
+      WHATSAPP_PHONE_NUMBER_ID: ${WHATSAPP_PHONE_NUMBER_ID:-}
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+      GROQ_API_KEY: ${GROQ_API_KEY:-}
+      MESA_PRIVACY_SALT: ${MESA_PRIVACY_SALT:-change-me-locally}
+      MEAL_PUBLIC_MODE: "0"
+    ports: ["10000:10000"]
+    depends_on: [redis]

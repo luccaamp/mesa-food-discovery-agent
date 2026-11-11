@@ -16,7 +16,7 @@ ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 \
 WORKDIR /app
 COPY pyproject.toml README.md LICENSE requirements-api.lock ./
 COPY src/ ./src/
-RUN pip install --no-cache-dir -c requirements-api.lock ".[api]"
+RUN pip install --no-cache-dir -c requirements-api.lock ".[api,channels]"
 COPY deploy/ ./deploy/
 COPY scripts/fetch_deploy_artifact.py scripts/start_cloud.py ./scripts/
 # Download only while building. Cold starts use the immutable, verified image.

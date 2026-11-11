@@ -12,12 +12,15 @@ license = "MIT"
 dependencies = []
 
 [project.optional-dependencies]
-api = ["fastapi==0.162.0", "uvicorn==0.54.0"]
-test = ["httpx2==2.16.0"]
+api = ["fastapi==0.162.0", "uvicorn==0.54.0", "langgraph==1.2.20"]
+mcp = ["mcp==2.3.0"]
+channels = ["redis==6.4.0"]
+test = ["httpx2==2.16.0", "fakeredis==2.40.0"]
 semantic = ["numpy==2.3.5", "onnxruntime==1.31.1", "tokenizers==0.23.3"]
 
 [project.scripts]
 meal-discovery = "meal_discovery.__main__:main"
+mesa-mcp = "meal_discovery.mcp_server:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

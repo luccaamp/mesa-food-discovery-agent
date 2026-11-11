@@ -31,3 +31,45 @@ services:
         value: "300"
       - key: GROQ_API_KEY
         sync: false
+      - key: REDIS_URL
+        fromService:
+          type: keyvalue
+          name: mesa-queue
+          property: connectionString
+      - key: WHATSAPP_WORKER
+        value: "1"
+      - key: WHATSAPP_ACCESS_TOKEN
+        sync: false
+      - key: WHATSAPP_PHONE_NUMBER_ID
+        sync: false
+      - key: MESA_PRIVACY_SALT
+        generateValue: true
+
+  # Receives WhatsApp webhooks, verifies and de-duplicates them, and queues them.
+  - type: web
+    name: mesa-whatsapp-gateway
+    runtime: docker
+    plan: free
+    region: virginia
+    branch: main
+    dockerfilePath: ./services/whatsapp-gateway/Dockerfile
+    dockerContext: ./services/whatsapp-gateway
+    healthCheckPath: /health
+    envVars:
+      - key: REDIS_URL
+        fromService:
+          type: keyvalue
+          name: mesa-queue
+          property: connectionString
+      - key: WHATSAPP_APP_SECRET
+        sync: false
+      - key: WHATSAPP_VERIFY_TOKEN
+        sync: false
+
+  # Queue between the gateway and the agent worker. Internal network only.
+  - type: keyvalue
+    name: mesa-queue
+    plan: free
+    region: virginia
+    ipAllowList: []
+    maxmemoryPolicy: noeviction

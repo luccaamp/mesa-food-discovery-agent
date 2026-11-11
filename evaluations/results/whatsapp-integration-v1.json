@@ -1,0 +1,42 @@
+{
+  "kind": "whatsapp_channel_integration",
+  "created_at": "2026-11-11T22:34:16.203577+00:00",
+  "components": [
+    "go_gateway_binary",
+    "redis_stream",
+    "python_worker",
+    "agent_real_llm",
+    "graph_api_mock"
+  ],
+  "phone_numbers_stored": false,
+  "checks": {
+    "verification_handshake": true,
+    "webhook_ack_ms": [
+      4.57,
+      1.2
+    ],
+    "duplicate_acknowledged_once": true,
+    "tampered_rejected": true,
+    "first_turn_ms": 1890,
+    "queued_once": true,
+    "replies_sent": 3,
+    "graph_api_auth_header": true,
+    "first_reply_lists_catalog_items": true,
+    "second_reply_keeps_dish_with_price_filter": true,
+    "erasure_confirmed": true,
+    "context_erased": true,
+    "queue_empty_after_processing": true,
+    "no_phone_in_redis_keys": true
+  },
+  "outcomes": [
+    "ok",
+    "ok",
+    "ok"
+  ],
+  "replies": [
+    "Encontrei várias opções de chicken rice para você. Gostaria de ver mais detalhes ou prefere uma sugestão de acompanhamento?\n1. [Aspirasi Chicken Rice]-Chicken Rice · singaporean · 0.002 u.n.\n2. [Hainanese Chicken Rice]-Chicken Rice · singaporean · 0.0016 u.n.\n3. Rice (Chicken Rice) · singaporean · 0.0004 u.n.\n4. Chicken Rice · chicken · 0 na fonte\n5. Chicken Rice · chicken · 0.0016 u.n.\n_Preços normalizados do catálogo histórico, sem moeda. Nomes não garantem ingredientes._",
+    "Encontrei opções de chicken rice dentro da faixa de preço que você definiu. Gostaria de adicionar algum desses itens ao seu pedido?\n1. [Aspirasi Chicken Rice]-Chicken Rice · singaporean · 0.002 u.n.\n2. [Hainanese Chicken Rice]-Chicken Rice · singaporean · 0.0016 u.n.\n3. Rice (Chicken Rice) · singaporean · 0.0004 u.n.\n4. Chicken Rice · chicken · 0 na fonte\n5. Chicken Rice · chicken · 0.0016 u.n.\n_Preços normalizados do catálogo histórico, sem moeda. Nomes não garantem ingredientes._",
+    "Pronto: apaguei o contexto da nossa conversa. Nenhum histórico seu fica guardado."
+  ],
+  "passed": true
+}

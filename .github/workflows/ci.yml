@@ -13,7 +13,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
-      - run: python -m pip install -c requirements-api.lock -c requirements-semantic.lock -e ".[api,test,semantic]"
+      - run: python -m pip install -c requirements-api.lock -c requirements-semantic.lock -e ".[api,test,semantic,mcp,channels]"
       - run: python -m pip check
       - run: python -m unittest discover -s tests -v
       - run: python -m meal_discovery --help
@@ -48,3 +48,17 @@ jobs:
       - run: python -m unittest discover -s tests_eval -v
         env:
           PYTHONPATH: src
+  gateway:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: services/whatsapp-gateway
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: services/whatsapp-gateway/go.mod
+          cache-dependency-path: services/whatsapp-gateway/go.sum
+      - run: go vet ./...
+      - run: go test -race -count=1 ./...
+      - run: CGO_ENABLED=0 go build -trimpath -o /tmp/gateway .
