@@ -34,3 +34,8 @@ reports/*
 configs/*.local.json
 .DS_Store
 Thumbs.db
+
+# Playwright
+apps/web/test-results/
+apps/web/playwright-report/
+apps/web/e2e/screenshots/
