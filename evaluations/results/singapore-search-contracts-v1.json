@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "kind": "mechanical_search_contracts_not_relevance_evaluation",
+  "catalog": {
+    "schema_version": 1,
+    "index_version": "lexical-fts5-v1",
+    "data_kind": "official_dhrd",
+    "city": "Singapore",
+    "source_database_sha256": "3c7123757311bd51ffb22bb9782f7b7600b71ec73741cd3f866a87a50acd5188",
+    "source_hashes": {
+      "vendors_sg.txt": "34d92d1c423db48156c59de74fa5cd3246c94d80eec3e7e759c5f46ae32da641",
+      "products_sg.txt": "63e981a45619a3a7e62af8a037ffb641e7410fee35e26b4882f9db6de5e1385c",
+      "orders_sg_train.txt": "4e4cbfbdf9731531ef0dde02538e62096b523b73a00a5c20bc3e5d6d6c7244e0"
+    },
+    "products": 1066840,
+    "cuisines": 78,
+    "price_unit": "dataset_normalized_unit",
+    "historical_catalog": true,
+    "limitations": [
+      "No live availability, currency conversion or delivery-radius guarantee.",
+      "Lexical matching only; no translation or semantic understanding.",
+      "Catalog includes products with no observed training interactions."
+    ]
+  },
+  "checks": [
+    {
+      "query": "chicken rice",
+      "total_matches": 27621,
+      "returned": 5,
+      "local_elapsed_ms": 96.75850003259256,
+      "cuisine_and_price_filter_contract": "passed"
+    },
+    {
+      "query": "pizza",
+      "total_matches": 45706,
+      "returned": 5,
+      "local_elapsed_ms": 51.63370002992451,
+      "cuisine_and_price_filter_contract": "passed"
+    },
+    {
+      "query": "milk tea",
+      "total_matches": 13826,
+      "returned": 5,
+      "local_elapsed_ms": 51.81330000050366,
+      "cuisine_and_price_filter_contract": "passed"
+    }
+  ],
+  "implementation_sha256": "684a9946d9a87eb0de49b07103c51d10d8f32076c4d638b25551c91f3e5622a5",
+  "limitations": "Three English literal probes; no human relevance labels, semantic or multilingual evaluation. Local elapsed time includes opening and count query, not a load test."
+}

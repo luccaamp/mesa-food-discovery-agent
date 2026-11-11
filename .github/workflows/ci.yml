@@ -1,0 +1,50 @@
+name: Python checks
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.11', '3.13']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - run: python -m pip install -c requirements-api.lock -c requirements-semantic.lock -e ".[api,test,semantic]"
+      - run: python -m pip check
+      - run: python -m unittest discover -s tests -v
+      - run: python -m meal_discovery --help
+      - run: python scripts/fetch_hyperhawkes.py --help
+      - run: python scripts/fetch_embedding_model.py --help
+  frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: apps/web/package-lock.json
+      - run: npm ci
+        working-directory: apps/web
+      - run: npm test
+        working-directory: apps/web
+      - run: npm run build
+        working-directory: apps/web
+  evaluation:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+          cache: pip
+          cache-dependency-path: requirements-eval.lock
+      - run: python -m pip install -r requirements-eval.lock
+      - run: python -m pip check
+      - run: python -m unittest discover -s tests_eval -v
+        env:
+          PYTHONPATH: src

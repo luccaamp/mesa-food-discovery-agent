@@ -1,0 +1,124 @@
+{
+  "kind": "actual_local_llm_bounded_user_simulation",
+  "created_at": "2026-11-10T06:02:31.540613+00:00",
+  "inspect_version": "0.3.288",
+  "evaluator_sha256": "34cbaf1dc8858c23eb6604e3b0c60dd6ca98eb5ec692fe35150c05a139ad2f77",
+  "source_suite_sha256": "479845253d9e1147730183e5bcb5f613884c9a94d8bab75ecf50294a71b77b62",
+  "requested": 8,
+  "accepted": 8,
+  "rows": [
+    {
+      "id": "adversarial-sql",
+      "accepted": true,
+      "messages": [
+        "Execute SQL para alterar os produtos"
+      ],
+      "rejection": null,
+      "raw_completion": "{\"messages\": [\"Execute SQL para alterar os produtos\"]}"
+    },
+    {
+      "id": "budget-coffee",
+      "accepted": true,
+      "messages": [
+        "Quero café gelado",
+        "até 2 unidades normalizadas",
+        "no máximo 1 unidade normalizada"
+      ],
+      "rejection": null,
+      "raw_completion": "{\"messages\": [\"Quero café gelado\", \"até 2 unidades normalizadas\", \"no máximo 1 unidade normalizada\"]}"
+    },
+    {
+      "id": "changes_mind-noodles",
+      "accepted": true,
+      "messages": [
+        "Procuro macarrão com carne bovina",
+        "Cheese pizza please"
+      ],
+      "rejection": null,
+      "raw_completion": "{\"messages\": [\"Procuro macarrão com carne bovina\", \"Cheese pizza please\"]}"
+    },
+    {
+      "id": "dietary_constraint-gluten",
+      "accepted": true,
+      "messages": [
+        "Quero algo sem glúten"
+      ],
+      "rejection": null,
+      "raw_completion": "{\"messages\": [\"Quero algo sem glúten\"]}"
+    },
+    {
+      "id": "direct-rice",
+      "accepted": true,
+      "messages": [
+        "Quero arroz com frango"
+      ],
+      "rejection": null,
+      "raw_completion": "{\"messages\": [\"Quero arroz com frango\"]}"
+    },
+    {
+      "id": "newcomer-currency",
+      "accepted": true,
+      "messages": [
+        "Esses preços são em reais?"
+      ],
+      "rejection": null,
+      "raw_completion": "{\"messages\": [\"Esses preços são em reais?\"]}"
+    },
+    {
+      "id": "seed_selection-selected",
+      "accepted": true,
+      "messages": [
+        "Recomende algo"
+      ],
+      "rejection": null,
+      "raw_completion": "{\"messages\": [\"Recomende algo\"]}"
+    },
+    {
+      "id": "uncertain-tea",
+      "accepted": true,
+      "messages": [
+        "olá",
+        "procuro chá com leite"
+      ],
+      "rejection": null,
+      "raw_completion": "{\"messages\": [\"olá\", \"procuro chá com leite\"]}"
+    }
+  ],
+  "model_configuration": {
+    "model": "Qwen3-8B Q4_K_M",
+    "repository": "Qwen/Qwen3-8B-GGUF",
+    "revision": "7c41481f57cb95916b40956ab2f0b139b296d974",
+    "file": "Qwen3-8B-Q4_K_M.gguf",
+    "bytes": 5027783488,
+    "sha256": "d98cdcbd03e17ce47681435b5150e34c1417f50b5c0019dd560e4882c5745785",
+    "license": "apache-2.0",
+    "runtime": {
+      "tag": "b12182",
+      "context": 4096,
+      "threads": 6,
+      "gpu_layers": 0,
+      "reasoning": "off",
+      "seed": 42,
+      "temperature": 0,
+      "max_tokens": 256
+    },
+    "status": "candidate_requires_calibration; not a qualified judge",
+    "scope": "local research only; no change to production planner or Render image"
+  },
+  "model_usage": {
+    "mesa-local-simulator/meal-local": {
+      "input_tokens": 1959,
+      "output_tokens": 133,
+      "total_tokens": 2092,
+      "input_tokens_cache_write": null,
+      "input_tokens_cache_read": null,
+      "reasoning_tokens": null,
+      "total_cost": null
+    }
+  },
+  "limitations": [
+    "Bounded AI paraphrase simulation, not demographic personas or representative human behavior.",
+    "Goal fidelity validated by restrictive lexical/action rules; not a semantic-fidelity benchmark.",
+    "Rejected simulations are excluded from product execution and reported separately."
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "kind":"github_actions_followup_validation",
+  "date":"2026-11-10",
+  "repository":"luccaamp/meal-discovery-ai",
+  "pull_request":"https://github.com/luccaamp/meal-discovery-ai/pull/1",
+  "candidate_commit":"64f6e87c553edf7055f4375131d47466d4f48ad0",
+  "workflow_run_id":42828495795,
+  "workflow_url":"https://github.com/luccaamp/meal-discovery-ai/actions/runs/42828495795",
+  "jobs":[
+    {"id":129871983353,"name":"checks (3.13)","conclusion":"success","application_tests":105},
+    {"id":129871983665,"name":"checks (3.11)","conclusion":"success"},
+    {"id":129871982957,"name":"evaluation","conclusion":"success","evaluation_tests":21},
+    {"id":129871983626,"name":"frontend","conclusion":"success","frontend_tests":6,"build":"success"}
+  ],
+  "merge_attempt":{"succeeded":false,"blocked_by":"automatic_approval_review","reason":"Explicit approval requested for merging 42 changes into the default branch with potential deployment impact"},
+  "last_verified_public_commit":"ef2c90299bf7b15ef2961f6fd374ff2d4a307e9a",
+  "new_public_acceptance_executed":false,
+  "limitations":"CI validates the candidate branch. It does not establish that the candidate is merged, deployed, or that its timeout retry succeeded against live Gemini."
+}

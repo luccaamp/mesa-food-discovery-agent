@@ -1,0 +1,32 @@
+{
+  "kind": "real_local_schema_enforcement_probe",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "proof": {
+        "type": "string",
+        "enum": [
+          "schema_enforced"
+        ]
+      }
+    },
+    "required": [
+      "proof"
+    ],
+    "additionalProperties": false
+  },
+  "actual": {
+    "proof": "schema_enforced"
+  },
+  "passed": true,
+  "usage": {
+    "completion_tokens": 19,
+    "prompt_tokens": 46,
+    "total_tokens": 65,
+    "prompt_tokens_details": {
+      "cached_tokens": 5
+    }
+  },
+  "runtime": "llama.cpp b12182",
+  "limitations": "One conflicting-prompt schema probe, not proof that all JSON Schema keywords or semantic judgments are correct."
+}

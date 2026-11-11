@@ -1,0 +1,11 @@
+{
+  "scope": "Regression observed in public acceptance; injected provider timeout, not live inference",
+  "cases": [{
+    "id": "catalog-search-framing-and-continuity",
+    "turns": [
+      {"message":"Gostaria de encontrar sopa de peixe no catálogo","tool":"search_catalog","concepts":[["fish"],["soup"]]},
+      {"message":"até 0,002 unidades normalizadas","tool":"search_catalog","concepts":[["fish"],["soup"]],"preserve_query":true,"context_equals":{"max_price":0.002}},
+      {"message":"Agora quero chá com leite","tool":"search_catalog","concepts":[["milk"],["tea"]],"excluded_query_terms":["fish","soup","agora"],"context_equals":{"max_price":0.002}}
+    ]
+  }]
+}

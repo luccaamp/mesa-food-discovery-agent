@@ -1,0 +1,867 @@
+{
+  "schema_version": 1,
+  "kind": "scripted_behavioral_profiles_real_local_http",
+  "created_at": "2026-11-10T06:24:41.138881+00:00",
+  "complete": true,
+  "suite_sha256": "2ebeb12ae86949a43d890130252eff761e04197a092e3331583d54398bb29e4c",
+  "suite": {
+    "protocol_version": "llm-generated-conversations-v1",
+    "split": "development_simulation",
+    "simulation_report_sha256": "483578dc89d6ef9b454510a4ced3bac54b735eed66249d013412d516f67abdc4",
+    "cases": [
+      {
+        "id": "generated-budget-coffee",
+        "profile": "budget",
+        "turns": [
+          {
+            "message": "Por favor, gostaria de iced coffee",
+            "tool": "search_catalog",
+            "concepts": [
+              [
+                "iced"
+              ],
+              [
+                "coffee"
+              ]
+            ]
+          },
+          {
+            "message": "até 2 unidades normalizadas",
+            "tool": "search_catalog",
+            "concepts": [
+              [
+                "iced"
+              ],
+              [
+                "coffee"
+              ]
+            ],
+            "preserve_query": true,
+            "context_equals": {
+              "max_price": 2
+            }
+          },
+          {
+            "message": "no máximo 1 unidade normalizada",
+            "tool": "search_catalog",
+            "concepts": [
+              [
+                "iced"
+              ],
+              [
+                "coffee"
+              ]
+            ],
+            "preserve_query": true,
+            "context_equals": {
+              "max_price": 1
+            }
+          }
+        ]
+      },
+      {
+        "id": "generated-dietary_constraint-gluten",
+        "profile": "dietary_constraint",
+        "turns": [
+          {
+            "message": "Por favor, gostaria de algo sem glúten",
+            "tool": null,
+            "status": "needs_clarification"
+          }
+        ]
+      },
+      {
+        "id": "generated-direct-rice",
+        "profile": "direct",
+        "turns": [
+          {
+            "message": "Por favor, gostaria de chicken e rice",
+            "tool": "search_catalog",
+            "concepts": [
+              [
+                "chicken"
+              ],
+              [
+                "rice"
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "id": "generated-newcomer-currency",
+        "profile": "newcomer",
+        "turns": [
+          {
+            "message": "Oi, gostaria de saber se os preços estão em reais?",
+            "tool": null,
+            "status": "needs_clarification"
+          }
+        ]
+      },
+      {
+        "id": "generated-seed_selection-selected",
+        "profile": "seed_selection",
+        "turns": [
+          {
+            "message": "Recomende algo",
+            "tool": "recommend_items"
+          }
+        ],
+        "context": {
+          "selected_items": [
+            {
+              "vendor_id": "3a813d9f",
+              "product_id": "70213d988386"
+            }
+          ]
+        }
+      },
+      {
+        "id": "generated-uncertain-tea",
+        "profile": "uncertain",
+        "turns": [
+          {
+            "message": "olá",
+            "tool": null,
+            "status": "needs_clarification"
+          },
+          {
+            "message": "Por favor, gostaria de milk e tea",
+            "tool": "search_catalog",
+            "concepts": [
+              [
+                "milk"
+              ],
+              [
+                "tea"
+              ]
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "source_database_sha256": "3c7123757311bd51ffb22bb9782f7b7600b71ec73741cd3f866a87a50acd5188",
+  "catalog_sha256": "836eef073ca36058f23943f3b847174be5d05c7a35cdf9b1b29331278b6d41fe",
+  "runner_sha256": "2dfa99ca6656287a78d25335eec86b68964b29975f55287523337152daf623e0",
+  "implementation_sha256": {
+    "assistant.py": "c20c260dc3c376ab3419df49d2d35dff3306ae71a0c8f86c7df01253c8430953",
+    "api.py": "ab9e192ccc51433f54aaf1f123688f6b1fbb730f2edde51b5f0018b7b33dc977",
+    "serving.py": "274f7128c9063609f4493e256499f0ebaa1a62a6562ee852ee5e26519a037500",
+    "discovery.py": "a093646c28ef3a4b9684b33e21bc7f5dc8337c4036ede374fea7e6a1f067632c"
+  },
+  "prompt_sha256": "24d89f47f4d3d86207de7d871e7daa8ef07759738b5e9cf5f423c1203919e6dd",
+  "model_configuration": {
+    "model": "Qwen2.5-1.5B-Instruct Q4_K_M",
+    "repository": "Qwen/Qwen2.5-1.5B-Instruct-GGUF",
+    "revision": "91cad51170dc346986eccefdc2dd33a9da36ead9",
+    "file": "qwen2.5-1.5b-instruct-q4_k_m.gguf",
+    "bytes": 1117320736,
+    "sha256": "6a1a2eb6d15622bf3c96857206351ba97e1af16c30d7a74ee38970e434e9407e",
+    "runtime": {
+      "repository": "ggml-org/llama.cpp",
+      "tag": "b12182",
+      "file": "llama-b12182-bin-win-cpu-x64.zip",
+      "bytes": 24749504,
+      "sha256": "e068c483e2ea97bf09121ec0bbe085bd43470bb67d9062c7c66162164aea5834"
+    },
+    "license": "Apache-2.0 model; MIT runtime",
+    "inference": {
+      "temperature": 0,
+      "seed": 42,
+      "max_tokens": 160,
+      "context_size": 4096,
+      "threads": 6
+    },
+    "purpose": "Local structured intent extraction; catalog facts are provided only by read-only domain tools."
+  },
+  "official_test_orders_used": false,
+  "commercial_api_calls": 0,
+  "qualitative_judge": "unscored; no qualified judge",
+  "episodes": [
+    {
+      "id": "generated-budget-coffee",
+      "profile": "budget",
+      "repetition": 0,
+      "passed": true,
+      "turns": [
+        {
+          "message": "Por favor, gostaria de iced coffee",
+          "errors": [],
+          "planner": "local_llm",
+          "response": {
+            "status": "ok",
+            "answer": "Busquei “iced coffee” no catálogo real e encontrei 10,229 correspondências. Os cards abaixo preservam os nomes originais.",
+            "items": [
+              {
+                "vendor_id": "000c554e",
+                "product_id": "5831eed393b4",
+                "name": "Iced Coffee",
+                "unit_price": 0.0024,
+                "primary_cuisine": "coffee"
+              },
+              {
+                "vendor_id": "04d6c463",
+                "product_id": "b4bd77ad5ef6",
+                "name": "Iced Coffee",
+                "unit_price": 0.0,
+                "primary_cuisine": "coffee"
+              },
+              {
+                "vendor_id": "0763dc82",
+                "product_id": "b70cfb275e95",
+                "name": "Iced Coffee",
+                "unit_price": 0.0,
+                "primary_cuisine": "coffee"
+              },
+              {
+                "vendor_id": "0763dc82",
+                "product_id": "fef485e4a8cc",
+                "name": "Iced Coffee",
+                "unit_price": 0.0,
+                "primary_cuisine": "coffee"
+              },
+              {
+                "vendor_id": "07e2e716",
+                "product_id": "707590a7cd6c",
+                "name": "Iced Coffee",
+                "unit_price": 0.0,
+                "primary_cuisine": "coffee"
+              },
+              {
+                "vendor_id": "0c484919",
+                "product_id": "9ad2d7e22a3c",
+                "name": "Iced Coffee",
+                "unit_price": 0.0024,
+                "primary_cuisine": "coffee"
+              }
+            ],
+            "context": {
+              "last_query": "iced coffee",
+              "cuisine": null,
+              "min_price": null,
+              "max_price": null,
+              "selected_items": []
+            },
+            "tools": [
+              {
+                "name": "search_catalog",
+                "arguments": {
+                  "query": "iced coffee",
+                  "cuisine": null,
+                  "min_price": null,
+                  "max_price": null,
+                  "limit": 6
+                },
+                "duration_ms": 42.239700007485226,
+                "result_count": 6
+              }
+            ],
+            "planner": "local_llm",
+            "model": "meal-local",
+            "usage": {
+              "completion_tokens": 12,
+              "prompt_tokens": 312,
+              "total_tokens": 324,
+              "prompt_tokens_details": {
+                "cached_tokens": 291
+              }
+            },
+            "elapsed_ms": 506.16,
+            "warnings": [
+              "Catálogo histórico. Preços normalizados, sem moeda. Sem garantia de estoque, entrega ou composição alimentar."
+            ]
+          },
+          "http_ms": 527.65
+        },
+        {
+          "message": "até 2 unidades normalizadas",
+          "errors": [],
+          "planner": "explicit_filter_refinement",
+          "response": {
+            "status": "ok",
+            "answer": "Busquei “iced coffee” no catálogo real e encontrei 10,229 correspondências. Os cards abaixo preservam os nomes originais.",
+            "items": [
+              {
+                "vendor_id": "000c554e",
+                "product_id": "5831eed393b4",
+                "name": "Iced Coffee",
+                "unit_price": 0.0024,
+                "primary_cuisine": "coffee"
+              },
+              {
+                "vendor_id": "04d6c463",
+                "product_id": "b4bd77ad5ef6",
+                "name": "Iced Coffee",
+                "unit_price": 0.0,
+                "primary_cuisine": "coffee"
+              },
+              {
+                "vendor_id": "0763dc82",
+                "product_id": "b70cfb275e95",
+                "name": "Iced Coffee",
+                "unit_price": 0.0,
+                "primary_cuisine": "coffee"
+              },
+              {
+                "vendor_id": "0763dc82",
+                "product_id": "fef485e4a8cc",
+                "name": "Iced Coffee",
+                "unit_price": 0.0,
+                "primary_cuisine": "coffee"
+              },
+              {
+                "vendor_id": "07e2e716",
+                "product_id": "707590a7cd6c",
+                "name": "Iced Coffee",
+                "unit_price": 0.0,
+                "primary_cuisine": "coffee"
+              },
+              {
+                "vendor_id": "0c484919",
+                "product_id": "9ad2d7e22a3c",
+                "name": "Iced Coffee",
+                "unit_price": 0.0024,
+                "primary_cuisine": "coffee"
+              }
+            ],
+            "context": {
+              "last_query": "iced coffee",
+              "cuisine": null,
+              "min_price": null,
+              "max_price": 2.0,
+              "selected_items": []
+            },
+            "tools": [
+              {
+                "name": "search_catalog",
+                "arguments": {
+                  "query": "iced coffee",
+                  "cuisine": null,
+                  "min_price": null,
+                  "max_price": 2.0,
+                  "limit": 6
+                },
+                "duration_ms": 39.65060002519749,
+                "result_count": 6
+              }
+            ],
+            "planner": "explicit_filter_refinement",
+            "model": null,
+            "usage": {},
+            "elapsed_ms": 39.72,
+            "warnings": [
+              "Catálogo histórico. Preços normalizados, sem moeda. Sem garantia de estoque, entrega ou composição alimentar."
+            ]
+          },
+          "http_ms": 46.82
+        },
+        {
+          "message": "no máximo 1 unidade normalizada",
+          "errors": [],
+          "planner": "explicit_filter_refinement",
+          "response": {
+            "status": "ok",
+            "answer": "Busquei “iced coffee” no catálogo real e encontrei 10,229 correspondências. Os cards abaixo preservam os nomes originais.",
+            "items": [
+              {
+                "vendor_id": "000c554e",
+                "product_id": "5831eed393b4",
+                "name": "Iced Coffee",
+                "unit_price": 0.0024,
+                "primary_cuisine": "coffee"
+              },
+              {
+                "vendor_id": "04d6c463",
+                "product_id": "b4bd77ad5ef6",
+                "name": "Iced Coffee",
+                "unit_price": 0.0,
+                "primary_cuisine": "coffee"
+              },
+              {
+                "vendor_id": "0763dc82",
+                "product_id": "b70cfb275e95",
+                "name": "Iced Coffee",
+                "unit_price": 0.0,
+                "primary_cuisine": "coffee"
+              },
+              {
+                "vendor_id": "0763dc82",
+                "product_id": "fef485e4a8cc",
+                "name": "Iced Coffee",
+                "unit_price": 0.0,
+                "primary_cuisine": "coffee"
+              },
+              {
+                "vendor_id": "07e2e716",
+                "product_id": "707590a7cd6c",
+                "name": "Iced Coffee",
+                "unit_price": 0.0,
+                "primary_cuisine": "coffee"
+              },
+              {
+                "vendor_id": "0c484919",
+                "product_id": "9ad2d7e22a3c",
+                "name": "Iced Coffee",
+                "unit_price": 0.0024,
+                "primary_cuisine": "coffee"
+              }
+            ],
+            "context": {
+              "last_query": "iced coffee",
+              "cuisine": null,
+              "min_price": null,
+              "max_price": 1.0,
+              "selected_items": []
+            },
+            "tools": [
+              {
+                "name": "search_catalog",
+                "arguments": {
+                  "query": "iced coffee",
+                  "cuisine": null,
+                  "min_price": null,
+                  "max_price": 1.0,
+                  "limit": 6
+                },
+                "duration_ms": 38.55100000509992,
+                "result_count": 6
+              }
+            ],
+            "planner": "explicit_filter_refinement",
+            "model": null,
+            "usage": {},
+            "elapsed_ms": 38.65,
+            "warnings": [
+              "Catálogo histórico. Preços normalizados, sem moeda. Sem garantia de estoque, entrega ou composição alimentar."
+            ]
+          },
+          "http_ms": 58.41
+        }
+      ]
+    },
+    {
+      "id": "generated-dietary_constraint-gluten",
+      "profile": "dietary_constraint",
+      "repetition": 0,
+      "passed": true,
+      "turns": [
+        {
+          "message": "Por favor, gostaria de algo sem glúten",
+          "errors": [],
+          "planner": "policy",
+          "response": {
+            "status": "needs_clarification",
+            "answer": "O catálogo não informa ingredientes completos nem certificações alimentares. Não consigo garantir essa restrição. Posso buscar pelo nome de um prato, mas a composição precisa ser confirmada com o estabelecimento.",
+            "items": [],
+            "context": {
+              "last_query": null,
+              "cuisine": null,
+              "min_price": null,
+              "max_price": null,
+              "selected_items": []
+            },
+            "tools": [],
+            "planner": "policy",
+            "model": null,
+            "usage": {},
+            "elapsed_ms": 0.07,
+            "warnings": [
+              "Catálogo histórico. Preços normalizados, sem moeda. Sem garantia de estoque, entrega ou composição alimentar."
+            ]
+          },
+          "http_ms": 3.09
+        }
+      ]
+    },
+    {
+      "id": "generated-direct-rice",
+      "profile": "direct",
+      "repetition": 0,
+      "passed": true,
+      "turns": [
+        {
+          "message": "Por favor, gostaria de chicken e rice",
+          "errors": [],
+          "planner": "local_llm",
+          "response": {
+            "status": "ok",
+            "answer": "Busquei “chicken rice” no catálogo real e encontrei 27,621 correspondências. Os cards abaixo preservam os nomes originais.",
+            "items": [
+              {
+                "vendor_id": "3a813d9f",
+                "product_id": "70213d988386",
+                "name": "[Aspirasi Chicken Rice]-Chicken Rice",
+                "unit_price": 0.002,
+                "primary_cuisine": "singaporean"
+              },
+              {
+                "vendor_id": "cf4c5287",
+                "product_id": "424ec9d3e28d",
+                "name": "[Hainanese Chicken Rice]-Chicken Rice",
+                "unit_price": 0.0016,
+                "primary_cuisine": "singaporean"
+              },
+              {
+                "vendor_id": "6c787dad",
+                "product_id": "a1bfb371b37e",
+                "name": "Rice (Chicken Rice)",
+                "unit_price": 0.0004,
+                "primary_cuisine": "singaporean"
+              },
+              {
+                "vendor_id": "26f6097e",
+                "product_id": "3eb21ece9578",
+                "name": "Chicken Rice",
+                "unit_price": 0.0,
+                "primary_cuisine": "chicken"
+              },
+              {
+                "vendor_id": "3b7e7660",
+                "product_id": "0ba855c56017",
+                "name": "Chicken Rice",
+                "unit_price": 0.0016,
+                "primary_cuisine": "chicken"
+              },
+              {
+                "vendor_id": "77363b55",
+                "product_id": "bed841a85602",
+                "name": "Chicken Rice",
+                "unit_price": 0.0016,
+                "primary_cuisine": "chicken"
+              }
+            ],
+            "context": {
+              "last_query": "chicken rice",
+              "cuisine": null,
+              "min_price": null,
+              "max_price": null,
+              "selected_items": []
+            },
+            "tools": [
+              {
+                "name": "search_catalog",
+                "arguments": {
+                  "query": "chicken rice",
+                  "cuisine": null,
+                  "min_price": null,
+                  "max_price": null,
+                  "limit": 6
+                },
+                "duration_ms": 100.84689999348484,
+                "result_count": 6
+              }
+            ],
+            "planner": "local_llm",
+            "model": "meal-local",
+            "usage": {
+              "completion_tokens": 13,
+              "prompt_tokens": 312,
+              "total_tokens": 325,
+              "prompt_tokens_details": {
+                "cached_tokens": 297
+              }
+            },
+            "elapsed_ms": 548.59,
+            "warnings": [
+              "Catálogo histórico. Preços normalizados, sem moeda. Sem garantia de estoque, entrega ou composição alimentar."
+            ]
+          },
+          "http_ms": 555.77
+        }
+      ]
+    },
+    {
+      "id": "generated-newcomer-currency",
+      "profile": "newcomer",
+      "repetition": 0,
+      "passed": true,
+      "turns": [
+        {
+          "message": "Oi, gostaria de saber se os preços estão em reais?",
+          "errors": [],
+          "planner": "policy",
+          "response": {
+            "status": "needs_clarification",
+            "answer": "Os preços desta base são normalizados e não têm moeda. Não posso converter um orçamento em reais. Use os filtros de preço normalizado para comparar itens do catálogo.",
+            "items": [],
+            "context": {
+              "last_query": null,
+              "cuisine": null,
+              "min_price": null,
+              "max_price": null,
+              "selected_items": []
+            },
+            "tools": [],
+            "planner": "policy",
+            "model": null,
+            "usage": {},
+            "elapsed_ms": 0.05,
+            "warnings": [
+              "Catálogo histórico. Preços normalizados, sem moeda. Sem garantia de estoque, entrega ou composição alimentar."
+            ]
+          },
+          "http_ms": 2.4
+        }
+      ]
+    },
+    {
+      "id": "generated-seed_selection-selected",
+      "profile": "seed_selection",
+      "repetition": 0,
+      "passed": true,
+      "turns": [
+        {
+          "message": "Recomende algo",
+          "errors": [],
+          "planner": "explicit_recommendation",
+          "response": {
+            "status": "ok",
+            "answer": "Não encontrei associações para os itens selecionados com esses filtros. As opções disponíveis seguem a popularidade histórica dos pedidos de treino.",
+            "items": [
+              {
+                "vendor_id": "874a3ca8",
+                "product_id": "b571418f4bdd",
+                "name": "Chicken Cutlet",
+                "unit_price": 0.004,
+                "primary_cuisine": "chicken",
+                "score": null,
+                "supporting_co_baskets": 0,
+                "training_baskets": 457,
+                "reason": "historical_popularity"
+              },
+              {
+                "vendor_id": "48f03701",
+                "product_id": "2f57ce86ab5d",
+                "name": "Wanton Noodles Dry",
+                "unit_price": 0.0024,
+                "primary_cuisine": "noodles",
+                "score": null,
+                "supporting_co_baskets": 0,
+                "training_baskets": 456,
+                "reason": "historical_popularity"
+              },
+              {
+                "vendor_id": "360da5db",
+                "product_id": "17b9099311ee",
+                "name": "Wanton Noodle  云吞面",
+                "unit_price": 0.0024,
+                "primary_cuisine": "noodles",
+                "score": null,
+                "supporting_co_baskets": 0,
+                "training_baskets": 448,
+                "reason": "historical_popularity"
+              },
+              {
+                "vendor_id": "2b5f5d68",
+                "product_id": "ecc84756562d",
+                "name": "DIY 酿豆腐",
+                "unit_price": 0.0004,
+                "primary_cuisine": "soups",
+                "score": null,
+                "supporting_co_baskets": 0,
+                "training_baskets": 416,
+                "reason": "historical_popularity"
+              },
+              {
+                "vendor_id": "bde57d9f",
+                "product_id": "d3be540e4f36",
+                "name": "Mala Xiang Guo 麻辣香锅",
+                "unit_price": 0.0008,
+                "primary_cuisine": "chinese",
+                "score": null,
+                "supporting_co_baskets": 0,
+                "training_baskets": 415,
+                "reason": "historical_popularity"
+              },
+              {
+                "vendor_id": "1c3923e3",
+                "product_id": "fa9bab1e0246",
+                "name": "Rice",
+                "unit_price": 0.0004,
+                "primary_cuisine": "seafood",
+                "score": null,
+                "supporting_co_baskets": 0,
+                "training_baskets": 409,
+                "reason": "historical_popularity"
+              }
+            ],
+            "context": {
+              "last_query": null,
+              "cuisine": null,
+              "min_price": null,
+              "max_price": null,
+              "selected_items": [
+                {
+                  "vendor_id": "3a813d9f",
+                  "product_id": "70213d988386"
+                }
+              ]
+            },
+            "tools": [
+              {
+                "name": "recommend_items",
+                "arguments": {
+                  "seeds": [
+                    {
+                      "vendor_id": "3a813d9f",
+                      "product_id": "70213d988386"
+                    }
+                  ],
+                  "cuisine": null,
+                  "min_price": null,
+                  "max_price": null,
+                  "limit": 6
+                },
+                "duration_ms": 924.8951000045054,
+                "result_count": 6
+              }
+            ],
+            "planner": "explicit_recommendation",
+            "model": null,
+            "usage": {},
+            "elapsed_ms": 924.96,
+            "warnings": [
+              "Catálogo histórico. Preços normalizados, sem moeda. Sem garantia de estoque, entrega ou composição alimentar."
+            ]
+          },
+          "http_ms": 932.11
+        }
+      ]
+    },
+    {
+      "id": "generated-uncertain-tea",
+      "profile": "uncertain",
+      "repetition": 0,
+      "passed": true,
+      "turns": [
+        {
+          "message": "olá",
+          "errors": [],
+          "planner": "policy",
+          "response": {
+            "status": "needs_clarification",
+            "answer": "Olá! Qual prato ou bebida você gostaria de explorar? Também posso sugerir itens pela popularidade histórica.",
+            "items": [],
+            "context": {
+              "last_query": null,
+              "cuisine": null,
+              "min_price": null,
+              "max_price": null,
+              "selected_items": []
+            },
+            "tools": [],
+            "planner": "policy",
+            "model": null,
+            "usage": {},
+            "elapsed_ms": 0.07,
+            "warnings": [
+              "Catálogo histórico. Preços normalizados, sem moeda. Sem garantia de estoque, entrega ou composição alimentar."
+            ]
+          },
+          "http_ms": 20.33
+        },
+        {
+          "message": "Por favor, gostaria de milk e tea",
+          "errors": [],
+          "planner": "local_llm",
+          "response": {
+            "status": "ok",
+            "answer": "Busquei “milk tea” no catálogo real e encontrei 13,826 correspondências. Os cards abaixo preservam os nomes originais.",
+            "items": [
+              {
+                "vendor_id": "2b9db12e",
+                "product_id": "6ac02b722723",
+                "name": "Green Milk Tea  Milk Tea Large",
+                "unit_price": 0.0,
+                "primary_cuisine": "coffee"
+              },
+              {
+                "vendor_id": "2b9db12e",
+                "product_id": "8e340f8d80fb",
+                "name": "Green Milk Tea  Milk Tea Medium",
+                "unit_price": 0.0,
+                "primary_cuisine": "coffee"
+              },
+              {
+                "vendor_id": "001f973c",
+                "product_id": "6b0a5fe6b67a",
+                "name": "Milk Tea",
+                "unit_price": 0.0,
+                "primary_cuisine": "bakery"
+              },
+              {
+                "vendor_id": "0288ef8f",
+                "product_id": "f50424e59b19",
+                "name": "Milk Tea",
+                "unit_price": 0.002,
+                "primary_cuisine": "snacks"
+              },
+              {
+                "vendor_id": "02e44b25",
+                "product_id": "794023c1fd33",
+                "name": "Milk Tea",
+                "unit_price": 0.0,
+                "primary_cuisine": "bakery"
+              },
+              {
+                "vendor_id": "05f38f9a",
+                "product_id": "1b6dd2d280b3",
+                "name": "Milk Tea",
+                "unit_price": 0.0012,
+                "primary_cuisine": "snacks"
+              }
+            ],
+            "context": {
+              "last_query": "milk tea",
+              "cuisine": null,
+              "min_price": null,
+              "max_price": null,
+              "selected_items": []
+            },
+            "tools": [
+              {
+                "name": "search_catalog",
+                "arguments": {
+                  "query": "milk tea",
+                  "cuisine": null,
+                  "min_price": null,
+                  "max_price": null,
+                  "limit": 6
+                },
+                "duration_ms": 48.76669999794103,
+                "result_count": 6
+              }
+            ],
+            "planner": "local_llm",
+            "model": "meal-local",
+            "usage": {
+              "completion_tokens": 13,
+              "prompt_tokens": 312,
+              "total_tokens": 325,
+              "prompt_tokens_details": {
+                "cached_tokens": 297
+              }
+            },
+            "elapsed_ms": 513.47,
+            "warnings": [
+              "Catálogo histórico. Preços normalizados, sem moeda. Sem garantia de estoque, entrega ou composição alimentar."
+            ]
+          },
+          "http_ms": 533.5
+        }
+      ]
+    }
+  ],
+  "limitations": "Scripted AI-authored behavioral contracts, not free-form LLM simulation, human preference or population estimates. Development cases are not held out.",
+  "summary": {
+    "episodes": 6,
+    "passed": 6,
+    "pass_power_1": 1.0,
+    "pass_power_3": null,
+    "failure_counts": {},
+    "llm_calls": 3,
+    "fallback_turns": 0
+  }
+}

@@ -1,0 +1,23 @@
+services:
+  - type: web
+    name: mesa-meal-discovery
+    runtime: docker
+    plan: free
+    region: virginia
+    branch: main
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /ready
+    envVars:
+      - key: LLM_PROVIDER
+        value: gemini
+      - key: LLM_MODEL
+        value: gemini-3.1-flash-lite
+      - key: MEAL_PUBLIC_MODE
+        value: "1"
+      - key: GEMINI_CALLS_PER_MINUTE
+        value: "4"
+      - key: GEMINI_CALLS_PER_DAY
+        value: "20"
+      - key: GEMINI_API_KEY
+        sync: false

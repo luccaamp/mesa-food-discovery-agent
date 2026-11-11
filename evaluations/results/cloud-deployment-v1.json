@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "kind": "deployment_smoke_not_quality_benchmark",
+  "verified_date": "2026-11-07",
+  "tested_commit": "dabf70f2e0e132406cec656d99de67b1307381f5",
+  "unit_tests": 76,
+  "python_frontend_ci": "https://github.com/luccaamp/meal-discovery-ai/actions/runs/42388706475",
+  "container_verification": {
+    "run_url": "https://github.com/luccaamp/meal-discovery-ai/actions/runs/42388707115",
+    "conclusion": "success",
+    "memory_limit_bytes": 536870912,
+    "cpu_limit": 0.1,
+    "read_only_filesystem": true,
+    "cgroup_memory_peak_bytes": 45338624,
+    "oom_killed": false,
+    "checks_passed": 6,
+    "timings_ms": {
+      "interface": 93.3,
+      "evaluations": 3.5,
+      "catalog": 2.5,
+      "search": 900.6,
+      "recommendations": 95.2,
+      "assistant_fallback": 701.1
+    }
+  },
+  "render": {
+    "url": "https://mesa-meal-discovery.onrender.com",
+    "plan": "free",
+    "region": "virginia",
+    "service_id": "srv-dbnkkiuc6qcc73e5j8j0",
+    "deploy_id": "dep-dbnkkjec6qcc73e5j9h0",
+    "status": "live",
+    "checks_passed": 6,
+    "timings_ms": {
+      "interface": 451.1,
+      "evaluations": 230.3,
+      "catalog": 484.6,
+      "search": 1035.7,
+      "recommendations": 275.1,
+      "assistant_fallback": 915.9
+    }
+  },
+  "real_products": 1066840,
+  "assistant_mode_tested": "glossary_fallback",
+  "live_gemini_tested": false,
+  "gemini_secret_configuration": "pending_author_action_in_render_dashboard",
+  "official_test_evaluated": false,
+  "limitations": [
+    "One sequential smoke run, not a load test or reliability guarantee.",
+    "Container resource measurements come from GitHub Actions, not Render telemetry.",
+    "Public timings include network latency from the author's machine.",
+    "The free service can sleep; cold-start latency was not measured on Render.",
+    "No external model was called and no Gemini quality claim is supported."
+  ]
+}

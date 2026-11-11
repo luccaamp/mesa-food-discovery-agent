@@ -1,0 +1,37 @@
+{
+  "artifact_version": "mesa-public-data-v1",
+  "download_url": "https://github.com/luccaamp/mesa/releases/download/mesa-data-sg-v1/catalog-serving-sg-v1.zip",
+  "bytes": 175769602,
+  "sha256": "1efe99435dfe1bbd8c6286c7f2720560983fde378c2fb950b171c83310ac160e",
+  "files": {
+    "singapore-catalog-v1.sqlite": {
+      "bytes": 174632960,
+      "sha256": "836eef073ca36058f23943f3b847174be5d05c7a35cdf9b1b29331278b6d41fe"
+    },
+    "singapore-serving-v1.sqlite": {
+      "bytes": 396230656,
+      "sha256": "7f49ba7099a2d7c852902e7283605c3540f38dca85c097ea43e3bd49bc1e2c25"
+    },
+    "DATA-NOTICE.txt": {
+      "bytes": 1974,
+      "sha256": "445315c6ad5cf3312d5bab9a1ed7c33cf35d97534e70eccb11cfa7033845fde2"
+    }
+  },
+  "provenance": {
+    "data_kind": "official_dhrd",
+    "city": "Singapore",
+    "products": 1066840,
+    "cuisines": 78,
+    "source_database_sha256": "3c7123757311bd51ffb22bb9782f7b7600b71ec73741cd3f866a87a50acd5188",
+    "source_hashes": {
+      "vendors_sg.txt": "34d92d1c423db48156c59de74fa5cd3246c94d80eec3e7e759c5f46ae32da641",
+      "products_sg.txt": "63e981a45619a3a7e62af8a037ffb641e7410fee35e26b4882f9db6de5e1385c",
+      "orders_sg_train.txt": "4e4cbfbdf9731531ef0dde02538e62096b523b73a00a5c20bc3e5d6d6c7244e0"
+    },
+    "training_orders": 1410654,
+    "training_items": 228822,
+    "neighbor_edges": 2165201,
+    "train_end_day_inclusive": 61,
+    "individual_order_or_customer_tables": false
+  }
+}

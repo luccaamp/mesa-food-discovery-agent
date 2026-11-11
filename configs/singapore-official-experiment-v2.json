@@ -1,0 +1,14 @@
+{
+  "protocol_version": "singapore-official-validation-v2",
+  "dataset_adapter": "singapore-official-v1",
+  "train_end_day_inclusive": 61,
+  "validation_end_day_inclusive": 75,
+  "test_start_day_inclusive": 76,
+  "test_end_day_inclusive": 90,
+  "k": 10,
+  "models": ["popularity", "repeat", "basket_cosine"],
+  "geographic_filter": false,
+  "max_users": null,
+  "test_policy": "Official test rows remain in the source TXT file, outside the training database; no scoring or tuning on them in this validation.",
+  "limitations": "Validation is an internal temporal split of official training orders. Historical v1 used only days 62-68; these scores are not directly interchangeable."
+}

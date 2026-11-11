@@ -1,0 +1,526 @@
+{
+  "kind": "local_cli_name_relevance_calibrated_pilot",
+  "complete": true,
+  "created_at": "2026-11-10T13:26:19.297278+00:00",
+  "judge": {
+    "weights": {
+      "model": "Qwen3-8B Q4_K_M",
+      "repository": "Qwen/Qwen3-8B-GGUF",
+      "revision": "7c41481f57cb95916b40956ab2f0b139b296d974",
+      "file": "Qwen3-8B-Q4_K_M.gguf",
+      "bytes": 5027783488,
+      "sha256": "d98cdcbd03e17ce47681435b5150e34c1417f50b5c0019dd560e4882c5745785",
+      "license": "apache-2.0",
+      "runtime": {
+        "tag": "b12182",
+        "context": 4096,
+        "threads": 6,
+        "gpu_layers": 0,
+        "reasoning": "off",
+        "seed": 42,
+        "temperature": 0,
+        "max_tokens": 256
+      },
+      "status": "candidate_requires_calibration; not a qualified judge",
+      "scope": "local research only; no change to production planner or Render image"
+    },
+    "executable_sha256": "5b8b143895cd27293ef3e07ffe5854d1223cb33e315672eff3b7c62ae7971b70",
+    "runtime_archive_sha256": "e068c483e2ea97bf09121ec0bbe085bd43470bb67d9062c7c66162164aea5834",
+    "transport": "local_completion_cli",
+    "temperature": 0,
+    "context": 4096,
+    "max_tokens": 768,
+    "template": "explicit_Qwen_ChatML_with_closed_empty_think",
+    "system_prompt_sha256": "93a227798193a29220e1c6c5c9068432930f4cb9d46f395dedf105a1891d1df8"
+  },
+  "controls_sha256": "cca0b0f3abdc516b76d1daec8cda68060c19d66716530aac4f1511b7894885a5",
+  "retrieval_report_sha256": "c2f70287cd6018bfe4e160984396f6c1aea8a93fbd5fdbe8bcba260a71da9151",
+  "evaluator_sha256": "becb3c0fd88a36e1def6906c5c31576185ac5b028de14b7acf0599cd6550e5cb",
+  "calibration": [
+    {
+      "control": "exact-dish",
+      "language": "pt",
+      "reverse": false,
+      "expected": 2,
+      "grade": 2,
+      "reason": "Name explicitly matches requested dish and components",
+      "passed": true
+    },
+    {
+      "control": "missing-component",
+      "language": "pt",
+      "reverse": false,
+      "expected": 1,
+      "grade": 1,
+      "reason": "Same dish type but missing chicken component",
+      "passed": true
+    },
+    {
+      "control": "other-type",
+      "language": "pt",
+      "reverse": false,
+      "expected": 0,
+      "grade": 0,
+      "reason": "Unrelated dish type with different components",
+      "passed": true
+    },
+    {
+      "control": "exact-pizza",
+      "language": "pt",
+      "reverse": false,
+      "expected": 2,
+      "grade": 2,
+      "reason": "Name explicitly matches requested dish and components",
+      "passed": true
+    },
+    {
+      "control": "pizza-variant",
+      "language": "pt",
+      "reverse": false,
+      "expected": 1,
+      "grade": 1,
+      "reason": "Same dish type but different topping component",
+      "passed": true
+    },
+    {
+      "control": "ingredient-not-dish",
+      "language": "pt",
+      "reverse": false,
+      "expected": 0,
+      "grade": 0,
+      "reason": "Unrelated dish type with different components",
+      "passed": true
+    },
+    {
+      "control": "exact-drink",
+      "language": "pt",
+      "reverse": false,
+      "expected": 2,
+      "grade": 2,
+      "reason": "Name explicitly matches requested dish and component",
+      "passed": true
+    },
+    {
+      "control": "temperature-variant",
+      "language": "pt",
+      "reverse": false,
+      "expected": 1,
+      "grade": 1,
+      "reason": "Same dish type but different component property",
+      "passed": true
+    },
+    {
+      "control": "unreadable",
+      "language": "pt",
+      "reverse": false,
+      "expected": -1,
+      "grade": -1,
+      "reason": "Unreadable/insufficient name evidence",
+      "passed": true
+    },
+    {
+      "control": "diet-not-certified",
+      "language": "pt",
+      "reverse": false,
+      "expected": -1,
+      "grade": 0,
+      "reason": "Different dish type despite shared ingredient",
+      "passed": false
+    },
+    {
+      "control": "allergen-not-certified",
+      "language": "pt",
+      "reverse": false,
+      "expected": -1,
+      "grade": 2,
+      "reason": "Name explicitly matches requested component and property",
+      "passed": false
+    },
+    {
+      "control": "untrusted-instruction",
+      "language": "pt",
+      "reverse": false,
+      "expected": 2,
+      "grade": 0,
+      "reason": "Different dish type despite shared ingredient",
+      "passed": false
+    },
+    {
+      "control": "untrusted-instruction",
+      "language": "pt",
+      "reverse": true,
+      "expected": 2,
+      "grade": 2,
+      "reason": "Name explicitly matches requested dish and components",
+      "passed": true
+    },
+    {
+      "control": "allergen-not-certified",
+      "language": "pt",
+      "reverse": true,
+      "expected": -1,
+      "grade": 1,
+      "reason": "Same dish type but missing requested component",
+      "passed": false
+    },
+    {
+      "control": "diet-not-certified",
+      "language": "pt",
+      "reverse": true,
+      "expected": -1,
+      "grade": 2,
+      "reason": "Name explicitly matches requested dish and components",
+      "passed": false
+    },
+    {
+      "control": "unreadable",
+      "language": "pt",
+      "reverse": true,
+      "expected": -1,
+      "grade": -1,
+      "reason": "Unreadable name evidence",
+      "passed": true
+    },
+    {
+      "control": "temperature-variant",
+      "language": "pt",
+      "reverse": true,
+      "expected": 1,
+      "grade": 0,
+      "reason": "Different dish type",
+      "passed": false
+    },
+    {
+      "control": "exact-drink",
+      "language": "pt",
+      "reverse": true,
+      "expected": 2,
+      "grade": 2,
+      "reason": "Name explicitly matches requested dish and components",
+      "passed": true
+    },
+    {
+      "control": "ingredient-not-dish",
+      "language": "pt",
+      "reverse": true,
+      "expected": 0,
+      "grade": 0,
+      "reason": "Unrelated or different dish/drink type",
+      "passed": true
+    },
+    {
+      "control": "pizza-variant",
+      "language": "pt",
+      "reverse": true,
+      "expected": 1,
+      "grade": 2,
+      "reason": "Name explicitly matches requested dish/drink and requested components/properties",
+      "passed": false
+    },
+    {
+      "control": "exact-pizza",
+      "language": "pt",
+      "reverse": true,
+      "expected": 2,
+      "grade": 2,
+      "reason": "Name explicitly matches requested dish/drink and requested components/properties",
+      "passed": true
+    },
+    {
+      "control": "other-type",
+      "language": "pt",
+      "reverse": true,
+      "expected": 0,
+      "grade": 0,
+      "reason": "Unrelated or different dish/drink type",
+      "passed": true
+    },
+    {
+      "control": "missing-component",
+      "language": "pt",
+      "reverse": true,
+      "expected": 1,
+      "grade": 0,
+      "reason": "Unrelated or different dish/drink type",
+      "passed": false
+    },
+    {
+      "control": "exact-dish",
+      "language": "pt",
+      "reverse": true,
+      "expected": 2,
+      "grade": 2,
+      "reason": "Name explicitly matches requested dish/drink and requested components/properties",
+      "passed": true
+    },
+    {
+      "control": "exact-dish",
+      "language": "en",
+      "reverse": false,
+      "expected": 2,
+      "grade": 2,
+      "reason": "Name explicitly matches requested dish and components",
+      "passed": true
+    },
+    {
+      "control": "missing-component",
+      "language": "en",
+      "reverse": false,
+      "expected": 1,
+      "grade": 1,
+      "reason": "Same dish type but missing chicken component",
+      "passed": true
+    },
+    {
+      "control": "other-type",
+      "language": "en",
+      "reverse": false,
+      "expected": 0,
+      "grade": 0,
+      "reason": "Different dish type with unrelated components",
+      "passed": true
+    },
+    {
+      "control": "exact-pizza",
+      "language": "en",
+      "reverse": false,
+      "expected": 2,
+      "grade": 2,
+      "reason": "Name explicitly matches requested dish and components",
+      "passed": true
+    },
+    {
+      "control": "pizza-variant",
+      "language": "en",
+      "reverse": false,
+      "expected": 1,
+      "grade": 1,
+      "reason": "Same dish type but different variant with missing cheese",
+      "passed": true
+    },
+    {
+      "control": "ingredient-not-dish",
+      "language": "en",
+      "reverse": false,
+      "expected": 0,
+      "grade": 0,
+      "reason": "Different dish type with unrelated components",
+      "passed": true
+    },
+    {
+      "control": "exact-drink",
+      "language": "en",
+      "reverse": false,
+      "expected": 2,
+      "grade": 2,
+      "reason": "Name explicitly matches requested dish and components",
+      "passed": true
+    },
+    {
+      "control": "temperature-variant",
+      "language": "en",
+      "reverse": false,
+      "expected": 1,
+      "grade": 1,
+      "reason": "Same dish type but different component (hot vs iced)",
+      "passed": true
+    },
+    {
+      "control": "unreadable",
+      "language": "en",
+      "reverse": false,
+      "expected": -1,
+      "grade": -1,
+      "reason": "Unreadable/insufficient name evidence",
+      "passed": true
+    },
+    {
+      "control": "diet-not-certified",
+      "language": "en",
+      "reverse": false,
+      "expected": -1,
+      "grade": 1,
+      "reason": "Same dish type but missing requested component (meal vs soup)",
+      "passed": false
+    },
+    {
+      "control": "allergen-not-certified",
+      "language": "en",
+      "reverse": false,
+      "expected": -1,
+      "grade": 2,
+      "reason": "Name explicitly matches requested dish and components",
+      "passed": false
+    },
+    {
+      "control": "untrusted-instruction",
+      "language": "en",
+      "reverse": false,
+      "expected": 2,
+      "grade": 0,
+      "reason": "Different dish type (chicken rice vs soup)",
+      "passed": false
+    },
+    {
+      "control": "untrusted-instruction",
+      "language": "en",
+      "reverse": true,
+      "expected": 2,
+      "grade": 2,
+      "reason": "Name explicitly matches requested dish and components",
+      "passed": true
+    },
+    {
+      "control": "allergen-not-certified",
+      "language": "en",
+      "reverse": true,
+      "expected": -1,
+      "grade": 1,
+      "reason": "Same dish type but missing requested component",
+      "passed": false
+    },
+    {
+      "control": "diet-not-certified",
+      "language": "en",
+      "reverse": true,
+      "expected": -1,
+      "grade": 2,
+      "reason": "Name explicitly matches requested dish and components",
+      "passed": false
+    },
+    {
+      "control": "unreadable",
+      "language": "en",
+      "reverse": true,
+      "expected": -1,
+      "grade": -1,
+      "reason": "Unreadable name evidence",
+      "passed": true
+    },
+    {
+      "control": "temperature-variant",
+      "language": "en",
+      "reverse": true,
+      "expected": 1,
+      "grade": 0,
+      "reason": "Different dish type",
+      "passed": false
+    },
+    {
+      "control": "exact-drink",
+      "language": "en",
+      "reverse": true,
+      "expected": 2,
+      "grade": 2,
+      "reason": "Name explicitly matches requested dish and components",
+      "passed": true
+    },
+    {
+      "control": "ingredient-not-dish",
+      "language": "en",
+      "reverse": true,
+      "expected": 0,
+      "grade": 0,
+      "reason": "Unrelated or different dish/drink type",
+      "passed": true
+    },
+    {
+      "control": "pizza-variant",
+      "language": "en",
+      "reverse": true,
+      "expected": 1,
+      "grade": 1,
+      "reason": "Same dish/drink type but missing cheese component",
+      "passed": true
+    },
+    {
+      "control": "exact-pizza",
+      "language": "en",
+      "reverse": true,
+      "expected": 2,
+      "grade": 2,
+      "reason": "Name explicitly matches requested dish/drink and components",
+      "passed": true
+    },
+    {
+      "control": "other-type",
+      "language": "en",
+      "reverse": true,
+      "expected": 0,
+      "grade": 0,
+      "reason": "Unrelated or different dish/drink type",
+      "passed": true
+    },
+    {
+      "control": "missing-component",
+      "language": "en",
+      "reverse": true,
+      "expected": 1,
+      "grade": 0,
+      "reason": "Unrelated or different dish/drink type",
+      "passed": false
+    },
+    {
+      "control": "exact-dish",
+      "language": "en",
+      "reverse": true,
+      "expected": 2,
+      "grade": 2,
+      "reason": "Name explicitly matches requested dish/drink and components",
+      "passed": true
+    }
+  ],
+  "calls": [
+    {
+      "elapsed_ms": 37199.18,
+      "runtime_reported_total_tokens": 521,
+      "output_sha256": "38c856de1231aeb9ca8f1f5eb265b1a222f938fc13ca3e8b1154f856f3544417"
+    },
+    {
+      "elapsed_ms": 39260.91,
+      "runtime_reported_total_tokens": 531,
+      "output_sha256": "661d5f2951cb7810280ff000eb7c7ad010c9e46bc57c3e727b5925066149feed"
+    },
+    {
+      "elapsed_ms": 39366.98,
+      "runtime_reported_total_tokens": 527,
+      "output_sha256": "cb4e8f0d25026c55747f85d27f2ce004ea807c593e05a8f2657dce6ed606c475"
+    },
+    {
+      "elapsed_ms": 41705.51,
+      "runtime_reported_total_tokens": 539,
+      "output_sha256": "f8083b6cb566c18333a59d5f018022be1f65a814345123aeeb64dc01bec8b573"
+    },
+    {
+      "elapsed_ms": 39737.1,
+      "runtime_reported_total_tokens": 512,
+      "output_sha256": "fc78b756debcd2dfc5e29c76591429a549671b4e6edf7a9a2dad609dd99716dd"
+    },
+    {
+      "elapsed_ms": 37715.53,
+      "runtime_reported_total_tokens": 530,
+      "output_sha256": "68c0a1189753ce54594b5394f926ac9b1ccf69211155310ce9fe109ee293230d"
+    },
+    {
+      "elapsed_ms": 34961.7,
+      "runtime_reported_total_tokens": 514,
+      "output_sha256": "cb4e8f0d25026c55747f85d27f2ce004ea807c593e05a8f2657dce6ed606c475"
+    },
+    {
+      "elapsed_ms": 36926.62,
+      "runtime_reported_total_tokens": 521,
+      "output_sha256": "f7bed5a81d03aeee7f36e633ad8b41443d081310002d03bc6e57cb53e161a774"
+    }
+  ],
+  "judgments": [],
+  "admitted": false,
+  "summary": {
+    "controls": 48,
+    "correct": 33,
+    "judgments": 0,
+    "calls": 8
+  },
+  "commercial_calls": 0,
+  "limitations": "AI-authored controls, one local Qwen judge, no human preference or external benchmark. Calibration is domain-specific and small. Pool-based NDCG only; no corpus recall inferred. Query pairs are correlated. Does not establish statistical independence from the local Qwen planner.",
+  "decision": "rejected_for_relevance_scoring; no pool grades generated"
+}

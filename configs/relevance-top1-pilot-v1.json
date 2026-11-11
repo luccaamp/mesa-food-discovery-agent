@@ -1,0 +1,10 @@
+{
+  "kind": "calibrated_name_relevance_development_pilot",
+  "retrieval": "evaluations/results/retrieval-additional-v2.json",
+  "k": 1,
+  "selection": "First result of every existing query/language/method row; no favorable case selection. Preserve empty results.",
+  "deduplication": "Identical query, language and name share a name-only judgment; all original product IDs are retained.",
+  "admission": "Frozen name-and-constraint guarded bounded judge must first pass all 32 v5 control judgments.",
+  "metrics": "Full name match rate at 1, partial match count, unrelated count, abstentions and empty results. Abstentions are excluded from match-rate denominator and reported separately.",
+  "limitations": "Top-1 development pilot, not full top-10 grading, recall, human preference, held-out generalization or grounds to promote semantic retrieval. PT/EN query pairs are correlated."
+}

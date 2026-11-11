@@ -1,0 +1,16 @@
+{
+  "kind": "incomplete_local_judge_attempt",
+  "status": "aborted_after_http_timeout",
+  "qualified": false,
+  "counts_as_completed_calibration": false,
+  "reason": "A sample exceeded the 60-second HTTP timeout with reasoning enabled; the owned run was stopped. No passing score is inferred.",
+  "partial_log_file": "2026-11-10T05-55-05-00-00_mesa-judge-calibration-v1_ntwNBdrDaeFFgzdEibRbhr.eval",
+  "partial_log_sha256": "f3f5c18a22d7fe79c61da46ce935e52b12b98d355aa149421569c77893175bc7",
+  "configuration": {
+    "model": "Qwen3-8B Q4_K_M",
+    "reasoning": "on",
+    "reasoning_budget": 512,
+    "max_tokens": 1024
+  },
+  "limitations": "Incomplete attempt, not a quality score. No commercial API used."
+}

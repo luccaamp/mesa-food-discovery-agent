@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "kind": "real_http_contracts_not_relevance_evaluation",
+  "api_version": "0.5.0",
+  "catalog": {
+    "schema_version": 1,
+    "index_version": "lexical-fts5-v1",
+    "data_kind": "official_dhrd",
+    "city": "Singapore",
+    "source_database_sha256": "3c7123757311bd51ffb22bb9782f7b7600b71ec73741cd3f866a87a50acd5188",
+    "source_hashes": {
+      "vendors_sg.txt": "34d92d1c423db48156c59de74fa5cd3246c94d80eec3e7e759c5f46ae32da641",
+      "products_sg.txt": "63e981a45619a3a7e62af8a037ffb641e7410fee35e26b4882f9db6de5e1385c",
+      "orders_sg_train.txt": "4e4cbfbdf9731531ef0dde02538e62096b523b73a00a5c20bc3e5d6d6c7244e0"
+    },
+    "products": 1066840,
+    "cuisines": 78,
+    "price_unit": "dataset_normalized_unit",
+    "historical_catalog": true,
+    "limitations": [
+      "No live availability, currency conversion or delivery-radius guarantee.",
+      "Lexical matching only; no translation or semantic understanding.",
+      "Catalog includes products with no observed training interactions."
+    ]
+  },
+  "checks": [
+    {
+      "query": "chicken rice",
+      "total_matches": 27621,
+      "returned": 5,
+      "local_http_elapsed_ms": 112.19620000338182,
+      "detail_contract": "passed",
+      "combined_filters": "passed"
+    },
+    {
+      "query": "pizza",
+      "total_matches": 45706,
+      "returned": 5,
+      "local_http_elapsed_ms": 62.33129999600351,
+      "detail_contract": "passed",
+      "combined_filters": "passed"
+    },
+    {
+      "query": "milk tea",
+      "total_matches": 13826,
+      "returned": 5,
+      "local_http_elapsed_ms": 73.46409995807335,
+      "detail_contract": "passed",
+      "combined_filters": "passed"
+    }
+  ],
+  "invalid_parameters": "422 passed",
+  "unknown_item": "404 passed",
+  "empty_results": "no fallback passed",
+  "trace_headers": "passed",
+  "limitations": "Three English literal queries against local HTTP, no human relevance labels or load test. Official test orders are not used.",
+  "implementation_sha256": {
+    "api.py": "43e189c8892026ec579f7c59d33150b70ecdc7702d2d563aaa86894e4fff4041",
+    "api_models.py": "04f462cd3306bbe362aa0b2bd59d411cfea6272d39e47a3412d4e6bf027b50e5",
+    "catalog.py": "228b5e061ad53bb96fd5d74c938fd97ba5fefaba0ecc8a1f9a483229264d0d6a"
+  }
+}

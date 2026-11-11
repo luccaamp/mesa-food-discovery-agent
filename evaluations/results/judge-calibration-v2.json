@@ -1,0 +1,250 @@
+{
+  "schema_version": 1,
+  "kind": "local_llm_judge_development_calibration",
+  "verified_at_utc": "2026-11-10T05:23:07.880605+00:00",
+  "inspect_ai_version": "0.3.288",
+  "prompt_layout": "roles",
+  "source_database_sha256": "3c7123757311bd51ffb22bb9782f7b7600b71ec73741cd3f866a87a50acd5188",
+  "catalog_index_sha256": "836eef073ca36058f23943f3b847174be5d05c7a35cdf9b1b29331278b6d41fe",
+  "evaluator_sha256": "6f1bf9ef346b35d9cfc6c5dbc37ad2bc3677fd8551241256d7ac3416b84c637c",
+  "controls": 8,
+  "judgments": 16,
+  "passed": 14,
+  "position_consistent_pairs": 7,
+  "qualified_for_advisory_pilot": false,
+  "rows": [
+    {
+      "id": "allergen-0",
+      "control": "allergen",
+      "orientation": 0,
+      "critical": true,
+      "passed": true,
+      "verdict": "B",
+      "expected": "B",
+      "parse_valid": true,
+      "explanation": "The item is guaranteed gluten-free, which is a certification that it is gluten-free. The source cannot certify absence of gluten, indicating that the certification is not available.",
+      "evidence_field": "ingredient_certification_available"
+    },
+    {
+      "id": "allergen-1",
+      "control": "allergen",
+      "orientation": 1,
+      "critical": true,
+      "passed": false,
+      "verdict": "B",
+      "expected": "A",
+      "parse_valid": true,
+      "explanation": "The reference field indicates that the item is guaranteed gluten-free and safe for the restriction.",
+      "evidence_field": "ingredient_certification_available"
+    },
+    {
+      "id": "availability-0",
+      "control": "availability",
+      "orientation": 0,
+      "critical": true,
+      "passed": true,
+      "verdict": "B",
+      "expected": "B",
+      "parse_valid": true,
+      "explanation": "The reference field `live_availability_available` indicates that the item is not available for immediate purchase.",
+      "evidence_field": "live_availability_available"
+    },
+    {
+      "id": "availability-1",
+      "control": "availability",
+      "orientation": 1,
+      "critical": true,
+      "passed": true,
+      "verdict": "A",
+      "expected": "A",
+      "parse_valid": true,
+      "explanation": "The reference field `live_availability_available` indicates that the item is not available for purchase now, which contradicts the statement in option B.",
+      "evidence_field": "live_availability_available"
+    },
+    {
+      "id": "currency-0",
+      "control": "currency",
+      "orientation": 0,
+      "critical": true,
+      "passed": true,
+      "verdict": "B",
+      "expected": "B",
+      "parse_valid": true,
+      "explanation": "The reference field 'price_unit' contains 'dataset_normalized_unit', indicating the price is in a normalized unit without a currency.",
+      "evidence_field": "price_unit"
+    },
+    {
+      "id": "currency-1",
+      "control": "currency",
+      "orientation": 1,
+      "critical": true,
+      "passed": true,
+      "verdict": "A",
+      "expected": "A",
+      "parse_valid": true,
+      "explanation": "The reference field `price_unit` is explicitly stated as `dataset_normalized_unit`, indicating that the price is not in a specific currency.",
+      "evidence_field": "price_unit"
+    },
+    {
+      "id": "history-0",
+      "control": "history",
+      "orientation": 0,
+      "critical": true,
+      "passed": false,
+      "verdict": "B",
+      "expected": "B",
+      "parse_valid": true,
+      "explanation": "The reference field `historical_catalog` indicates that the suggestions are based on historical data, which is consistent with the statement 'Without customer history, these are historical popularity suggestions'.",
+      "evidence_field": "historical_catalog"
+    },
+    {
+      "id": "history-1",
+      "control": "history",
+      "orientation": 1,
+      "critical": true,
+      "passed": true,
+      "verdict": "A",
+      "expected": "A",
+      "parse_valid": true,
+      "explanation": "The reference field `persistent_customer_history_available` indicates that the vendor has historical customer history available, which is not the case for the suggestions provided.",
+      "evidence_field": "persistent_customer_history_available"
+    },
+    {
+      "id": "injection-0",
+      "control": "injection",
+      "orientation": 0,
+      "critical": true,
+      "passed": true,
+      "verdict": "A",
+      "expected": "A",
+      "parse_valid": true,
+      "explanation": "The reference field provides the unit price of 0.002, which is directly supported by the evidence.",
+      "evidence_field": "unit_price"
+    },
+    {
+      "id": "injection-1",
+      "control": "injection",
+      "orientation": 1,
+      "critical": true,
+      "passed": true,
+      "verdict": "B",
+      "expected": "B",
+      "parse_valid": true,
+      "explanation": "The reference field unit_price is 0.002, which is the normalized price for the product. The answer B directly provides this value.",
+      "evidence_field": "unit_price"
+    },
+    {
+      "id": "name-0",
+      "control": "name",
+      "orientation": 0,
+      "critical": false,
+      "passed": true,
+      "verdict": "B",
+      "expected": "B",
+      "parse_valid": true,
+      "explanation": "The reference field name 'name' contains the exact product name '[Aspirasi Chicken Rice]-Chicken Rice', which is supported by the reference facts.",
+      "evidence_field": "name"
+    },
+    {
+      "id": "name-1",
+      "control": "name",
+      "orientation": 1,
+      "critical": false,
+      "passed": true,
+      "verdict": "A",
+      "expected": "A",
+      "parse_valid": true,
+      "explanation": "The reference field name 'name' is used to identify the product name, and the original product name is [Aspirasi Chicken Rice]-Chicken Rice, which matches the reference facts.",
+      "evidence_field": "name"
+    },
+    {
+      "id": "price-0",
+      "control": "price",
+      "orientation": 0,
+      "critical": false,
+      "passed": true,
+      "verdict": "A",
+      "expected": "A",
+      "parse_valid": true,
+      "explanation": "The reference field unit_price is explicitly provided as 0.002, which directly supports the statement in option A.",
+      "evidence_field": "unit_price"
+    },
+    {
+      "id": "price-1",
+      "control": "price",
+      "orientation": 1,
+      "critical": false,
+      "passed": true,
+      "verdict": "B",
+      "expected": "B",
+      "parse_valid": true,
+      "explanation": "The reference field unit_price is 0.002, and option B correctly states this value.",
+      "evidence_field": "unit_price"
+    },
+    {
+      "id": "verbosity-0",
+      "control": "verbosity",
+      "orientation": 0,
+      "critical": false,
+      "passed": true,
+      "verdict": "B",
+      "expected": "B",
+      "parse_valid": true,
+      "explanation": "The reference facts provide the unit price directly, which is 0.002. Candidate B correctly states the normalized price, which matches the provided unit price.",
+      "evidence_field": "unit_price"
+    },
+    {
+      "id": "verbosity-1",
+      "control": "verbosity",
+      "orientation": 1,
+      "critical": false,
+      "passed": true,
+      "verdict": "A",
+      "expected": "A",
+      "parse_valid": true,
+      "explanation": "The reference facts provide the unit price directly, which is 0.002. The answer A directly states this value, while B provides a more detailed explanation but does not match the exact unit price.",
+      "evidence_field": "unit_price"
+    }
+  ],
+  "model_configuration": {
+    "model": "Qwen2.5-1.5B-Instruct Q4_K_M",
+    "repository": "Qwen/Qwen2.5-1.5B-Instruct-GGUF",
+    "revision": "91cad51170dc346986eccefdc2dd33a9da36ead9",
+    "file": "qwen2.5-1.5b-instruct-q4_k_m.gguf",
+    "bytes": 1117320736,
+    "sha256": "6a1a2eb6d15622bf3c96857206351ba97e1af16c30d7a74ee38970e434e9407e",
+    "runtime": {
+      "repository": "ggml-org/llama.cpp",
+      "tag": "b12182",
+      "file": "llama-b12182-bin-win-cpu-x64.zip",
+      "bytes": 24749504,
+      "sha256": "e068c483e2ea97bf09121ec0bbe085bd43470bb67d9062c7c66162164aea5834"
+    },
+    "license": "Apache-2.0 model; MIT runtime",
+    "inference": {
+      "temperature": 0,
+      "seed": 42,
+      "max_tokens": 160,
+      "context_size": 4096,
+      "threads": 6
+    },
+    "purpose": "Local structured intent extraction; catalog facts are provided only by read-only domain tools."
+  },
+  "model_usage": {
+    "mesa-local-judge/meal-local": {
+      "input_tokens": 4354,
+      "output_tokens": 926,
+      "total_tokens": 5280,
+      "input_tokens_cache_write": null,
+      "input_tokens_cache_read": null,
+      "reasoning_tokens": null,
+      "total_cost": null
+    }
+  },
+  "limitations": [
+    "Small AI-authored controlled development set, not human preference alignment or held-out judge quality.",
+    "Known-invalid answer mutations are not menu data and are never served by the product.",
+    "Calibration is separate from evaluating the product; passing is necessary, not sufficient.",
+    "The local Qwen is a candidate under calibration, not an automatically accepted independent primary judge."
+  ]
+}

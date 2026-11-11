@@ -1,0 +1,12 @@
+{
+  "kind": "real_browser_max_selection_keyboard_check",
+  "url": "http://127.0.0.1:8000",
+  "checks": {
+    "selection_count": 5,
+    "unselected_reference_disabled": true,
+    "tab_stays_on_only_enabled_button": true,
+    "shift_tab_stays_on_only_enabled_button": true
+  },
+  "app_sha256": "f3980fe7a9423a7257824141c88e7dd28656085e2d08c2c7f4f760da4db380cc",
+  "limits": "Targeted real-browser test; not a complete accessibility certification."
+}

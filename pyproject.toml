@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "meal-discovery-ai"
+version = "0.8.0"
+description = "Meal recommendation and conversational discovery with reproducible evaluation"
+readme = "README.md"
+requires-python = ">=3.11"
+license = "MIT"
+dependencies = []
+
+[project.optional-dependencies]
+api = ["fastapi==0.162.0", "uvicorn==0.54.0"]
+test = ["httpx2==2.16.0"]
+semantic = ["numpy==2.3.5", "onnxruntime==1.31.1", "tokenizers==0.23.3"]
+
+[project.scripts]
+meal-discovery = "meal_discovery.__main__:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+meal_discovery = ["prompts/*.txt"]

@@ -1,0 +1,130 @@
+{
+  "data_kind": "official_dhrd",
+  "checked_at_utc": "2026-11-07T02:49:28.521916+00:00",
+  "source": "User downloaded the three ZIPs from the official Drive folder.",
+  "source_url": "https://drive.google.com/drive/folders/1dCUvFVmt9xNOGgadql_O16SwtGy6e_hE",
+  "checksum_reference": "https://github.com/ISG-Siegen/OmniRec/blob/9800bd4e75d321d37be78de4d33ba72b73d8b92e/src/omnirec/data_loaders/deliveryhero.py",
+  "archives": [
+    {
+      "city_code": "se",
+      "archive": "data_se.zip",
+      "archive_bytes": 30425419,
+      "archive_sha256": "2a3947bd29a892a634882b0ec45e4d47a09e68dfdc74fca353b53467eeb43da4",
+      "matches_reference": true,
+      "member_crc_verified": true,
+      "files": [
+        {
+          "path": "data_se/products_se.txt",
+          "bytes": 5506529,
+          "sha256": "77c8b2637a445a4cadada32deef5e4c44536418683b8d1022dcd465f15b793a1",
+          "crc32": "c8d72d04"
+        },
+        {
+          "path": "data_se/orders_se_train.txt",
+          "bytes": 44103808,
+          "sha256": "a81c5361b8c7ea19601ebb0222d0f583aa8d3a30ad3f74bbb00d7f20e6c490ea",
+          "crc32": "1306e310"
+        },
+        {
+          "path": "data_se/orders_se.txt",
+          "bytes": 54090728,
+          "sha256": "c23e35d6c3b94bb7e269906512715a5da675c6cb61e141e48586144d5acb1d98",
+          "crc32": "aeaaae1d"
+        },
+        {
+          "path": "data_se/orders_se_test.txt",
+          "bytes": 9987004,
+          "sha256": "dad8003a66badda16ce70fbbdf351e8016dbd565630f883bf6656ab8821bb964",
+          "crc32": "cbbc2898"
+        },
+        {
+          "path": "data_se/vendors_se.txt",
+          "bytes": 36509,
+          "sha256": "6d207a61715c24d8a8a75e9170f7a5fe7f9b27609ddc3951601b8d770d8b98e5",
+          "crc32": "241b4ec5"
+        }
+      ]
+    },
+    {
+      "city_code": "sg",
+      "archive": "data_sg.zip",
+      "archive_bytes": 182576616,
+      "archive_sha256": "55a94a5c7eeba9610776b864aae7d653426afdb8aae93e5fa5050cbdc1c25d32",
+      "matches_reference": true,
+      "member_crc_verified": true,
+      "files": [
+        {
+          "path": "data_sg/orders_sg_train.txt",
+          "bytes": 250646970,
+          "sha256": "4e4cbfbdf9731531ef0dde02538e62096b523b73a00a5c20bc3e5d6d6c7244e0",
+          "crc32": "bde75bc7"
+        },
+        {
+          "path": "data_sg/products_sg.txt",
+          "bytes": 65265976,
+          "sha256": "63e981a45619a3a7e62af8a037ffb641e7410fee35e26b4882f9db6de5e1385c",
+          "crc32": "9a46f0b1"
+        },
+        {
+          "path": "data_sg/orders_sg_test.txt",
+          "bytes": 43252524,
+          "sha256": "3903a8b261ae6499c85d10341b1c94def746a6f8059c2a534c6c3700b2257118",
+          "crc32": "dc9273c8"
+        },
+        {
+          "path": "data_sg/orders_sg.txt",
+          "bytes": 293899410,
+          "sha256": "1269f7d9956e2b47c4a77a42ee2d956a76a1c4bccb60c098bb71535895d7f05a",
+          "crc32": "7088d919"
+        },
+        {
+          "path": "data_sg/vendors_sg.txt",
+          "bytes": 269488,
+          "sha256": "34d92d1c423db48156c59de74fa5cd3246c94d80eec3e7e759c5f46ae32da641",
+          "crc32": "e166c5b9"
+        }
+      ]
+    },
+    {
+      "city_code": "tw",
+      "archive": "data_tw.zip",
+      "archive_bytes": 195759832,
+      "archive_sha256": "83e8c0f5bfb4c27f14e3dd13964cc72117975397d7bee2522336301eaed781ec",
+      "matches_reference": true,
+      "member_crc_verified": true,
+      "files": [
+        {
+          "path": "data_tw/products_tw.txt",
+          "bytes": 44468492,
+          "sha256": "e7172b77a7caef535fafd93f4daf47447c1ca4d5e4ab6c68d481756089bbb879",
+          "crc32": "d8e15cdf"
+        },
+        {
+          "path": "data_tw/orders_tw_train.txt",
+          "bytes": 274288034,
+          "sha256": "b0d6428a873f0408f5c0b4be095051f180e5658cf3c89969ff3777ff7932a4c0",
+          "crc32": "252cdb33"
+        },
+        {
+          "path": "data_tw/vendors_tw.txt",
+          "bytes": 309976,
+          "sha256": "af99e00967efa637b0403b2ebb4b3454d07073eaa2d54183d17a901b7ff8d53d",
+          "crc32": "02fdebf9"
+        },
+        {
+          "path": "data_tw/orders_tw_test.txt",
+          "bytes": 60615494,
+          "sha256": "ad4ffd1ccc6658721bd09e3f401c2fdd5b407e2b1f029e1001892656e1be6221",
+          "crc32": "4937ba5a"
+        },
+        {
+          "path": "data_tw/orders_tw.txt",
+          "bytes": 334903444,
+          "sha256": "9eb0b4a37a1303e3bf7fd782dfb4cd584aabc46b72d2ee0dfbe08a77d2f0a29a",
+          "crc32": "86d414bf"
+        }
+      ]
+    }
+  ],
+  "policy": "Read official test files for structural audit only; do not train/tune on their outcomes."
+}

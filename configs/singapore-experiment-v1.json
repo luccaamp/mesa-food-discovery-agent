@@ -1,0 +1,13 @@
+{
+  "protocol_version": "singapore-next-basket-v1",
+  "dataset_adapter": "singapore-v1",
+  "train_end_day_inclusive": 61,
+  "validation_end_day_inclusive": 68,
+  "test_end_day_inclusive": 75,
+  "k": 10,
+  "models": ["popularity", "repeat", "basket_cosine"],
+  "geographic_filter": false,
+  "max_users": null,
+  "test_policy": "Days 69-75 remain reserved until the implementation and model choice are frozen. This file does not enforce access control.",
+  "limitations": "Own temporal split within the 76-day public training mirror, not the unavailable original official test."
+}

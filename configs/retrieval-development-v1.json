@@ -1,0 +1,22 @@
+{
+  "protocol_version": "retrieval-development-v1",
+  "k": 10,
+  "modes": ["lexical", "semantic", "hybrid"],
+  "label_kind": "silver_name_rules_not_human_judgments",
+  "query_authorship": "AI-authored development probes, frozen before the first measurement",
+  "limitations": "Relevant means the original product name matches all concept regexes. Rule-negative items are treated as nonrelevant for this proxy only. These are incomplete noisy labels, not dietary facts, human preference or a held-out relevance test. No tuning or final quality claim from this small development set.",
+  "queries": [
+    {"id": "chicken-rice-pt", "language": "pt", "query": "arroz com frango", "name_patterns": ["\\bchicken\\b", "\\brice\\b"]},
+    {"id": "chicken-rice-en", "language": "en", "query": "chicken rice", "name_patterns": ["\\bchicken\\b", "\\brice\\b"]},
+    {"id": "milk-tea-pt", "language": "pt", "query": "chá com leite", "name_patterns": ["\\bmilk\\b", "\\btea\\b"]},
+    {"id": "milk-tea-en", "language": "en", "query": "milk tea", "name_patterns": ["\\bmilk\\b", "\\btea\\b"]},
+    {"id": "cheese-pizza-pt", "language": "pt", "query": "pizza de queijo", "name_patterns": ["\\bcheese\\b", "\\bpizza\\b"]},
+    {"id": "cheese-pizza-en", "language": "en", "query": "cheese pizza", "name_patterns": ["\\bcheese\\b", "\\bpizza\\b"]},
+    {"id": "beef-noodles-pt", "language": "pt", "query": "macarrão com carne bovina", "name_patterns": ["\\bbeef\\b", "\\bnoodles?\\b"]},
+    {"id": "beef-noodles-en", "language": "en", "query": "beef noodles", "name_patterns": ["\\bbeef\\b", "\\bnoodles?\\b"]},
+    {"id": "iced-coffee-pt", "language": "pt", "query": "café gelado", "name_patterns": ["\\bice[ds]?\\b", "\\bcoffee\\b"]},
+    {"id": "iced-coffee-en", "language": "en", "query": "iced coffee", "name_patterns": ["\\bice[ds]?\\b", "\\bcoffee\\b"]},
+    {"id": "chicken-burger-pt", "language": "pt", "query": "hambúrguer de frango", "name_patterns": ["\\bchicken\\b", "\\bburger\\b"]},
+    {"id": "chicken-burger-en", "language": "en", "query": "chicken burger", "name_patterns": ["\\bchicken\\b", "\\bburger\\b"]}
+  ]
+}

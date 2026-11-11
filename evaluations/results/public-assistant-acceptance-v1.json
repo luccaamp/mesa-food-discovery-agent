@@ -1,0 +1,599 @@
+{
+  "kind": "public_gemini_bounded_deployment_acceptance",
+  "created_at": "2026-11-10T12:18:47.073377+00:00",
+  "complete": true,
+  "protocol": {
+    "protocol_version": "public-assistant-acceptance-v1",
+    "scope": "AI-authored deployment acceptance, not held-out human relevance or population quality",
+    "max_model_attempts": 8,
+    "max_consecutive_inference_failures": 2,
+    "cases": [
+      {
+        "id": "fish-search",
+        "message": "Gostaria de encontrar sopa de peixe no catálogo",
+        "tool": "search_catalog",
+        "concepts": [
+          [
+            "fish"
+          ],
+          [
+            "soup"
+          ]
+        ],
+        "requires_gemini": true,
+        "context": {}
+      },
+      {
+        "id": "price-followup",
+        "message": "até 0,004 unidades normalizadas",
+        "tool": "search_catalog",
+        "concepts": [
+          [
+            "fish"
+          ],
+          [
+            "soup"
+          ]
+        ],
+        "preserve_query": true,
+        "context_equals": {
+          "max_price": 0.004
+        },
+        "carry_context": true
+      },
+      {
+        "id": "switch-to-tea",
+        "message": "Agora prefiro chá com leite",
+        "tool": "search_catalog",
+        "concepts": [
+          [
+            "milk"
+          ],
+          [
+            "tea"
+          ]
+        ],
+        "excluded_query_terms": [
+          "fish",
+          "soup"
+        ],
+        "requires_gemini": true,
+        "carry_context": true
+      },
+      {
+        "id": "off-topic",
+        "message": "Quanto é dois mais dois?",
+        "tool": null,
+        "status": "needs_clarification",
+        "requires_gemini": true,
+        "context": {}
+      },
+      {
+        "id": "unsupported-allergy",
+        "message": "Tenho alergia a amendoim, garanta uma opção segura",
+        "tool": null,
+        "status": "needs_clarification",
+        "context": {}
+      },
+      {
+        "id": "selected-recommendations",
+        "message": "Recomende algo",
+        "tool": "recommend_items",
+        "select_observed_item": true,
+        "context": {}
+      }
+    ]
+  },
+  "protocol_sha256": "79f8e673291990ad00ef04306dfac860a60f60b74ce0dbc044604e8872c2aa93",
+  "evaluator_sha256": "6366d9bb96b2e739c65039ea1ecb7d9e2743d4afeebd4af37452a41b49cea396",
+  "source_database_sha256": "3c7123757311bd51ffb22bb9782f7b7600b71ec73741cd3f866a87a50acd5188",
+  "deployment_commit": "03ccef0e1f171bb508dad615b35299eaa6c77d85",
+  "reliability_policy": {
+    "max_attempts": 2,
+    "total_budget_seconds": 45
+  },
+  "model": "gemini-3.1-flash-lite",
+  "rows": [
+    {
+      "id": "fish-search",
+      "request_id": "ce67166be24244dea300e06345f852f0",
+      "request": {
+        "message": "Gostaria de encontrar sopa de peixe no catálogo",
+        "context": {}
+      },
+      "response": {
+        "status": "ok",
+        "answer": "Busquei “fish soup” no catálogo real e encontrei 3,052 correspondências. Os cards abaixo preservam os nomes originais.",
+        "items": [
+          {
+            "vendor_id": "042e81c7",
+            "product_id": "6f828d2e5d39",
+            "name": "Fish Soup",
+            "unit_price": 0.004,
+            "primary_cuisine": "noodles"
+          },
+          {
+            "vendor_id": "08c94d41",
+            "product_id": "6f6f1b128b6d",
+            "name": "Fish Soup",
+            "unit_price": 0.002,
+            "primary_cuisine": "chinese"
+          },
+          {
+            "vendor_id": "124caccc",
+            "product_id": "01ab1d161c3d",
+            "name": "Fish Soup",
+            "unit_price": 0.0048,
+            "primary_cuisine": "noodles"
+          },
+          {
+            "vendor_id": "3689391f",
+            "product_id": "08e8ea475a8d",
+            "name": "Fish Soup",
+            "unit_price": 0.0048,
+            "primary_cuisine": "noodles"
+          },
+          {
+            "vendor_id": "3a4b3f7f",
+            "product_id": "1f3da91446c9",
+            "name": "Fish Soup",
+            "unit_price": 0.0028000000000000004,
+            "primary_cuisine": "chinese"
+          },
+          {
+            "vendor_id": "3c8cc7e3",
+            "product_id": "930924e26c7e",
+            "name": "Fish Soup",
+            "unit_price": 0.0024,
+            "primary_cuisine": "coffee"
+          }
+        ],
+        "context": {
+          "last_query": "fish soup",
+          "cuisine": null,
+          "min_price": null,
+          "max_price": null,
+          "selected_items": []
+        },
+        "tools": [
+          {
+            "name": "search_catalog",
+            "arguments": {
+              "query": "fish soup",
+              "cuisine": null,
+              "min_price": null,
+              "max_price": null,
+              "limit": 6
+            },
+            "duration_ms": 116.20319494977593,
+            "result_count": 6
+          }
+        ],
+        "planner": "gemini_llm",
+        "model": "gemini-3.1-flash-lite",
+        "usage": {
+          "prompt_tokens": 324,
+          "completion_tokens": 12,
+          "total_tokens": 336,
+          "thought_tokens": 0,
+          "provider_attempts": 1,
+          "failed_attempts_usage_unknown": 0
+        },
+        "elapsed_ms": 2815.28,
+        "warnings": [
+          "Catálogo histórico. Preços normalizados, sem moeda. Sem garantia de estoque, entrega ou composição alimentar."
+        ]
+      },
+      "domain_errors": [],
+      "inference_completed": true,
+      "passed": true,
+      "http_ms": 3155.02
+    },
+    {
+      "id": "price-followup",
+      "request_id": "ddd85fc0c83f4f3e8839adcb6e69f675",
+      "request": {
+        "message": "até 0,004 unidades normalizadas",
+        "context": {
+          "last_query": "fish soup",
+          "cuisine": null,
+          "min_price": null,
+          "max_price": null,
+          "selected_items": []
+        }
+      },
+      "response": {
+        "status": "ok",
+        "answer": "Busquei “fish soup” no catálogo real e encontrei 2,322 correspondências. Os cards abaixo preservam os nomes originais.",
+        "items": [
+          {
+            "vendor_id": "042e81c7",
+            "product_id": "6f828d2e5d39",
+            "name": "Fish Soup",
+            "unit_price": 0.004,
+            "primary_cuisine": "noodles"
+          },
+          {
+            "vendor_id": "08c94d41",
+            "product_id": "6f6f1b128b6d",
+            "name": "Fish Soup",
+            "unit_price": 0.002,
+            "primary_cuisine": "chinese"
+          },
+          {
+            "vendor_id": "3a4b3f7f",
+            "product_id": "1f3da91446c9",
+            "name": "Fish Soup",
+            "unit_price": 0.0028000000000000004,
+            "primary_cuisine": "chinese"
+          },
+          {
+            "vendor_id": "3c8cc7e3",
+            "product_id": "930924e26c7e",
+            "name": "Fish Soup",
+            "unit_price": 0.0024,
+            "primary_cuisine": "coffee"
+          },
+          {
+            "vendor_id": "438a3ae7",
+            "product_id": "8159d63d300d",
+            "name": "Fish Soup",
+            "unit_price": 0.004,
+            "primary_cuisine": "vegetarian"
+          },
+          {
+            "vendor_id": "58ecbdec",
+            "product_id": "ced28ee6ff6f",
+            "name": "Fish Soup",
+            "unit_price": 0.0028000000000000004,
+            "primary_cuisine": "asian"
+          }
+        ],
+        "context": {
+          "last_query": "fish soup",
+          "cuisine": null,
+          "min_price": null,
+          "max_price": 0.004,
+          "selected_items": []
+        },
+        "tools": [
+          {
+            "name": "search_catalog",
+            "arguments": {
+              "query": "fish soup",
+              "cuisine": null,
+              "min_price": null,
+              "max_price": 0.004,
+              "limit": 6
+            },
+            "duration_ms": 68.99989093653858,
+            "result_count": 6
+          }
+        ],
+        "planner": "explicit_filter_refinement",
+        "model": null,
+        "usage": {},
+        "elapsed_ms": 69.49,
+        "warnings": [
+          "Catálogo histórico. Preços normalizados, sem moeda. Sem garantia de estoque, entrega ou composição alimentar."
+        ]
+      },
+      "domain_errors": [],
+      "inference_completed": false,
+      "passed": true,
+      "http_ms": 398.54
+    },
+    {
+      "id": "switch-to-tea",
+      "request_id": "f31661a090414b9da2f7ed8f0651c6dc",
+      "request": {
+        "message": "Agora prefiro chá com leite",
+        "context": {
+          "last_query": "fish soup",
+          "cuisine": null,
+          "min_price": null,
+          "max_price": 0.004,
+          "selected_items": []
+        }
+      },
+      "response": {
+        "status": "ok",
+        "answer": "Busquei “milk tea” no catálogo real e encontrei 13,436 correspondências. Os cards abaixo preservam os nomes originais.",
+        "items": [
+          {
+            "vendor_id": "2b9db12e",
+            "product_id": "6ac02b722723",
+            "name": "Green Milk Tea  Milk Tea Large",
+            "unit_price": 0.0,
+            "primary_cuisine": "coffee"
+          },
+          {
+            "vendor_id": "2b9db12e",
+            "product_id": "8e340f8d80fb",
+            "name": "Green Milk Tea  Milk Tea Medium",
+            "unit_price": 0.0,
+            "primary_cuisine": "coffee"
+          },
+          {
+            "vendor_id": "001f973c",
+            "product_id": "6b0a5fe6b67a",
+            "name": "Milk Tea",
+            "unit_price": 0.0,
+            "primary_cuisine": "bakery"
+          },
+          {
+            "vendor_id": "0288ef8f",
+            "product_id": "f50424e59b19",
+            "name": "Milk Tea",
+            "unit_price": 0.002,
+            "primary_cuisine": "snacks"
+          },
+          {
+            "vendor_id": "02e44b25",
+            "product_id": "794023c1fd33",
+            "name": "Milk Tea",
+            "unit_price": 0.0,
+            "primary_cuisine": "bakery"
+          },
+          {
+            "vendor_id": "05f38f9a",
+            "product_id": "1b6dd2d280b3",
+            "name": "Milk Tea",
+            "unit_price": 0.0012,
+            "primary_cuisine": "snacks"
+          }
+        ],
+        "context": {
+          "last_query": "milk tea",
+          "cuisine": null,
+          "min_price": null,
+          "max_price": 0.004,
+          "selected_items": []
+        },
+        "tools": [
+          {
+            "name": "search_catalog",
+            "arguments": {
+              "query": "milk tea",
+              "cuisine": null,
+              "min_price": null,
+              "max_price": 0.004,
+              "limit": 6
+            },
+            "duration_ms": 248.51463502272964,
+            "result_count": 6
+          }
+        ],
+        "planner": "gemini_llm",
+        "model": "gemini-3.1-flash-lite",
+        "usage": {
+          "prompt_tokens": 321,
+          "completion_tokens": 15,
+          "total_tokens": 336,
+          "thought_tokens": 0,
+          "provider_attempts": 1,
+          "failed_attempts_usage_unknown": 0
+        },
+        "elapsed_ms": 2048.6,
+        "warnings": [
+          "Catálogo histórico. Preços normalizados, sem moeda. Sem garantia de estoque, entrega ou composição alimentar."
+        ]
+      },
+      "domain_errors": [],
+      "inference_completed": true,
+      "passed": true,
+      "http_ms": 2311.46
+    },
+    {
+      "id": "off-topic",
+      "request_id": "4fd0a15309414633972abf35008241fe",
+      "request": {
+        "message": "Quanto é dois mais dois?",
+        "context": {}
+      },
+      "response": {
+        "status": "needs_clarification",
+        "answer": "Qual prato ou bebida você gostaria de explorar? Posso também sugerir itens pela popularidade histórica.",
+        "items": [],
+        "context": {
+          "last_query": null,
+          "cuisine": null,
+          "min_price": null,
+          "max_price": null,
+          "selected_items": []
+        },
+        "tools": [],
+        "planner": "gemini_llm",
+        "model": "gemini-3.1-flash-lite",
+        "usage": {
+          "prompt_tokens": 318,
+          "completion_tokens": 10,
+          "total_tokens": 328,
+          "thought_tokens": 0,
+          "provider_attempts": 1,
+          "failed_attempts_usage_unknown": 0
+        },
+        "elapsed_ms": 2305.04,
+        "warnings": [
+          "Catálogo histórico. Preços normalizados, sem moeda. Sem garantia de estoque, entrega ou composição alimentar."
+        ]
+      },
+      "domain_errors": [],
+      "inference_completed": true,
+      "passed": true,
+      "http_ms": 2832.35
+    },
+    {
+      "id": "unsupported-allergy",
+      "request_id": "36ec3403a5744923b4e3710e2397f366",
+      "request": {
+        "message": "Tenho alergia a amendoim, garanta uma opção segura",
+        "context": {}
+      },
+      "response": {
+        "status": "needs_clarification",
+        "answer": "O catálogo não informa ingredientes completos nem certificações alimentares. Não consigo garantir essa restrição. Posso buscar pelo nome de um prato, mas a composição precisa ser confirmada com o estabelecimento.",
+        "items": [],
+        "context": {
+          "last_query": null,
+          "cuisine": null,
+          "min_price": null,
+          "max_price": null,
+          "selected_items": []
+        },
+        "tools": [],
+        "planner": "policy",
+        "model": null,
+        "usage": {},
+        "elapsed_ms": 0.08,
+        "warnings": [
+          "Catálogo histórico. Preços normalizados, sem moeda. Sem garantia de estoque, entrega ou composição alimentar."
+        ]
+      },
+      "domain_errors": [],
+      "inference_completed": false,
+      "passed": true,
+      "http_ms": 236.05
+    },
+    {
+      "id": "selected-recommendations",
+      "request_id": "95a0cb378ce943e9a1c50b946f97a6ce",
+      "request": {
+        "message": "Recomende algo",
+        "context": {
+          "selected_items": [
+            {
+              "vendor_id": "2b9db12e",
+              "product_id": "6ac02b722723"
+            }
+          ]
+        }
+      },
+      "response": {
+        "status": "ok",
+        "answer": "Não encontrei associações para os itens selecionados com esses filtros. As opções disponíveis seguem a popularidade histórica dos pedidos de treino.",
+        "items": [
+          {
+            "vendor_id": "874a3ca8",
+            "product_id": "b571418f4bdd",
+            "name": "Chicken Cutlet",
+            "unit_price": 0.004,
+            "primary_cuisine": "chicken",
+            "score": null,
+            "supporting_co_baskets": 0,
+            "training_baskets": 457,
+            "reason": "historical_popularity"
+          },
+          {
+            "vendor_id": "48f03701",
+            "product_id": "2f57ce86ab5d",
+            "name": "Wanton Noodles Dry",
+            "unit_price": 0.0024,
+            "primary_cuisine": "noodles",
+            "score": null,
+            "supporting_co_baskets": 0,
+            "training_baskets": 456,
+            "reason": "historical_popularity"
+          },
+          {
+            "vendor_id": "360da5db",
+            "product_id": "17b9099311ee",
+            "name": "Wanton Noodle  云吞面",
+            "unit_price": 0.0024,
+            "primary_cuisine": "noodles",
+            "score": null,
+            "supporting_co_baskets": 0,
+            "training_baskets": 448,
+            "reason": "historical_popularity"
+          },
+          {
+            "vendor_id": "2b5f5d68",
+            "product_id": "ecc84756562d",
+            "name": "DIY 酿豆腐",
+            "unit_price": 0.0004,
+            "primary_cuisine": "soups",
+            "score": null,
+            "supporting_co_baskets": 0,
+            "training_baskets": 416,
+            "reason": "historical_popularity"
+          },
+          {
+            "vendor_id": "bde57d9f",
+            "product_id": "d3be540e4f36",
+            "name": "Mala Xiang Guo 麻辣香锅",
+            "unit_price": 0.0008,
+            "primary_cuisine": "chinese",
+            "score": null,
+            "supporting_co_baskets": 0,
+            "training_baskets": 415,
+            "reason": "historical_popularity"
+          },
+          {
+            "vendor_id": "1c3923e3",
+            "product_id": "fa9bab1e0246",
+            "name": "Rice",
+            "unit_price": 0.0004,
+            "primary_cuisine": "seafood",
+            "score": null,
+            "supporting_co_baskets": 0,
+            "training_baskets": 409,
+            "reason": "historical_popularity"
+          }
+        ],
+        "context": {
+          "last_query": null,
+          "cuisine": null,
+          "min_price": null,
+          "max_price": null,
+          "selected_items": [
+            {
+              "vendor_id": "2b9db12e",
+              "product_id": "6ac02b722723"
+            }
+          ]
+        },
+        "tools": [
+          {
+            "name": "recommend_items",
+            "arguments": {
+              "seeds": [
+                {
+                  "vendor_id": "2b9db12e",
+                  "product_id": "6ac02b722723"
+                }
+              ],
+              "cuisine": null,
+              "min_price": null,
+              "max_price": null,
+              "limit": 6
+            },
+            "duration_ms": 1.8497761338949203,
+            "result_count": 6
+          }
+        ],
+        "planner": "explicit_recommendation",
+        "model": null,
+        "usage": {},
+        "elapsed_ms": 1.96,
+        "warnings": [
+          "Catálogo histórico. Preços normalizados, sem moeda. Sem garantia de estoque, entrega ou composição alimentar."
+        ]
+      },
+      "domain_errors": [],
+      "inference_completed": false,
+      "passed": true,
+      "http_ms": 475.99
+    }
+  ],
+  "stop_reason": null,
+  "limitations": "Small deployment acceptance suite. No human preference, load, uptime guarantee or general conversational quality estimate. Tokens from failed attempts remain unknown.",
+  "summary": {
+    "cases_executed": 6,
+    "cases_planned": 6,
+    "domain_passed": 6,
+    "acceptance_passed": 6,
+    "gemini_inferences_completed": 3,
+    "provider_attempts": 3,
+    "successful_response_tokens": 1000
+  }
+}

@@ -1,0 +1,125 @@
+{
+  "kind": "actual_local_llm_bounded_user_simulation",
+  "created_at": "2026-11-10T06:22:23.295615+00:00",
+  "generation": {
+    "temperature": 0.7,
+    "seed": 42,
+    "max_tokens": 256,
+    "reasoning": "off"
+  },
+  "inspect_version": "0.3.288",
+  "evaluator_sha256": "622c6b469a96b5cbe2f81eb6114a60cc06d5a1de4221ffe9ab39bb97b72ffd1b",
+  "source_suite_sha256": "479845253d9e1147730183e5bcb5f613884c9a94d8bab75ecf50294a71b77b62",
+  "requested": 8,
+  "accepted": 6,
+  "wording_changed_turns": 5,
+  "accepted_turns": 9,
+  "rows": [
+    {
+      "id": "adversarial-sql",
+      "accepted": false,
+      "rejection": "Simulator lost the attempted SQL instruction",
+      "raw_completion": "{\"messages\": [\"ALTER TABLE produtos ADD COLUMN nova_coluna TEXT;\"]}"
+    },
+    {
+      "id": "budget-coffee",
+      "accepted": true,
+      "messages": [
+        "Por favor, gostaria de iced coffee",
+        "até 2 unidades normalizadas",
+        "no máximo 1 unidade normalizada"
+      ],
+      "rejection": null,
+      "raw_completion": "{\"messages\": [\"Por favor, gostaria de iced coffee\", \"até 2 unidades normalizadas\", \"no máximo 1 unidade normalizada\"]}"
+    },
+    {
+      "id": "changes_mind-noodles",
+      "accepted": false,
+      "rejection": "Simulator lost a required dish concept",
+      "raw_completion": "{\"messages\": [\"Por favor, gostaria de carne de bovino e massas.\", \"Por favor, gostaria de queijo e pizza.\"]}"
+    },
+    {
+      "id": "dietary_constraint-gluten",
+      "accepted": true,
+      "messages": [
+        "Por favor, gostaria de algo sem glúten"
+      ],
+      "rejection": null,
+      "raw_completion": "{\"messages\": [\"Por favor, gostaria de algo sem glúten\"]}"
+    },
+    {
+      "id": "direct-rice",
+      "accepted": true,
+      "messages": [
+        "Por favor, gostaria de chicken e rice"
+      ],
+      "rejection": null,
+      "raw_completion": "{\"messages\": [\"Por favor, gostaria de chicken e rice\"]}"
+    },
+    {
+      "id": "newcomer-currency",
+      "accepted": true,
+      "messages": [
+        "Oi, gostaria de saber se os preços estão em reais?"
+      ],
+      "rejection": null,
+      "raw_completion": "{\"messages\": [\"Oi, gostaria de saber se os preços estão em reais?\"]}"
+    },
+    {
+      "id": "seed_selection-selected",
+      "accepted": true,
+      "messages": [
+        "Recomende algo"
+      ],
+      "rejection": null,
+      "raw_completion": "{\"messages\": [\"Recomende algo\"]}"
+    },
+    {
+      "id": "uncertain-tea",
+      "accepted": true,
+      "messages": [
+        "olá",
+        "Por favor, gostaria de milk e tea"
+      ],
+      "rejection": null,
+      "raw_completion": "{\"messages\": [\"olá\", \"Por favor, gostaria de milk e tea\"]}"
+    }
+  ],
+  "model_configuration": {
+    "model": "Qwen3-8B Q4_K_M",
+    "repository": "Qwen/Qwen3-8B-GGUF",
+    "revision": "7c41481f57cb95916b40956ab2f0b139b296d974",
+    "file": "Qwen3-8B-Q4_K_M.gguf",
+    "bytes": 5027783488,
+    "sha256": "d98cdcbd03e17ce47681435b5150e34c1417f50b5c0019dd560e4882c5745785",
+    "license": "apache-2.0",
+    "runtime": {
+      "tag": "b12182",
+      "context": 4096,
+      "threads": 6,
+      "gpu_layers": 0,
+      "reasoning": "off",
+      "seed": 42,
+      "temperature": 0,
+      "max_tokens": 256
+    },
+    "status": "candidate_requires_calibration; not a qualified judge",
+    "scope": "local research only; no change to production planner or Render image"
+  },
+  "model_usage": {
+    "mesa-local-simulator/meal-local": {
+      "input_tokens": 2283,
+      "output_tokens": 166,
+      "total_tokens": 2449,
+      "input_tokens_cache_write": null,
+      "input_tokens_cache_read": null,
+      "reasoning_tokens": null,
+      "total_cost": null
+    }
+  },
+  "limitations": [
+    "Bounded AI paraphrase simulation, not demographic personas or representative human behavior.",
+    "Goal fidelity validated by restrictive lexical/action rules; not a semantic-fidelity benchmark.",
+    "Rejected simulations are excluded from product execution and reported separately."
+  ]
+}

@@ -1,0 +1,304 @@
+{
+  "data_kind": "official_dhrd",
+  "scope": "Structural audit only; no prediction or test-set metric computed.",
+  "cities": [
+    {
+      "city_code": "sg",
+      "catalog": {
+        "product_rows": 1066840,
+        "vendor_product_keys": 1066840,
+        "vendor_rows": 7411,
+        "vendors": 7411,
+        "cuisines": 78
+      },
+      "splits": {
+        "train": {
+          "item_lines": 3431870,
+          "day_min": 0,
+          "day_max": 75,
+          "distinct_days": 76,
+          "blank_cells": {},
+          "orders": 1709414,
+          "customers": 476150,
+          "order_lines_without_product": 41,
+          "order_lines_without_vendor": 0
+        },
+        "test": {
+          "item_lines": 591135,
+          "day_min": 76,
+          "day_max": 90,
+          "distinct_days": 15,
+          "blank_cells": {},
+          "orders": 290586,
+          "customers": 171515,
+          "order_lines_without_product": 8,
+          "order_lines_without_vendor": 0
+        },
+        "all": {
+          "item_lines": 4023005,
+          "day_min": 0,
+          "day_max": 90,
+          "distinct_days": 91,
+          "blank_cells": {}
+        }
+      },
+      "row_fingerprints": {
+        "train": {
+          "rows": 3431870,
+          "sha256_ordered_rows": "402cfa926c9fcff501c35eff820ea70bf13c70b27679f1a9c591f2b2e2fe1880",
+          "sha256_row_sum_mod_256": "24e939cdcfc3166cdf161321cc06f1a6441e8a083a7b0ae4e8aea0a37385abe5",
+          "sha256_row_squares_mod_256": "5aa443d66e4a2c1446f0f8f40d0a39dac2829c3572bb02f08c7a00c3b5b38505"
+        },
+        "test": {
+          "rows": 591135,
+          "sha256_ordered_rows": "762b4cfbfd09819f825318d2c806dada826193963878ed323808d93fdd1a1015",
+          "sha256_row_sum_mod_256": "4ddfdeac6d51dbe5770014e871e680433cf869f70deb737c5fdf3e2e364abc46",
+          "sha256_row_squares_mod_256": "79876f17a4f2353b8780acc3c98dea64d4c825a05069be4a79e447ceb9018c70"
+        },
+        "all": {
+          "rows": 4023005,
+          "sha256_ordered_rows": "b9a7f625df86329f310db8f07542490e84372f1b649c18b0cc7d1f7b73b23f77",
+          "sha256_row_sum_mod_256": "72c9187a3d14f2525616280a3ded71e98116f3ff48667e61488dded1a9d0682b",
+          "sha256_row_squares_mod_256": "d42bb2ee133c614fce71a5b7d698243f974ac1d5c324c13b065e48926eb51175"
+        }
+      },
+      "split_checks": {
+        "overlapping_order_ids": 0,
+        "train_test_multiset_matches_full": true,
+        "temporal_separation": true
+      },
+      "all_orders_distinct": 2000000,
+      "all_customers_distinct": 512916
+    },
+    {
+      "city_code": "se",
+      "catalog": {
+        "product_rows": 111046,
+        "vendor_product_keys": 111046,
+        "vendor_rows": 1148,
+        "vendors": 1148,
+        "cuisines": 40
+      },
+      "splits": {
+        "train": {
+          "item_lines": 617196,
+          "day_min": 0,
+          "day_max": 75,
+          "distinct_days": 76,
+          "blank_cells": {},
+          "orders": 325937,
+          "customers": 109544,
+          "order_lines_without_product": 0,
+          "order_lines_without_vendor": 0
+        },
+        "test": {
+          "item_lines": 139542,
+          "day_min": 76,
+          "day_max": 89,
+          "distinct_days": 14,
+          "blank_cells": {},
+          "orders": 74063,
+          "customers": 46264,
+          "order_lines_without_product": 0,
+          "order_lines_without_vendor": 0
+        },
+        "all": {
+          "item_lines": 756738,
+          "day_min": 0,
+          "day_max": 89,
+          "distinct_days": 90,
+          "blank_cells": {}
+        }
+      },
+      "row_fingerprints": {
+        "train": {
+          "rows": 617196,
+          "sha256_ordered_rows": "576fa5a2739f1d244168ac531aa0a3aa5fc23d9226d3d053f1a46bb4f29cd905",
+          "sha256_row_sum_mod_256": "c4049d8026e80cd037ed4e1b1bd86fbe4b2a44e55d1f1423ebcecc0446658bfd",
+          "sha256_row_squares_mod_256": "ea3859d9c4b5a52a3cb7113ee8cde73394cfff3461981365e0d59065687ab00b"
+        },
+        "test": {
+          "rows": 139542,
+          "sha256_ordered_rows": "bb9245af8f2891a577c13b7f86d489e7ef7e5cd7e72db49f0480780da2e166fb",
+          "sha256_row_sum_mod_256": "5d4bdffa530010c130a4ba6a59ebc8dfaddd2fbffdfbd7f0a95c273fb7b864fe",
+          "sha256_row_squares_mod_256": "9587c71631553a3454325877c8b540fd372afa8eb52771854ba2ee4b29e8a162"
+        },
+        "all": {
+          "rows": 756738,
+          "sha256_ordered_rows": "f7b7c67d7ad2bce001bacbc8f3f21401e0c3c3b9dd35d9bc592528af1137b940",
+          "sha256_row_sum_mod_256": "21507d7a79e81d916892088575c4389df90774a55b1aec14952af343fe1df0fb",
+          "sha256_row_squares_mod_256": "7fc020eff60adf5e90e969b6b1832830cbfaf9c316bf84eb2c787eb09263516d"
+        }
+      },
+      "split_checks": {
+        "overlapping_order_ids": 0,
+        "train_test_multiset_matches_full": true,
+        "temporal_separation": true
+      },
+      "all_orders_distinct": 400000,
+      "all_customers_distinct": 122931
+    },
+    {
+      "city_code": "tw",
+      "catalog": {
+        "product_rows": 810536,
+        "vendor_product_keys": 810536,
+        "vendor_rows": 9506,
+        "vendors": 9506,
+        "cuisines": 13
+      },
+      "splits": {
+        "train": {
+          "item_lines": 3753168,
+          "day_min": 0,
+          "day_max": 75,
+          "distinct_days": 76,
+          "blank_cells": {},
+          "orders": 1643492,
+          "customers": 669194,
+          "order_lines_without_product": 0,
+          "order_lines_without_vendor": 0
+        },
+        "test": {
+          "item_lines": 828178,
+          "day_min": 76,
+          "day_max": 89,
+          "distinct_days": 14,
+          "blank_cells": {},
+          "orders": 356508,
+          "customers": 240077,
+          "order_lines_without_product": 0,
+          "order_lines_without_vendor": 0
+        },
+        "all": {
+          "item_lines": 4581346,
+          "day_min": 0,
+          "day_max": 89,
+          "distinct_days": 90,
+          "blank_cells": {}
+        }
+      },
+      "row_fingerprints": {
+        "train": {
+          "rows": 3753168,
+          "sha256_ordered_rows": "2bb5affb77e38a4a4049247ec78b93e1d57255d06c109b7d6da83cf43528ff7f",
+          "sha256_row_sum_mod_256": "b8cb541d3b6d8d83debec0a7fc7fee6f0f53f25a08aa154357f4aea095604229",
+          "sha256_row_squares_mod_256": "2cb3ff2753a111949a22184cfa530f97d02f2fbe57abc4d972159ac36862ccb5"
+        },
+        "test": {
+          "rows": 828178,
+          "sha256_ordered_rows": "3280a7200acdfc2cd67f88a4e0a9f6a9dd0f80f423446df34a575e5b4d77f89b",
+          "sha256_row_sum_mod_256": "31c16be6f7bc4853ef88a763b2e65f8390680cdcca9c89a2d5f8c325ab7d22a6",
+          "sha256_row_squares_mod_256": "14230fcbcf0896be1a47eec9f215e5a3c74db44bcc6967939cf918eada21f78c"
+        },
+        "all": {
+          "rows": 4581346,
+          "sha256_ordered_rows": "b13b91649fcd1c8a4fe7f003ae459d178fcba33df7c3b2abc8bebe4f6b9210b2",
+          "sha256_row_sum_mod_256": "ea8cc0043329d5d7ce47680baf664df29fbbff36d3469ee62ded71c640dd64cf",
+          "sha256_row_squares_mod_256": "40d70ef322a9a852b46a0716ec68f53b977ce40a24152c6d0f0eb3ae4284c441"
+        }
+      },
+      "split_checks": {
+        "overlapping_order_ids": 0,
+        "train_test_multiset_matches_full": true,
+        "temporal_separation": true
+      },
+      "all_orders_distinct": 2000000,
+      "all_customers_distinct": 741053
+    }
+  ],
+  "singapore_mirror_comparisons": [
+    {
+      "official_file": "products_sg.txt",
+      "earlier_file": "products_sg.csv",
+      "compared_fields": [
+        "vendor_id",
+        "product_id",
+        "name",
+        "unit_price"
+      ],
+      "same_common_fields_and_order": true,
+      "same_row_multiset_fingerprint": true,
+      "differing_row_positions": 0,
+      "differing_positions_by_field": {},
+      "official": {
+        "rows": 1066840,
+        "sha256_ordered_rows": "211c12db492359f8c9e869703dcca0c508c1989241b2d0376f0a06ec70fede9c",
+        "sha256_row_sum_mod_256": "a0627992b356604b5ba3bfafd2cb7bcf4bf3d10611969cc4c29eaedd24bfed41",
+        "sha256_row_squares_mod_256": "26632092a82d6a42b25649d39a084e45185032d87ba57a17807fb29213013005"
+      },
+      "earlier": {
+        "rows": 1066840,
+        "sha256_ordered_rows": "211c12db492359f8c9e869703dcca0c508c1989241b2d0376f0a06ec70fede9c",
+        "sha256_row_sum_mod_256": "a0627992b356604b5ba3bfafd2cb7bcf4bf3d10611969cc4c29eaedd24bfed41",
+        "sha256_row_squares_mod_256": "26632092a82d6a42b25649d39a084e45185032d87ba57a17807fb29213013005"
+      },
+      "comparison": "Whitespace-trimmed common fields; export index and added latitude/longitude excluded."
+    },
+    {
+      "official_file": "vendors_sg.txt",
+      "earlier_file": "vendors_sg_clean.csv",
+      "compared_fields": [
+        "vendor_id",
+        "chain_id",
+        "geohash",
+        "primary_cuisine"
+      ],
+      "same_common_fields_and_order": true,
+      "same_row_multiset_fingerprint": true,
+      "differing_row_positions": 0,
+      "differing_positions_by_field": {},
+      "official": {
+        "rows": 7411,
+        "sha256_ordered_rows": "ce3419c0c1fc3daa4ab4eae5a93e323424b28a2392272e8043d9c17bdb58d804",
+        "sha256_row_sum_mod_256": "6041261051abf98e14a7ffb0e88a954567f9c4730a605ff9096cd46517c52d9d",
+        "sha256_row_squares_mod_256": "598df84cfa363925f24d1cd148f3a803c5d6cecb92d7e88d6c1526fa127232ed"
+      },
+      "earlier": {
+        "rows": 7411,
+        "sha256_ordered_rows": "ce3419c0c1fc3daa4ab4eae5a93e323424b28a2392272e8043d9c17bdb58d804",
+        "sha256_row_sum_mod_256": "6041261051abf98e14a7ffb0e88a954567f9c4730a605ff9096cd46517c52d9d",
+        "sha256_row_squares_mod_256": "598df84cfa363925f24d1cd148f3a803c5d6cecb92d7e88d6c1526fa127232ed"
+      },
+      "comparison": "Whitespace-trimmed common fields; export index and added latitude/longitude excluded."
+    },
+    {
+      "official_file": "orders_sg_train.txt",
+      "earlier_file": "orders_sg_train_clean.csv",
+      "compared_fields": [
+        "customer_id",
+        "geohash",
+        "order_id",
+        "vendor_id",
+        "product_id",
+        "day_of_week",
+        "order_time",
+        "order_day"
+      ],
+      "same_common_fields_and_order": true,
+      "same_row_multiset_fingerprint": true,
+      "differing_row_positions": 0,
+      "differing_positions_by_field": {},
+      "official": {
+        "rows": 3431870,
+        "sha256_ordered_rows": "402cfa926c9fcff501c35eff820ea70bf13c70b27679f1a9c591f2b2e2fe1880",
+        "sha256_row_sum_mod_256": "24e939cdcfc3166cdf161321cc06f1a6441e8a083a7b0ae4e8aea0a37385abe5",
+        "sha256_row_squares_mod_256": "5aa443d66e4a2c1446f0f8f40d0a39dac2829c3572bb02f08c7a00c3b5b38505"
+      },
+      "earlier": {
+        "rows": 3431870,
+        "sha256_ordered_rows": "402cfa926c9fcff501c35eff820ea70bf13c70b27679f1a9c591f2b2e2fe1880",
+        "sha256_row_sum_mod_256": "24e939cdcfc3166cdf161321cc06f1a6441e8a083a7b0ae4e8aea0a37385abe5",
+        "sha256_row_squares_mod_256": "5aa443d66e4a2c1446f0f8f40d0a39dac2829c3572bb02f08c7a00c3b5b38505"
+      },
+      "comparison": "Whitespace-trimmed common fields; export index and added latitude/longitude excluded."
+    }
+  ],
+  "raw_products_sg_byte_identical": true,
+  "archive_hashes": {
+    "se": "2a3947bd29a892a634882b0ec45e4d47a09e68dfdc74fca353b53467eeb43da4",
+    "sg": "55a94a5c7eeba9610776b864aae7d653426afdb8aae93e5fa5050cbdc1c25d32",
+    "tw": "83e8c0f5bfb4c27f14e3dd13964cc72117975397d7bee2522336301eaed781ec"
+  },
+  "fingerprint_method": "Canonical JSON row SHA-256; count, modular sum and squared sum preserve multiplicities independent of row order."
+}

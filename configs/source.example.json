@@ -1,0 +1,20 @@
+{
+  "data_kind": "dhrd",
+  "city": "REPLACE_AFTER_AUDIT",
+  "source_url": "https://github.com/deliveryhero/dh-reco-dataset",
+  "license": "MIT according to publisher README; verify downloaded files",
+  "tables": {
+    "vendors": {
+      "path": "../data/raw/REPLACE/vendors.csv",
+      "columns": {"vendor_id": "vendor_id", "primary_cuisine": "primary_cuisine"}
+    },
+    "products": {
+      "path": "../data/raw/REPLACE/products.csv",
+      "columns": {"vendor_id": "vendor_id", "product_id": "product_id", "name": "name", "unit_price": "unit_price"}
+    },
+    "orders": {
+      "path": "../data/raw/REPLACE/orders.csv",
+      "columns": {"order_id": "order_id", "customer_id": "customer_id", "vendor_id": "vendor_id", "product_id": "product_id", "order_day": "order_day", "order_time": "order_time"}
+    }
+  }
+}

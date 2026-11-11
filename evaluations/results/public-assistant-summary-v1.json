@@ -1,0 +1,16 @@
+{
+  "kind": "public_gemini_bounded_deployment_acceptance",
+  "verified_at": "2026-11-10T12:18:47.073377+00:00",
+  "deployment_commit": "03ccef0e1f171bb508dad615b35299eaa6c77d85",
+  "model": "gemini-3.1-flash-lite",
+  "passed": 6,
+  "total": 6,
+  "gemini_inferences_completed": 3,
+  "provider_attempts": 3,
+  "successful_response_tokens": 1000,
+  "catalog_items_checked": 24,
+  "http_latency_ms_median": 1393.725,
+  "source_database_sha256": "3c7123757311bd51ffb22bb9782f7b7600b71ec73741cd3f866a87a50acd5188",
+  "report_sha256": "a8f4e9ec549c6d5d168cce501f063a7a0770b0bf82ac8cf953769671dcd20051",
+  "limitations": "Small deployment acceptance suite. No human preference, load, uptime guarantee or general conversational quality estimate. Tokens from failed attempts remain unknown."
+}

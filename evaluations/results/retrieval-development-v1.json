@@ -1,0 +1,670 @@
+{
+  "schema_version": 1,
+  "kind": "development_silver_labels_not_human_relevance",
+  "software_versions": {
+    "python": "3.13.3",
+    "numpy": "2.3.5",
+    "onnxruntime": "1.31.1",
+    "tokenizers": "0.23.3",
+    "huggingface-hub": "2.4.0"
+  },
+  "protocol_sha256": "67d379cf432eabd27ad7efea582a0e995ccbc07bb30968e5968a5c69fc53f182",
+  "protocol": {
+    "protocol_version": "retrieval-development-v1",
+    "k": 10,
+    "modes": [
+      "lexical",
+      "semantic",
+      "hybrid"
+    ],
+    "label_kind": "silver_name_rules_not_human_judgments",
+    "query_authorship": "AI-authored development probes, frozen before the first measurement",
+    "limitations": "Relevant means the original product name matches all concept regexes. Rule-negative items are treated as nonrelevant for this proxy only. These are incomplete noisy labels, not dietary facts, human preference or a held-out relevance test. No tuning or final quality claim from this small development set.",
+    "queries": [
+      {
+        "id": "chicken-rice-pt",
+        "language": "pt",
+        "query": "arroz com frango",
+        "name_patterns": [
+          "\\bchicken\\b",
+          "\\brice\\b"
+        ]
+      },
+      {
+        "id": "chicken-rice-en",
+        "language": "en",
+        "query": "chicken rice",
+        "name_patterns": [
+          "\\bchicken\\b",
+          "\\brice\\b"
+        ]
+      },
+      {
+        "id": "milk-tea-pt",
+        "language": "pt",
+        "query": "chá com leite",
+        "name_patterns": [
+          "\\bmilk\\b",
+          "\\btea\\b"
+        ]
+      },
+      {
+        "id": "milk-tea-en",
+        "language": "en",
+        "query": "milk tea",
+        "name_patterns": [
+          "\\bmilk\\b",
+          "\\btea\\b"
+        ]
+      },
+      {
+        "id": "cheese-pizza-pt",
+        "language": "pt",
+        "query": "pizza de queijo",
+        "name_patterns": [
+          "\\bcheese\\b",
+          "\\bpizza\\b"
+        ]
+      },
+      {
+        "id": "cheese-pizza-en",
+        "language": "en",
+        "query": "cheese pizza",
+        "name_patterns": [
+          "\\bcheese\\b",
+          "\\bpizza\\b"
+        ]
+      },
+      {
+        "id": "beef-noodles-pt",
+        "language": "pt",
+        "query": "macarrão com carne bovina",
+        "name_patterns": [
+          "\\bbeef\\b",
+          "\\bnoodles?\\b"
+        ]
+      },
+      {
+        "id": "beef-noodles-en",
+        "language": "en",
+        "query": "beef noodles",
+        "name_patterns": [
+          "\\bbeef\\b",
+          "\\bnoodles?\\b"
+        ]
+      },
+      {
+        "id": "iced-coffee-pt",
+        "language": "pt",
+        "query": "café gelado",
+        "name_patterns": [
+          "\\bice[ds]?\\b",
+          "\\bcoffee\\b"
+        ]
+      },
+      {
+        "id": "iced-coffee-en",
+        "language": "en",
+        "query": "iced coffee",
+        "name_patterns": [
+          "\\bice[ds]?\\b",
+          "\\bcoffee\\b"
+        ]
+      },
+      {
+        "id": "chicken-burger-pt",
+        "language": "pt",
+        "query": "hambúrguer de frango",
+        "name_patterns": [
+          "\\bchicken\\b",
+          "\\bburger\\b"
+        ]
+      },
+      {
+        "id": "chicken-burger-en",
+        "language": "en",
+        "query": "chicken burger",
+        "name_patterns": [
+          "\\bchicken\\b",
+          "\\bburger\\b"
+        ]
+      }
+    ]
+  },
+  "index_sha256": "ad288bf0e9e020f8a3e5801d465ba25a0435eedc8e39f019bd93f215a624d3e7",
+  "retrieval_manifest": {
+    "schema_version": 1,
+    "index_version": "semantic-pilot-v1",
+    "data_kind": "official_dhrd",
+    "source_catalog_sha256": "836eef073ca36058f23943f3b847174be5d05c7a35cdf9b1b29331278b6d41fe",
+    "source_catalog_products": 1066840,
+    "indexed_products": 10000,
+    "catalog_fraction": 0.009373476810018372,
+    "sample_keys_sha256": "8aa74bb2697f3df4ea3a00943adfdfc6005d24a411b5c5e3036d12a72f4f6eae",
+    "protocol_sha256": "219078b7caf409ec87661f02c6c7a9150c4ef009e0fed72522821fe1fabc9ac2",
+    "protocol": {
+      "protocol_version": "semantic-pilot-v1",
+      "sample_size": 10000,
+      "sample_seed": "meal-discovery-semantic-pilot-v1",
+      "selection": "lowest SHA256 of UTF-8 JSON [seed,vendor_id,product_id]; no query or interaction-based selection",
+      "batch_size": 32,
+      "dimension": 384,
+      "model_repository": "Xenova/multilingual-e5-small",
+      "model_revision": "761b726dd34fb83930e26aab4e9ac3899aa1fa78",
+      "document_template": "{name}. Cuisine: {primary_cuisine}.",
+      "k": 10,
+      "hybrid": {
+        "method": "reciprocal_rank_fusion",
+        "rank_constant": 60,
+        "candidate_depth": 50
+      },
+      "scope": "Experimental real catalog subset; never describe it as complete-catalog semantic search.",
+      "evaluation": "AI-authored development queries and deterministic name-rule silver labels, not human judgments or held-out relevance test. Official test orders are not used."
+    },
+    "model": {
+      "base_model": "intfloat/multilingual-e5-small",
+      "repository": "Xenova/multilingual-e5-small",
+      "revision": "761b726dd34fb83930e26aab4e9ac3899aa1fa78",
+      "files": {
+        "onnx/model_quantized.onnx": {
+          "bytes": 118308185,
+          "sha256": "f80102d3f2a1229f387d3c81909990d8945513e347b0eab049f7de3c6f98c193"
+        },
+        "tokenizer.json": {
+          "bytes": 17082730,
+          "sha256": "0b44a9d7b51c3c62626640cda0e2c2f70fdacdc25bbbd68038369d14ebdf4c39"
+        }
+      },
+      "dimension": 384,
+      "runtime": "onnxruntime CPU",
+      "quantization": "ONNX dynamic int8",
+      "max_tokens": 128,
+      "pooling": "attention-masked mean then L2 normalization",
+      "prefixes": {
+        "query": "query: ",
+        "passage": "passage: "
+      },
+      "threads": 4,
+      "license": "MIT (base model)"
+    },
+    "official_test_orders_used": false
+  },
+  "queries": [
+    {
+      "id": "chicken-rice-pt",
+      "language": "pt",
+      "query": "arroz com frango",
+      "silver_relevant_products": 129,
+      "models": {
+        "lexical": {
+          "recall": 0.0,
+          "ndcg": 0.0,
+          "hit_rate": 0.0,
+          "precision": 0.0,
+          "returned": 0,
+          "local_elapsed_ms": 2.3516000364907086
+        },
+        "semantic": {
+          "recall": 0.0,
+          "ndcg": 0.0,
+          "hit_rate": 0.0,
+          "precision": 0.0,
+          "returned": 10,
+          "local_elapsed_ms": 18.157799961045384
+        },
+        "hybrid": {
+          "recall": 0.0,
+          "ndcg": 0.0,
+          "hit_rate": 0.0,
+          "precision": 0.0,
+          "returned": 10,
+          "local_elapsed_ms": 17.16310001211241
+        }
+      }
+    },
+    {
+      "id": "chicken-rice-en",
+      "language": "en",
+      "query": "chicken rice",
+      "silver_relevant_products": 129,
+      "models": {
+        "lexical": {
+          "recall": 0.07751937984496124,
+          "ndcg": 1.0,
+          "hit_rate": 1.0,
+          "precision": 1.0,
+          "returned": 10,
+          "local_elapsed_ms": 3.5673999809660017
+        },
+        "semantic": {
+          "recall": 0.031007751937984496,
+          "ndcg": 0.3347092591719316,
+          "hit_rate": 1.0,
+          "precision": 0.4,
+          "returned": 10,
+          "local_elapsed_ms": 19.75719997426495
+        },
+        "hybrid": {
+          "recall": 0.06201550387596899,
+          "ndcg": 0.8200685179888282,
+          "hit_rate": 1.0,
+          "precision": 0.8,
+          "returned": 10,
+          "local_elapsed_ms": 17.31839997228235
+        }
+      }
+    },
+    {
+      "id": "milk-tea-pt",
+      "language": "pt",
+      "query": "chá com leite",
+      "silver_relevant_products": 106,
+      "models": {
+        "lexical": {
+          "recall": 0.0,
+          "ndcg": 0.0,
+          "hit_rate": 0.0,
+          "precision": 0.0,
+          "returned": 0,
+          "local_elapsed_ms": 2.938800025731325
+        },
+        "semantic": {
+          "recall": 0.03773584905660377,
+          "ndcg": 0.2874476364692017,
+          "hit_rate": 1.0,
+          "precision": 0.4,
+          "returned": 10,
+          "local_elapsed_ms": 16.96599996648729
+        },
+        "hybrid": {
+          "recall": 0.03773584905660377,
+          "ndcg": 0.2874476364692017,
+          "hit_rate": 1.0,
+          "precision": 0.4,
+          "returned": 10,
+          "local_elapsed_ms": 14.785400009714067
+        }
+      }
+    },
+    {
+      "id": "milk-tea-en",
+      "language": "en",
+      "query": "milk tea",
+      "silver_relevant_products": 106,
+      "models": {
+        "lexical": {
+          "recall": 0.09433962264150944,
+          "ndcg": 1.0,
+          "hit_rate": 1.0,
+          "precision": 1.0,
+          "returned": 10,
+          "local_elapsed_ms": 2.974300005007535
+        },
+        "semantic": {
+          "recall": 0.09433962264150944,
+          "ndcg": 1.0,
+          "hit_rate": 1.0,
+          "precision": 1.0,
+          "returned": 10,
+          "local_elapsed_ms": 16.614300024230033
+        },
+        "hybrid": {
+          "recall": 0.09433962264150944,
+          "ndcg": 1.0,
+          "hit_rate": 1.0,
+          "precision": 1.0,
+          "returned": 10,
+          "local_elapsed_ms": 16.109799966216087
+        }
+      }
+    },
+    {
+      "id": "cheese-pizza-pt",
+      "language": "pt",
+      "query": "pizza de queijo",
+      "silver_relevant_products": 2,
+      "models": {
+        "lexical": {
+          "recall": 0.0,
+          "ndcg": 0.0,
+          "hit_rate": 0.0,
+          "precision": 0.0,
+          "returned": 0,
+          "local_elapsed_ms": 2.334600023459643
+        },
+        "semantic": {
+          "recall": 0.0,
+          "ndcg": 0.0,
+          "hit_rate": 0.0,
+          "precision": 0.0,
+          "returned": 10,
+          "local_elapsed_ms": 15.737999987322837
+        },
+        "hybrid": {
+          "recall": 0.0,
+          "ndcg": 0.0,
+          "hit_rate": 0.0,
+          "precision": 0.0,
+          "returned": 10,
+          "local_elapsed_ms": 15.424099983647466
+        }
+      }
+    },
+    {
+      "id": "cheese-pizza-en",
+      "language": "en",
+      "query": "cheese pizza",
+      "silver_relevant_products": 2,
+      "models": {
+        "lexical": {
+          "recall": 1.0,
+          "ndcg": 1.0,
+          "hit_rate": 1.0,
+          "precision": 0.2,
+          "returned": 10,
+          "local_elapsed_ms": 3.1638999935239553
+        },
+        "semantic": {
+          "recall": 1.0,
+          "ndcg": 1.0,
+          "hit_rate": 1.0,
+          "precision": 0.2,
+          "returned": 10,
+          "local_elapsed_ms": 16.197999997530133
+        },
+        "hybrid": {
+          "recall": 1.0,
+          "ndcg": 1.0,
+          "hit_rate": 1.0,
+          "precision": 0.2,
+          "returned": 10,
+          "local_elapsed_ms": 14.621900045312941
+        }
+      }
+    },
+    {
+      "id": "beef-noodles-pt",
+      "language": "pt",
+      "query": "macarrão com carne bovina",
+      "silver_relevant_products": 14,
+      "models": {
+        "lexical": {
+          "recall": 0.0,
+          "ndcg": 0.0,
+          "hit_rate": 0.0,
+          "precision": 0.0,
+          "returned": 0,
+          "local_elapsed_ms": 2.354600001126528
+        },
+        "semantic": {
+          "recall": 0.0,
+          "ndcg": 0.0,
+          "hit_rate": 0.0,
+          "precision": 0.0,
+          "returned": 10,
+          "local_elapsed_ms": 15.939600009005517
+        },
+        "hybrid": {
+          "recall": 0.0,
+          "ndcg": 0.0,
+          "hit_rate": 0.0,
+          "precision": 0.0,
+          "returned": 10,
+          "local_elapsed_ms": 15.5761000351049
+        }
+      }
+    },
+    {
+      "id": "beef-noodles-en",
+      "language": "en",
+      "query": "beef noodles",
+      "silver_relevant_products": 14,
+      "models": {
+        "lexical": {
+          "recall": 0.5714285714285714,
+          "ndcg": 0.8603818544462508,
+          "hit_rate": 1.0,
+          "precision": 0.8,
+          "returned": 10,
+          "local_elapsed_ms": 2.474399982020259
+        },
+        "semantic": {
+          "recall": 0.35714285714285715,
+          "ndcg": 0.6489315753318465,
+          "hit_rate": 1.0,
+          "precision": 0.5,
+          "returned": 10,
+          "local_elapsed_ms": 14.427400019485503
+        },
+        "hybrid": {
+          "recall": 0.5714285714285714,
+          "ndcg": 0.8643145546088337,
+          "hit_rate": 1.0,
+          "precision": 0.8,
+          "returned": 10,
+          "local_elapsed_ms": 14.63970000622794
+        }
+      }
+    },
+    {
+      "id": "iced-coffee-pt",
+      "language": "pt",
+      "query": "café gelado",
+      "silver_relevant_products": 9,
+      "models": {
+        "lexical": {
+          "recall": 0.0,
+          "ndcg": 0.0,
+          "hit_rate": 0.0,
+          "precision": 0.0,
+          "returned": 0,
+          "local_elapsed_ms": 2.1747000282630324
+        },
+        "semantic": {
+          "recall": 0.0,
+          "ndcg": 0.0,
+          "hit_rate": 0.0,
+          "precision": 0.0,
+          "returned": 10,
+          "local_elapsed_ms": 13.817799976095557
+        },
+        "hybrid": {
+          "recall": 0.0,
+          "ndcg": 0.0,
+          "hit_rate": 0.0,
+          "precision": 0.0,
+          "returned": 10,
+          "local_elapsed_ms": 14.691299991682172
+        }
+      }
+    },
+    {
+      "id": "iced-coffee-en",
+      "language": "en",
+      "query": "iced coffee",
+      "silver_relevant_products": 9,
+      "models": {
+        "lexical": {
+          "recall": 0.5555555555555556,
+          "ndcg": 0.653362686448447,
+          "hit_rate": 1.0,
+          "precision": 0.5,
+          "returned": 10,
+          "local_elapsed_ms": 3.0455999658443034
+        },
+        "semantic": {
+          "recall": 0.1111111111111111,
+          "ndcg": 0.08372491399919348,
+          "hit_rate": 1.0,
+          "precision": 0.1,
+          "returned": 10,
+          "local_elapsed_ms": 14.95969999814406
+        },
+        "hybrid": {
+          "recall": 0.3333333333333333,
+          "ndcg": 0.443496354740707,
+          "hit_rate": 1.0,
+          "precision": 0.3,
+          "returned": 10,
+          "local_elapsed_ms": 14.978499966673553
+        }
+      }
+    },
+    {
+      "id": "chicken-burger-pt",
+      "language": "pt",
+      "query": "hambúrguer de frango",
+      "silver_relevant_products": 31,
+      "models": {
+        "lexical": {
+          "recall": 0.0,
+          "ndcg": 0.0,
+          "hit_rate": 0.0,
+          "precision": 0.0,
+          "returned": 0,
+          "local_elapsed_ms": 2.2877000155858696
+        },
+        "semantic": {
+          "recall": 0.0,
+          "ndcg": 0.0,
+          "hit_rate": 0.0,
+          "precision": 0.0,
+          "returned": 10,
+          "local_elapsed_ms": 14.271799998823553
+        },
+        "hybrid": {
+          "recall": 0.0,
+          "ndcg": 0.0,
+          "hit_rate": 0.0,
+          "precision": 0.0,
+          "returned": 10,
+          "local_elapsed_ms": 15.345999971032143
+        }
+      }
+    },
+    {
+      "id": "chicken-burger-en",
+      "language": "en",
+      "query": "chicken burger",
+      "silver_relevant_products": 31,
+      "models": {
+        "lexical": {
+          "recall": 0.3225806451612903,
+          "ndcg": 1.0,
+          "hit_rate": 1.0,
+          "precision": 1.0,
+          "returned": 10,
+          "local_elapsed_ms": 2.5766000035218894
+        },
+        "semantic": {
+          "recall": 0.1935483870967742,
+          "ndcg": 0.6114735274236562,
+          "hit_rate": 1.0,
+          "precision": 0.6,
+          "returned": 10,
+          "local_elapsed_ms": 14.06780001707375
+        },
+        "hybrid": {
+          "recall": 0.25806451612903225,
+          "ndcg": 0.8357804136936718,
+          "hit_rate": 1.0,
+          "precision": 0.8,
+          "returned": 10,
+          "local_elapsed_ms": 19.061199971474707
+        }
+      }
+    }
+  ],
+  "summary": {
+    "lexical": {
+      "pt": {
+        "queries": 6,
+        "recall": 0.0,
+        "ndcg": 0.0,
+        "precision": 0.0,
+        "hit_rate": 0.0,
+        "local_elapsed_ms": 2.4070000217761844
+      },
+      "all": {
+        "queries": 12,
+        "recall": 0.218451981219324,
+        "ndcg": 0.45947871174122484,
+        "precision": 0.375,
+        "hit_rate": 0.5,
+        "local_elapsed_ms": 2.6870166717950874
+      },
+      "en": {
+        "queries": 6,
+        "recall": 0.436903962438648,
+        "ndcg": 0.9189574234824497,
+        "precision": 0.75,
+        "hit_rate": 1.0,
+        "local_elapsed_ms": 2.967033321813991
+      }
+    },
+    "semantic": {
+      "pt": {
+        "queries": 6,
+        "recall": 0.006289308176100628,
+        "ndcg": 0.047907939411533616,
+        "precision": 0.06666666666666667,
+        "hit_rate": 0.16666666666666666,
+        "local_elapsed_ms": 15.815166649796689
+      },
+      "all": {
+        "queries": 12,
+        "recall": 0.15207379824890335,
+        "ndcg": 0.33052390936631915,
+        "precision": 0.26666666666666666,
+        "hit_rate": 0.5833333333333334,
+        "local_elapsed_ms": 15.90961666079238
+      },
+      "en": {
+        "queries": 6,
+        "recall": 0.2978582883217061,
+        "ndcg": 0.6131398793211046,
+        "precision": 0.4666666666666666,
+        "hit_rate": 1.0,
+        "local_elapsed_ms": 16.00406667178807
+      }
+    },
+    "hybrid": {
+      "pt": {
+        "queries": 6,
+        "recall": 0.006289308176100628,
+        "ndcg": 0.047907939411533616,
+        "precision": 0.06666666666666667,
+        "hit_rate": 0.16666666666666666,
+        "local_elapsed_ms": 15.497666667215526
+      },
+      "all": {
+        "queries": 12,
+        "recall": 0.1964097830387516,
+        "ndcg": 0.4375922897917702,
+        "precision": 0.35833333333333334,
+        "hit_rate": 0.5833333333333334,
+        "local_elapsed_ms": 15.809624994290061
+      },
+      "en": {
+        "queries": 6,
+        "recall": 0.38653025790140255,
+        "ndcg": 0.8272766401720067,
+        "precision": 0.65,
+        "hit_rate": 1.0,
+        "local_elapsed_ms": 16.121583321364596
+      }
+    }
+  },
+  "implementation_sha256": {
+    "semantic.py": "f73f554ff12b6ccb6564b7f5527ed65823aad0ea66d394b2abb0aa02692869c4",
+    "embeddings.py": "a07947c5d079a81d3908845479ffde38aaca9363d915da4876538bad6a1b52cd",
+    "catalog.py": "228b5e061ad53bb96fd5d74c938fd97ba5fefaba0ecc8a1f9a483229264d0d6a"
+  },
+  "evaluator_sha256": "c862a32fb97a16401cded55ed425e1ed1d66f610e8e312f2dc6f0e6ab1ba3622",
+  "limitations": [
+    "Relevant means the original product name matches all concept regexes. Rule-negative items are treated as nonrelevant for this proxy only. These are incomplete noisy labels, not dietary facts, human preference or a held-out relevance test. No tuning or final quality claim from this small development set.",
+    "Same frozen catalog subset for all modes, no official test orders.",
+    "Local warmed timings include lexical search and exact dense scoring; no load test.",
+    "Neural retrieval returns nearest neighbors even when none are relevant; no confidence threshold validated."
+  ]
+}

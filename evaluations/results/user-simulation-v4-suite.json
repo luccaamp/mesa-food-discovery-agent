@@ -1,0 +1,138 @@
+{
+  "protocol_version": "llm-generated-conversations-v1",
+  "split": "development_simulation",
+  "simulation_report_sha256": "483578dc89d6ef9b454510a4ced3bac54b735eed66249d013412d516f67abdc4",
+  "cases": [
+    {
+      "id": "generated-budget-coffee",
+      "profile": "budget",
+      "turns": [
+        {
+          "message": "Por favor, gostaria de iced coffee",
+          "tool": "search_catalog",
+          "concepts": [
+            [
+              "iced"
+            ],
+            [
+              "coffee"
+            ]
+          ]
+        },
+        {
+          "message": "até 2 unidades normalizadas",
+          "tool": "search_catalog",
+          "concepts": [
+            [
+              "iced"
+            ],
+            [
+              "coffee"
+            ]
+          ],
+          "preserve_query": true,
+          "context_equals": {
+            "max_price": 2
+          }
+        },
+        {
+          "message": "no máximo 1 unidade normalizada",
+          "tool": "search_catalog",
+          "concepts": [
+            [
+              "iced"
+            ],
+            [
+              "coffee"
+            ]
+          ],
+          "preserve_query": true,
+          "context_equals": {
+            "max_price": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "generated-dietary_constraint-gluten",
+      "profile": "dietary_constraint",
+      "turns": [
+        {
+          "message": "Por favor, gostaria de algo sem glúten",
+          "tool": null,
+          "status": "needs_clarification"
+        }
+      ]
+    },
+    {
+      "id": "generated-direct-rice",
+      "profile": "direct",
+      "turns": [
+        {
+          "message": "Por favor, gostaria de chicken e rice",
+          "tool": "search_catalog",
+          "concepts": [
+            [
+              "chicken"
+            ],
+            [
+              "rice"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "generated-newcomer-currency",
+      "profile": "newcomer",
+      "turns": [
+        {
+          "message": "Oi, gostaria de saber se os preços estão em reais?",
+          "tool": null,
+          "status": "needs_clarification"
+        }
+      ]
+    },
+    {
+      "id": "generated-seed_selection-selected",
+      "profile": "seed_selection",
+      "turns": [
+        {
+          "message": "Recomende algo",
+          "tool": "recommend_items"
+        }
+      ],
+      "context": {
+        "selected_items": [
+          {
+            "vendor_id": "3a813d9f",
+            "product_id": "70213d988386"
+          }
+        ]
+      }
+    },
+    {
+      "id": "generated-uncertain-tea",
+      "profile": "uncertain",
+      "turns": [
+        {
+          "message": "olá",
+          "tool": null,
+          "status": "needs_clarification"
+        },
+        {
+          "message": "Por favor, gostaria de milk e tea",
+          "tool": "search_catalog",
+          "concepts": [
+            [
+              "milk"
+            ],
+            [
+              "tea"
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "kind": "retrieval_release_decision",
+  "queries": 16,
+  "independent_concepts": 8,
+  "label_kind": "automatic_name_evidence_proxy_not_human_preference",
+  "controls_correct": 28,
+  "controls_total": 40,
+  "judge_admitted": false,
+  "previous_controls_correct": 33,
+  "previous_controls_total": 48,
+  "decision": "retain_glossary_lexical; reject_current_judge; do_not_promote_or_expand_current_semantic_pilot",
+  "judged_semantic_relevance_complete": false,
+  "automatic_comparison_complete": true,
+  "source_reports": ["retrieval-additional-v2.json", "relevance-judge-cli-v1.json", "relevance-judge-single-pair-v1.json"],
+  "limitations": "Negative judge calibration is a completed experiment, not completion of calibrated semantic grading. No pool grades, human preference claim, external benchmark claim or statistical independence claim."
+}

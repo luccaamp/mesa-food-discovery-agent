@@ -1,0 +1,91 @@
+{
+  "schema_version": 1,
+  "kind": "live_gemini_smoke_not_quality_benchmark",
+  "verified_at_utc": "2026-11-09T05:26:38.103280+00:00",
+  "base_url": "https://mesa-meal-discovery.onrender.com",
+  "model": "gemini-3.1-flash-lite",
+  "tested_deploy_id": "dep-dbolhns9v7es73fl5ur0",
+  "tested_code_commit": "2c3665b9007079927d29b383ac895a0b96e7c25b",
+  "source_database_sha256": "3c7123757311bd51ffb22bb9782f7b7600b71ec73741cd3f866a87a50acd5188",
+  "live_gemini_tested": true,
+  "cases": [
+    {
+      "message": "Gostaria de uma bebida com chá e leite.",
+      "planner": "gemini_llm",
+      "model": "gemini-3.1-flash-lite",
+      "status": "ok",
+      "usage": {
+        "prompt_tokens": 323,
+        "completion_tokens": 12,
+        "total_tokens": 335,
+        "thought_tokens": 0
+      },
+      "tools": [
+        {
+          "name": "search_catalog",
+          "arguments": {
+            "query": "milk tea",
+            "cuisine": null,
+            "min_price": null,
+            "max_price": null,
+            "limit": 6
+          },
+          "duration_ms": 216.88993088901043,
+          "result_count": 6
+        }
+      ],
+      "items": 6,
+      "example_names": [
+        "Green Milk Tea  Milk Tea Large",
+        "Green Milk Tea  Milk Tea Medium"
+      ],
+      "http_and_evidence_verification_ms": 2936.84
+    },
+    {
+      "message": "Me mostre opções de macarrão com carne bovina.",
+      "planner": "gemini_llm",
+      "model": "gemini-3.1-flash-lite",
+      "status": "ok",
+      "usage": {
+        "prompt_tokens": 325,
+        "completion_tokens": 12,
+        "total_tokens": 337,
+        "thought_tokens": 0
+      },
+      "tools": [
+        {
+          "name": "search_catalog",
+          "arguments": {
+            "query": "beef noodles",
+            "cuisine": null,
+            "min_price": null,
+            "max_price": null,
+            "limit": 6
+          },
+          "duration_ms": 12.4708516523242,
+          "result_count": 6
+        }
+      ],
+      "items": 6,
+      "example_names": [
+        "Beef Noodles",
+        "Beef Noodles"
+      ],
+      "http_and_evidence_verification_ms": 7685.49
+    }
+  ],
+  "passed": 2,
+  "catalog_items_checked": 12,
+  "tokens": 672,
+  "initial_configuration_failure": {
+    "model": "gemini-2.5-flash-lite",
+    "http_status": 404
+  },
+  "secret_accessed_or_printed": false,
+  "external_api_cost_usd": null,
+  "limitations": [
+    "Two development smoke queries, not a human relevance or held-out quality evaluation.",
+    "No paid tier was enabled; account billing configuration was not inspected.",
+    "Historical Qwen and Gemini latencies are not comparable benchmarks."
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "protocol_version": "semantic-pilot-v1",
+  "sample_size": 10000,
+  "sample_seed": "meal-discovery-semantic-pilot-v1",
+  "selection": "lowest SHA256 of UTF-8 JSON [seed,vendor_id,product_id]; no query or interaction-based selection",
+  "batch_size": 32,
+  "dimension": 384,
+  "model_repository": "Xenova/multilingual-e5-small",
+  "model_revision": "761b726dd34fb83930e26aab4e9ac3899aa1fa78",
+  "document_template": "{name}. Cuisine: {primary_cuisine}.",
+  "k": 10,
+  "hybrid": {"method": "reciprocal_rank_fusion", "rank_constant": 60, "candidate_depth": 50},
+  "scope": "Experimental real catalog subset; never describe it as complete-catalog semantic search.",
+  "evaluation": "AI-authored development queries and deterministic name-rule silver labels, not human judgments or held-out relevance test. Official test orders are not used."
+}

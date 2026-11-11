@@ -1,0 +1,17 @@
+{
+  "kind": "public_gemini_bounded_deployment_acceptance",
+  "verified_at": "2026-11-10T14:01:19.168428+00:00",
+  "deployment_commit": "ad181c18a1ad3b1193c0cc8a594c986b35f263db",
+  "model": "gemini-3.1-flash-lite",
+  "complete": false,
+  "cases_executed": 3,
+  "passed": 0,
+  "total": 10,
+  "gemini_inferences_completed": 0,
+  "provider_attempts": 4,
+  "successful_response_tokens": 0,
+  "catalog_items_checked": 6,
+  "http_latency_ms_median": 24421.46,
+  "report_sha256": "74cd66d8f74324a70e1eaa05b375ebf392896b6a884075f9a481b85ecb14db33",
+  "limitations": "Incomplete: stopped after two failed provider requests. Only three of ten planned cases executed. No successful Gemini inference; fallback is not LLM inference. Failed-attempt token usage remains unknown."
+}

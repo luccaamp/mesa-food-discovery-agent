@@ -1,0 +1,25 @@
+{
+  "kind": "retrieval_release_decision",
+  "queries": 16,
+  "independent_concepts": 8,
+  "label_kind": "automatic_name_evidence_proxy_not_human_preference",
+  "controls_correct": 15,
+  "controls_total": 16,
+  "controls_required": 32,
+  "judge_admitted": false,
+  "calibration_complete": false,
+  "decision": "retain_glossary_lexical; reject_order_sensitive_guarded_judge; no_pool_scores",
+  "judged_semantic_relevance_complete": false,
+  "judged_top1_pilot_complete": false,
+  "automatic_comparison_complete": true,
+  "source_reports": [
+    "retrieval-additional-v2.json",
+    "relevance-thinking-diagnostic-v1.json",
+    "relevance-thinking-diagnostic-v2.json",
+    "relevance-bounded-diagnostic-v1.json",
+    "relevance-bounded-calibration-v1.json",
+    "relevance-bounded-calibration-v2.json",
+    "relevance-bounded-calibration-v3.json"
+  ],
+  "limitations": "Latest composite evaluator stopped after the first failed batch: 15/16 executed judgments, 32 required. Fish Soup for grilled fish changed from 0 to 1 when order changed. Four executed abstentions were deterministic, not LLM judgments. No pool scoring or top-1 pilot executed. Frozen AI-authored controls are not a human or external benchmark."
+}

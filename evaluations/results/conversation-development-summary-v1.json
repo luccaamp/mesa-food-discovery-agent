@@ -1,0 +1,20 @@
+{
+  "episodes": 120,
+  "passed": 120,
+  "pass_power_1": 1.0,
+  "pass_power_3": 1.0,
+  "failure_counts": {},
+  "llm_calls": 90,
+  "fallback_turns": 0,
+  "scenarios": 40,
+  "profiles": 8,
+  "turns": 177,
+  "catalog_items_checked": 702,
+  "baseline_passed": 38,
+  "baseline_episodes": 40,
+  "source_database_sha256": "3c7123757311bd51ffb22bb9782f7b7600b71ec73741cd3f866a87a50acd5188",
+  "suite_sha256": "479845253d9e1147730183e5bcb5f613884c9a94d8bab75ecf50294a71b77b62",
+  "report_sha256": "d62949ddd86d60ff92e27c7ca9300b0bbcbf96b7759a46e379391ebe41e15ee8",
+  "kind": "scripted_behavioral_profiles_real_local_http",
+  "limitations": "Scripted AI-authored behavioral contracts, not free-form LLM simulation, human preference or population estimates. Development cases are not held out."
+}

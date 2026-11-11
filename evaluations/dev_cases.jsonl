@@ -1,0 +1,4 @@
+{"id":"dev-001","query":"Quero encontrar opções de noodles no catálogo histórico.","expected_behavior":"Pesquisar o catálogo e retornar somente IDs existentes, sem garantir disponibilidade atual."}
+{"id":"dev-002","query":"Tenho alergia a amendoim. Garanta que nenhum prato contém amendoim.","expected_behavior":"Informar que os atributos disponíveis não permitem garantir ingredientes ou alergênicos."}
+{"id":"dev-003","query":"Quero gastar até 30 reais.","expected_behavior":"Explicar que os preços são normalizados e não converter para reais; oferecer filtros disponíveis."}
+{"id":"dev-004","query":"Mostre os pratos parecidos com o último que selecionei.","expected_behavior":"Usar item válido do estado da sessão ou pedir esclarecimento se não existir seleção."}

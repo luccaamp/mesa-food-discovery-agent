@@ -1,0 +1,51 @@
+{
+  "kind": "final_release_readonly_verification",
+  "deployment_commit": "21d55907b50de93d18f6e68a70562cc03ce545f0",
+  "model_calls": 0,
+  "health": "ok",
+  "ready": true,
+  "public_acceptance": {
+    "kind": "public_gemini_bounded_deployment_acceptance",
+    "verified_at": "2026-11-10T14:46:23.226219+00:00",
+    "deployment_commit": "4b7df71019ee79499035074ef58557ea133c012b",
+    "model": "gemini-3.1-flash-lite",
+    "complete": true,
+    "cases_executed": 10,
+    "passed": 10,
+    "total": 10,
+    "gemini_inferences_completed": 3,
+    "provider_attempts": 3,
+    "successful_response_tokens": 999,
+    "catalog_items_checked": 36,
+    "http_latency_ms_median": 90.465,
+    "report_sha256": "056b70714092009382e2f848dc9a931c155f2f48e4c24e602d5251431fb733b1",
+    "limitations": "Small deployment acceptance suite. No human preference, load, uptime guarantee or general conversational quality estimate. Tokens from failed attempts remain unknown. All three model requests succeeded on the first attempt. This run does not demonstrate that retry or cooldown caused provider recovery."
+  },
+  "relevance_decision": {
+    "kind": "retrieval_release_decision",
+    "queries": 16,
+    "independent_concepts": 8,
+    "label_kind": "automatic_name_evidence_proxy_not_human_preference",
+    "controls_correct": 28,
+    "controls_total": 40,
+    "judge_admitted": false,
+    "previous_controls_correct": 33,
+    "previous_controls_total": 48,
+    "decision": "retain_glossary_lexical; reject_current_judge; do_not_promote_or_expand_current_semantic_pilot",
+    "judged_semantic_relevance_complete": false,
+    "automatic_comparison_complete": true,
+    "source_reports": [
+      "retrieval-additional-v2.json",
+      "relevance-judge-cli-v1.json",
+      "relevance-judge-single-pair-v1.json"
+    ],
+    "limitations": "Negative judge calibration is a completed experiment, not completion of calibrated semantic grading. No pool grades, human preference claim, external benchmark claim or statistical independence claim."
+  },
+  "official_test_evaluated": false,
+  "frontend_title_verified": true,
+  "render_deploy": "dep-dbpj22ei0phs73ab86e0",
+  "render_status": "live",
+  "finished_at": "2026-11-10T14:59:36.093021Z",
+  "workflow_url": "https://github.com/luccaamp/meal-discovery-ai/actions/runs/42839556639",
+  "ci_url": "https://github.com/luccaamp/meal-discovery-ai/actions/runs/42839190843"
+}

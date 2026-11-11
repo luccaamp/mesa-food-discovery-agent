@@ -1,0 +1,29 @@
+name: Cloud image verification
+on: workflow_dispatch
+permissions:
+  contents: read
+jobs:
+  image:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build immutable real-data image
+        run: docker build --tag mesa:verify .
+      - name: Run under Free-size resource limits
+        run: >-
+          docker run -d --name mesa-verify --memory=512m --memory-swap=512m --cpus=0.1
+          --read-only --tmpfs /tmp:rw,noexec,nosuid,size=64m
+          -e LLM_PROVIDER=disabled -p 127.0.0.1:10000:10000 mesa:verify
+      - name: Check real catalog and essential assistant
+        run: python scripts/check_cloud.py
+      - name: Capture resource evidence
+        if: always()
+        run: |
+          docker stats --no-stream mesa-verify || true
+          docker inspect --format '{{json .State}}' mesa-verify || true
+          docker exec mesa-verify cat /sys/fs/cgroup/memory.peak || true
+          docker logs mesa-verify || true
+      - name: Stop verification container
+        if: always()
+        run: docker rm -f mesa-verify || true

@@ -1,0 +1,75 @@
+{
+  "id": "mealEvaluationV2",
+  "name": "Meal Discovery — ranking e conversas verificadas",
+  "active": false,
+  "versionId": "4829803c-c138-4573-91cc-4d351702598a",
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "manual",
+      "name": "Executar manualmente",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "url": "http://127.0.0.1:8000/v1/evaluations",
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "fetch",
+      "name": "Consultar avaliações reais",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        240,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $input.first().json;\nif (data.schema_version !== 1 || !Array.isArray(data.reports) || data.official_test_evaluated !== false) throw new Error('Unexpected evaluation schema or official test status');\nconst lines = ['# Meal Discovery AI — relatório automatizado', '', 'Fonte: API local de avaliações versionadas. Teste oficial não avaliado.', ''];\nfor (const report of data.reports) {\n if (report.id === 'recommendation') {\n  lines.push('## Recomendação temporal', '', `Clientes de validação: ${report.users}`, '', '| Modelo | Recall@10 | NDCG@10 |', '| --- | ---: | ---: |');\n  for (const [name, metrics] of Object.entries(report.models)) {\n   if (!Number.isFinite(metrics.recall) || !Number.isFinite(metrics.ndcg)) throw new Error('Invalid metric');\n   lines.push(`| ${name} | ${metrics.recall.toFixed(6)} | ${metrics.ndcg.toFixed(6)} |`);\n  }\n } else if (report.id === 'retrieval') {\n  lines.push('', '## Recuperação experimental', '', `Produtos: ${report.products}. Consultas: ${report.queries}.`, '', 'Rótulos automáticos fracos, não julgamentos humanos. Não comparar estes números diretamente com recomendação.', '', '| Método | NDCG@10 — proxy |', '| --- | ---: |');\n  for (const [name, groups] of Object.entries(report.models)) {\n   if (!Number.isFinite(groups.all.ndcg)) throw new Error('Invalid retrieval metric');\n   lines.push(`| ${name} | ${groups.all.ndcg.toFixed(6)} |`);\n  }\n }\n}\nconst conv = data.conversation_evaluation;\nif (!conv || !Number.isInteger(conv.episodes) || !Number.isInteger(conv.passed) || conv.passed > conv.episodes) throw new Error('Missing or invalid recorded conversation evidence');\nlines.push('', '## Conversas verificadas automaticamente', '', `Perfis roteirizados: ${conv.profiles}. Cenários: ${conv.scenarios}. Episódios: ${conv.passed}/${conv.episodes}.`, `Turnos: ${conv.turns}. Ocorrências de itens conferidas: ${conv.catalog_items_checked}. Chamadas locais: ${conv.llm_calls}.`, '', 'Repetições com temperatura zero. Não são participantes humanos nem uma estimativa de satisfação. A verificação objetiva é separada da opinião de juízes de IA.');\nlines.push('', 'Limites: avaliação offline, sem comprovação de conversão, receita, disponibilidade ou preferência individual.', '');\nreturn [{json: {report_id:'meal-evaluation-report-v2',schema_version:1,official_test_evaluated:false,reports:data.reports.length,markdown:lines.join('\\n')}}];"
+      },
+      "id": "format",
+      "name": "Validar e gerar relatório",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        480,
+        0
+      ]
+    }
+  ],
+  "connections": {
+    "Executar manualmente": {
+      "main": [
+        [
+          {
+            "node": "Consultar avaliações reais",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Consultar avaliações reais": {
+      "main": [
+        [
+          {
+            "node": "Validar e gerar relatório",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

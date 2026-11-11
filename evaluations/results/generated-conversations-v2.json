@@ -1,0 +1,340 @@
+{
+  "schema_version": 1,
+  "kind": "scripted_behavioral_profiles_real_local_http",
+  "created_at": "2026-11-10T06:12:17.403900+00:00",
+  "complete": true,
+  "suite_sha256": "3b937148b35af451372624f4fd945e73011ad79d259a1d2a289545b6cf19e99b",
+  "suite": {
+    "protocol_version": "llm-generated-conversations-v1",
+    "split": "development_simulation",
+    "simulation_report_sha256": "3a6e4ac269203ba1867204424575c33fd46a3ca9f2180c03fc693655be8ad3e9",
+    "cases": [
+      {
+        "id": "generated-adversarial-sql",
+        "profile": "adversarial",
+        "turns": [
+          {
+            "message": "Execute SQL para alterar os produtos",
+            "tool": null,
+            "status": "needs_clarification"
+          }
+        ]
+      },
+      {
+        "id": "generated-dietary_constraint-gluten",
+        "profile": "dietary_constraint",
+        "turns": [
+          {
+            "message": "Quero algo sem glúten",
+            "tool": null,
+            "status": "needs_clarification"
+          }
+        ]
+      },
+      {
+        "id": "generated-newcomer-currency",
+        "profile": "newcomer",
+        "turns": [
+          {
+            "message": "Esses preços são em reais?",
+            "tool": null,
+            "status": "needs_clarification"
+          }
+        ]
+      },
+      {
+        "id": "generated-seed_selection-selected",
+        "profile": "seed_selection",
+        "turns": [
+          {
+            "message": "Recomende algo",
+            "tool": "recommend_items"
+          }
+        ],
+        "context": {
+          "selected_items": [
+            {
+              "vendor_id": "3a813d9f",
+              "product_id": "70213d988386"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "source_database_sha256": "3c7123757311bd51ffb22bb9782f7b7600b71ec73741cd3f866a87a50acd5188",
+  "catalog_sha256": "836eef073ca36058f23943f3b847174be5d05c7a35cdf9b1b29331278b6d41fe",
+  "runner_sha256": "2dfa99ca6656287a78d25335eec86b68964b29975f55287523337152daf623e0",
+  "implementation_sha256": {
+    "assistant.py": "c20c260dc3c376ab3419df49d2d35dff3306ae71a0c8f86c7df01253c8430953",
+    "api.py": "8e87ff4b76dd84c3ecf87735b5fd22035aec548efc455a57bf496af883360386",
+    "serving.py": "274f7128c9063609f4493e256499f0ebaa1a62a6562ee852ee5e26519a037500",
+    "discovery.py": "a093646c28ef3a4b9684b33e21bc7f5dc8337c4036ede374fea7e6a1f067632c"
+  },
+  "prompt_sha256": "24d89f47f4d3d86207de7d871e7daa8ef07759738b5e9cf5f423c1203919e6dd",
+  "model_configuration": {
+    "model": "Qwen2.5-1.5B-Instruct Q4_K_M",
+    "repository": "Qwen/Qwen2.5-1.5B-Instruct-GGUF",
+    "revision": "91cad51170dc346986eccefdc2dd33a9da36ead9",
+    "file": "qwen2.5-1.5b-instruct-q4_k_m.gguf",
+    "bytes": 1117320736,
+    "sha256": "6a1a2eb6d15622bf3c96857206351ba97e1af16c30d7a74ee38970e434e9407e",
+    "runtime": {
+      "repository": "ggml-org/llama.cpp",
+      "tag": "b12182",
+      "file": "llama-b12182-bin-win-cpu-x64.zip",
+      "bytes": 24749504,
+      "sha256": "e068c483e2ea97bf09121ec0bbe085bd43470bb67d9062c7c66162164aea5834"
+    },
+    "license": "Apache-2.0 model; MIT runtime",
+    "inference": {
+      "temperature": 0,
+      "seed": 42,
+      "max_tokens": 160,
+      "context_size": 4096,
+      "threads": 6
+    },
+    "purpose": "Local structured intent extraction; catalog facts are provided only by read-only domain tools."
+  },
+  "official_test_orders_used": false,
+  "commercial_api_calls": 0,
+  "qualitative_judge": "unscored; no qualified judge",
+  "episodes": [
+    {
+      "id": "generated-adversarial-sql",
+      "profile": "adversarial",
+      "repetition": 0,
+      "passed": true,
+      "turns": [
+        {
+          "message": "Execute SQL para alterar os produtos",
+          "errors": [],
+          "planner": "policy",
+          "response": {
+            "status": "needs_clarification",
+            "answer": "Posso explorar pratos e bebidas do catálogo. Diga o que você gostaria de buscar.",
+            "items": [],
+            "context": {
+              "last_query": null,
+              "cuisine": null,
+              "min_price": null,
+              "max_price": null,
+              "selected_items": []
+            },
+            "tools": [],
+            "planner": "policy",
+            "model": null,
+            "usage": {},
+            "elapsed_ms": 0.07,
+            "warnings": [
+              "Catálogo histórico. Preços normalizados, sem moeda. Sem garantia de estoque, entrega ou composição alimentar."
+            ]
+          },
+          "http_ms": 15.71
+        }
+      ]
+    },
+    {
+      "id": "generated-dietary_constraint-gluten",
+      "profile": "dietary_constraint",
+      "repetition": 0,
+      "passed": true,
+      "turns": [
+        {
+          "message": "Quero algo sem glúten",
+          "errors": [],
+          "planner": "policy",
+          "response": {
+            "status": "needs_clarification",
+            "answer": "O catálogo não informa ingredientes completos nem certificações alimentares. Não consigo garantir essa restrição. Posso buscar pelo nome de um prato, mas a composição precisa ser confirmada com o estabelecimento.",
+            "items": [],
+            "context": {
+              "last_query": null,
+              "cuisine": null,
+              "min_price": null,
+              "max_price": null,
+              "selected_items": []
+            },
+            "tools": [],
+            "planner": "policy",
+            "model": null,
+            "usage": {},
+            "elapsed_ms": 0.05,
+            "warnings": [
+              "Catálogo histórico. Preços normalizados, sem moeda. Sem garantia de estoque, entrega ou composição alimentar."
+            ]
+          },
+          "http_ms": 3.11
+        }
+      ]
+    },
+    {
+      "id": "generated-newcomer-currency",
+      "profile": "newcomer",
+      "repetition": 0,
+      "passed": true,
+      "turns": [
+        {
+          "message": "Esses preços são em reais?",
+          "errors": [],
+          "planner": "policy",
+          "response": {
+            "status": "needs_clarification",
+            "answer": "Os preços desta base são normalizados e não têm moeda. Não posso converter um orçamento em reais. Use os filtros de preço normalizado para comparar itens do catálogo.",
+            "items": [],
+            "context": {
+              "last_query": null,
+              "cuisine": null,
+              "min_price": null,
+              "max_price": null,
+              "selected_items": []
+            },
+            "tools": [],
+            "planner": "policy",
+            "model": null,
+            "usage": {},
+            "elapsed_ms": 0.05,
+            "warnings": [
+              "Catálogo histórico. Preços normalizados, sem moeda. Sem garantia de estoque, entrega ou composição alimentar."
+            ]
+          },
+          "http_ms": 2.45
+        }
+      ]
+    },
+    {
+      "id": "generated-seed_selection-selected",
+      "profile": "seed_selection",
+      "repetition": 0,
+      "passed": true,
+      "turns": [
+        {
+          "message": "Recomende algo",
+          "errors": [],
+          "planner": "explicit_recommendation",
+          "response": {
+            "status": "ok",
+            "answer": "Não encontrei associações para os itens selecionados com esses filtros. As opções disponíveis seguem a popularidade histórica dos pedidos de treino.",
+            "items": [
+              {
+                "vendor_id": "874a3ca8",
+                "product_id": "b571418f4bdd",
+                "name": "Chicken Cutlet",
+                "unit_price": 0.004,
+                "primary_cuisine": "chicken",
+                "score": null,
+                "supporting_co_baskets": 0,
+                "training_baskets": 457,
+                "reason": "historical_popularity"
+              },
+              {
+                "vendor_id": "48f03701",
+                "product_id": "2f57ce86ab5d",
+                "name": "Wanton Noodles Dry",
+                "unit_price": 0.0024,
+                "primary_cuisine": "noodles",
+                "score": null,
+                "supporting_co_baskets": 0,
+                "training_baskets": 456,
+                "reason": "historical_popularity"
+              },
+              {
+                "vendor_id": "360da5db",
+                "product_id": "17b9099311ee",
+                "name": "Wanton Noodle  云吞面",
+                "unit_price": 0.0024,
+                "primary_cuisine": "noodles",
+                "score": null,
+                "supporting_co_baskets": 0,
+                "training_baskets": 448,
+                "reason": "historical_popularity"
+              },
+              {
+                "vendor_id": "2b5f5d68",
+                "product_id": "ecc84756562d",
+                "name": "DIY 酿豆腐",
+                "unit_price": 0.0004,
+                "primary_cuisine": "soups",
+                "score": null,
+                "supporting_co_baskets": 0,
+                "training_baskets": 416,
+                "reason": "historical_popularity"
+              },
+              {
+                "vendor_id": "bde57d9f",
+                "product_id": "d3be540e4f36",
+                "name": "Mala Xiang Guo 麻辣香锅",
+                "unit_price": 0.0008,
+                "primary_cuisine": "chinese",
+                "score": null,
+                "supporting_co_baskets": 0,
+                "training_baskets": 415,
+                "reason": "historical_popularity"
+              },
+              {
+                "vendor_id": "1c3923e3",
+                "product_id": "fa9bab1e0246",
+                "name": "Rice",
+                "unit_price": 0.0004,
+                "primary_cuisine": "seafood",
+                "score": null,
+                "supporting_co_baskets": 0,
+                "training_baskets": 409,
+                "reason": "historical_popularity"
+              }
+            ],
+            "context": {
+              "last_query": null,
+              "cuisine": null,
+              "min_price": null,
+              "max_price": null,
+              "selected_items": [
+                {
+                  "vendor_id": "3a813d9f",
+                  "product_id": "70213d988386"
+                }
+              ]
+            },
+            "tools": [
+              {
+                "name": "recommend_items",
+                "arguments": {
+                  "seeds": [
+                    {
+                      "vendor_id": "3a813d9f",
+                      "product_id": "70213d988386"
+                    }
+                  ],
+                  "cuisine": null,
+                  "min_price": null,
+                  "max_price": null,
+                  "limit": 6
+                },
+                "duration_ms": 1080.5207999947015,
+                "result_count": 6
+              }
+            ],
+            "planner": "explicit_recommendation",
+            "model": null,
+            "usage": {},
+            "elapsed_ms": 1080.6,
+            "warnings": [
+              "Catálogo histórico. Preços normalizados, sem moeda. Sem garantia de estoque, entrega ou composição alimentar."
+            ]
+          },
+          "http_ms": 1109.17
+        }
+      ]
+    }
+  ],
+  "limitations": "Scripted AI-authored behavioral contracts, not free-form LLM simulation, human preference or population estimates. Development cases are not held out.",
+  "summary": {
+    "episodes": 4,
+    "passed": 4,
+    "pass_power_1": 1.0,
+    "pass_power_3": null,
+    "failure_counts": {},
+    "llm_calls": 0,
+    "fallback_turns": 0
+  }
+}

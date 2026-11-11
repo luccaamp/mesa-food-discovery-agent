@@ -1,0 +1,100 @@
+{
+  "schema_version": 1,
+  "kind": "real_catalog_browser_and_http_development_checks",
+  "verified_at_utc": "2026-11-09T04:35:00.563282+00:00",
+  "deployed_commit": "ea6a40cf298c415d751d38be59bb06648072e4d7",
+  "public_url": "https://mesa-meal-discovery.onrender.com",
+  "render_deploy_id": "dep-dbokpf5g1s2s73fgui7g",
+  "render_plan": "free",
+  "ci_url": "https://github.com/luccaamp/meal-discovery-ai/actions/runs/42562276066",
+  "python_tests": 81,
+  "frontend_tests": 6,
+  "container_verification": {
+    "url": "https://github.com/luccaamp/meal-discovery-ai/actions/runs/42562128892",
+    "tested_commit": "eb1500e68afe0001914b0515a910ed51e2b550b0",
+    "memory_limit_bytes": 536870912,
+    "cpu_limit": 0.1,
+    "memory_peak_bytes": 45408256,
+    "oom_killed": false,
+    "checks_passed": 8
+  },
+  "price_audit": {
+    "products": 1066840,
+    "source_zeros": 294542,
+    "positive_values_previously_rounded_to_zero": 541161,
+    "positive_display_example": "0,002 u.n.",
+    "zero_display_label": "Zero na fonte",
+    "source_databases_modified": false
+  },
+  "public_http": {
+    "checks_passed": 8,
+    "real_products": 1066840,
+    "timings": {
+      "interface_ms": 471.9,
+      "evaluations_ms": 224.6,
+      "catalog_ms": 416.0,
+      "search_ms": 955.2,
+      "price_filter_ms": 810.8,
+      "recommendations_ms": 197.5,
+      "assistant_fallback_ms": 701.9,
+      "explicit_recommendation_ms": 225.4
+    },
+    "positive_source_price_preserved": 0.002,
+    "live_gemini_tested": false,
+    "assistant_mode": "glossary_fallback"
+  },
+  "browser_checks": [
+    {
+      "case": "positive_price_and_evidence_dialog",
+      "passed": true,
+      "observed_price": 0.002
+    },
+    {
+      "case": "partial_system_503_keeps_real_catalog_and_reports",
+      "passed": true,
+      "scope": "local fault simulation, products remain official"
+    },
+    {
+      "case": "retry_recovers_without_page_reload",
+      "passed": true
+    },
+    {
+      "case": "filter_maximum_0.001_and_clear",
+      "passed": true,
+      "filtered_matches": 5088,
+      "cleared_matches": 27621
+    },
+    {
+      "case": "changed_selection_invalidates_old_suggestions",
+      "passed": true
+    },
+    {
+      "case": "explicit_recommendation_without_llm",
+      "passed": true
+    },
+    {
+      "case": "mobile_single_column_cards_and_evidence",
+      "passed": true,
+      "viewport_width": 360,
+      "viewport_height": 800,
+      "document_width": 345
+    },
+    {
+      "case": "public_laboratory_has_latest_qwen_record",
+      "passed": true,
+      "report_version": "product-flow-v2"
+    }
+  ],
+  "live_gemini_tested": false,
+  "limitations": [
+    "Development checks, not human usability or relevance research.",
+    "Container memory measured in GitHub Actions, not Render telemetry.",
+    "The final commit adds an assistant availability copy refinement after the container check; its frontend build and CI passed.",
+    "Public timings are one sequential run including client network latency.",
+    "Gemini key configuration and live validation remain pending."
+  ],
+  "screenshot_storage": "local_ignored_not_in_git",
+  "screenshots": [
+    "reports/screenshots/mesa-prices-public-v2.png"
+  ]
+}

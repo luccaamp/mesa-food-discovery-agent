@@ -1,0 +1,138 @@
+{
+  "kind": "bounded_judge_calibration",
+  "created_at": "2026-11-10T16:43:55.257812+00:00",
+  "complete": false,
+  "admitted": false,
+  "judge": {
+    "weights": {
+      "model": "Qwen3-8B Q4_K_M",
+      "repository": "Qwen/Qwen3-8B-GGUF",
+      "revision": "7c41481f57cb95916b40956ab2f0b139b296d974",
+      "file": "Qwen3-8B-Q4_K_M.gguf",
+      "bytes": 5027783488,
+      "sha256": "d98cdcbd03e17ce47681435b5150e34c1417f50b5c0019dd560e4882c5745785",
+      "license": "apache-2.0",
+      "runtime": {
+        "tag": "b12182",
+        "context": 4096,
+        "threads": 6,
+        "gpu_layers": 0,
+        "reasoning": "off",
+        "seed": 42,
+        "temperature": 0,
+        "max_tokens": 256
+      },
+      "status": "candidate_requires_calibration; not a qualified judge",
+      "scope": "local research only; no change to production planner or Render image"
+    },
+    "executable_sha256": "5b8b143895cd27293ef3e07ffe5854d1223cb33e315672eff3b7c62ae7971b70",
+    "runtime_archive_sha256": "e068c483e2ea97bf09121ec0bbe085bd43470bb67d9062c7c66162164aea5834",
+    "transport": "local_completion_cli",
+    "temperature": 0.6,
+    "context": 4096,
+    "max_tokens": 768,
+    "template": "explicit_ChatML_bounded_reasoning_then_constrained_final",
+    "system_prompt_sha256": "93a227798193a29220e1c6c5c9068432930f4cb9d46f395dedf105a1891d1df8",
+    "top_p": 0.95,
+    "top_k": 20,
+    "min_p": 0,
+    "seed": 42,
+    "reasoning_tokens": 512,
+    "output": "JSON schema constrained final; reasoning not retained"
+  },
+  "controls_sha256": "9029558cfb54302e8f48a7ae0a7bc2bf8ebb4308211070648493734ae29a0580",
+  "evaluator_sha256": "5f2fa38b2296ed7491952d1b738f086a41095ec462d7f0dfcb86128d69f23c63",
+  "calibration": [
+    {
+      "id": "exact-rice",
+      "language": "pt",
+      "reverse": false,
+      "expected": 2,
+      "grade": 2,
+      "reason": "Name explicitly matches requested dish/drink and components.",
+      "passed": true
+    },
+    {
+      "id": "different-sandwich",
+      "language": "pt",
+      "reverse": false,
+      "expected": 1,
+      "grade": 1,
+      "reason": "Same dish type but component differs (egg vs tuna).",
+      "passed": true
+    },
+    {
+      "id": "shared-beef",
+      "language": "pt",
+      "reverse": false,
+      "expected": 0,
+      "grade": 0,
+      "reason": "Unrelated dish type (burger vs noodle dish).",
+      "passed": true
+    },
+    {
+      "id": "different-water",
+      "language": "pt",
+      "reverse": false,
+      "expected": 1,
+      "grade": 1,
+      "reason": "Same drink type but component differs (coconut vs mineral).",
+      "passed": true
+    },
+    {
+      "id": "unrelated-tea",
+      "language": "pt",
+      "reverse": false,
+      "expected": 0,
+      "grade": 0,
+      "reason": "Unrelated dish type; green tea vs roast duck",
+      "passed": true
+    },
+    {
+      "id": "unknown-name",
+      "language": "pt",
+      "reverse": false,
+      "expected": -1,
+      "grade": 0,
+      "reason": "No mention of ice cream or vanilla in item number",
+      "passed": false
+    },
+    {
+      "id": "nut-certification",
+      "language": "pt",
+      "reverse": false,
+      "expected": -1,
+      "grade": -1,
+      "reason": "Dietary certification required for allergen claims",
+      "passed": true
+    },
+    {
+      "id": "untrusted-cake",
+      "language": "pt",
+      "reverse": false,
+      "expected": 2,
+      "grade": 2,
+      "reason": "Explicit match for chocolate cake",
+      "passed": true
+    }
+  ],
+  "calls": [
+    {
+      "elapsed_ms": 116332.25,
+      "output_sha256": "88fcd53a3f38f25b322c327df72bd1961c6d45bae63390443d33178322e0a61c"
+    },
+    {
+      "elapsed_ms": 113940.32,
+      "output_sha256": "70b83efdb19d730efd2659948a3e5eb4ef33ad6d2918a3350c849541c9e95fc5"
+    }
+  ],
+  "commercial_calls": 0,
+  "judgments": [],
+  "limitations": "AI-authored controls, not human preferences. Development controls cannot admit the judge. Calibration stops at the first failed batch; all 32 grades required for admission.",
+  "summary": {
+    "correct": 7,
+    "total": 8,
+    "required": 32
+  },
+  "decision": "rejected_failed_control_no_pool_scores"
+}
