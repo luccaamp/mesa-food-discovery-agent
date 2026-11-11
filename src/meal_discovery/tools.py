@@ -9,6 +9,7 @@ from time import perf_counter
 
 from .api_models import AssistantContext, SearchParams
 from .discovery import guarded_constraint
+from .observability import tool_span
 
 DISCLOSURE = ("Catálogo histórico. Preços normalizados, sem moeda. "
               "Sem garantia de estoque, entrega ou composição alimentar.")
@@ -33,7 +34,13 @@ def search(reader, context: AssistantContext, query: str) -> ToolOutcome:
     started = perf_counter()
     params = SearchParams(query=query, cuisine=context.cuisine, min_price=context.min_price,
                           max_price=context.max_price, limit=RESULT_LIMIT)
-    result = reader.search(params)
+    with tool_span("search_catalog", filtered=context.max_price is not None) as span:
+        try:
+            result = reader.search(params)
+        except ValueError:  # e.g. a model-generated query with no searchable terms
+            span.set_attribute("error.type", "invalid_query")
+            return ToolOutcome(answer=VAGUE_QUERY, rejected=True)
+        span.set_attribute("mesa.result_count", len(result["items"]))
     context.last_query = query
     items = result["items"]
     trace = {"name": "search_catalog", "arguments": params.model_dump(),
@@ -51,7 +58,9 @@ def recommend(recommender, context: AssistantContext) -> ToolOutcome:
     started = perf_counter()
     args = {"seeds": [item.model_dump() for item in context.selected_items], "cuisine": context.cuisine,
             "min_price": context.min_price, "max_price": context.max_price, "limit": RESULT_LIMIT}
-    result = recommender(args)
+    with tool_span("recommend_items", seeds=len(context.selected_items)) as span:
+        result = recommender(args)
+        span.set_attribute("mesa.result_count", len(result["items"]))
     items = result["items"]
     trace = {"name": "recommend_items", "arguments": args,
              "duration_ms": (perf_counter() - started) * 1000, "result_count": len(items)}

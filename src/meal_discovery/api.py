@@ -29,6 +29,7 @@ from .llm import describe, resilience
 from .planner import IntentPlanner
 from .serving import recommend
 from .cloud_limits import PublicDemoGuard
+from .observability import HTTP, metrics_payload, record_turn, setup_tracing
 
 logger = logging.getLogger("meal_discovery.api")
 
@@ -73,6 +74,7 @@ def create_app(index: Path | None = None) -> FastAPI:
     application.state.catalog_reader = CatalogReader(
         Path(index) if index is not None else Path(os.environ.get("MEAL_CATALOG_INDEX", "data/processed/singapore-catalog-v1.sqlite")))
     application.state.serving_index = Path(os.environ.get("MEAL_SERVING_INDEX", "data/processed/singapore-serving-v1.sqlite"))
+    setup_tracing()
     application.add_middleware(PublicDemoGuard, enabled=os.environ.get("MEAL_PUBLIC_MODE") == "1")
 
     @application.middleware("http")
@@ -85,6 +87,7 @@ def create_app(index: Path | None = None) -> FastAPI:
         response.headers["Server-Timing"] = f"app;dur={elapsed:.2f}"
         # Route template excludes item IDs; query strings and bodies are never logged here.
         route = request.scope.get("route")
+        HTTP.labels(getattr(route, "path", "unmatched"), request.method, str(response.status_code)).observe(elapsed / 1000)
         logger.info(json.dumps({"request_id": request.state.request_id, "method": request.method,
                                 "route": getattr(route, "path", "unmatched"),
                                 "status": response.status_code, "elapsed_ms": round(elapsed, 2)}))
@@ -170,13 +173,17 @@ def create_app(index: Path | None = None) -> FastAPI:
 
     @application.post("/v1/assistant", response_model=AssistantResponse, tags=["assistant"])
     def assistant(params: AssistantRequest, reader: Reader):
-        return run_assistant(params, reader, recommendations_for)
+        result = run_assistant(params, reader, recommendations_for)
+        record_turn("planner", result)
+        return result
 
     @application.post("/v1/agent", response_model=AssistantResponse, tags=["assistant"],
                       summary="Multi-step tool-calling agent (LangGraph)")
     def agent(params: AssistantRequest, reader: Reader):
         from .agent import run_agent
-        return run_agent(params, reader, recommendations_for)
+        result = run_agent(params, reader, recommendations_for)
+        record_turn("agent", result)
+        return result
 
     @application.post("/v1/agent/stream", tags=["assistant"], summary="Agent steps as Server-Sent Events",
                       response_class=StreamingResponse)
@@ -186,10 +193,17 @@ def create_app(index: Path | None = None) -> FastAPI:
         def events():
             for event in stream_agent(params, reader, recommendations_for):
                 if event["type"] == "result":
+                    record_turn("agent_stream", event["response"])
                     event = {"type": "result", "response": AssistantResponse.model_validate(event["response"]).model_dump(mode="json")}
                 yield f"event: {event['type']}\ndata: {json.dumps(event, ensure_ascii=False)}\n\n"
         return StreamingResponse(events(), media_type="text/event-stream",
                                  headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"})
+
+    @application.get("/metrics", include_in_schema=False)
+    def metrics():
+        from fastapi.responses import Response
+        body, content_type = metrics_payload()
+        return Response(body, media_type=content_type)
 
     @application.get("/v1/system", tags=["operations"])
     def system():

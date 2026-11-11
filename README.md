@@ -33,6 +33,9 @@ levar um minuto: o servidor gratuito hiberna) · [Arquitetura](docs/ARCHITECTURE
 - **Servidor MCP**: as mesmas ferramentas para Claude Desktop, Claude Code e Cursor.
 - **Avaliação como produto**: contratos verificados por código contra o
   catálogo, suíte reservada, comparação entre provedores, E2E com axe.
+- **Segurança e operação**: red team mapeado ao OWASP Top 10 para LLMs,
+  dados pessoais mascarados antes do modelo, métricas Prometheus e traces
+  OpenTelemetry com convenções de GenAI. [Detalhes](docs/SECURITY.md).
 
 ## Resultados
 
@@ -63,7 +66,9 @@ correção. [Dados brutos](evaluations/results/agent-provider-reserved-v1.json) 
 **Operação:** 52/52 cenários com o provedor fora do ar seguem respondendo pelo
 glossário; WhatsApp de ponta a ponta aprovado com gateway respondendo em ~5 ms
 ([relatório](evaluations/results/whatsapp-integration-v1.json)); 12/12 testes
-E2E em desktop e celular sem violações sérias de acessibilidade.
+E2E em desktop e celular sem violações sérias de acessibilidade; red team
+OWASP com 24 ataques: 24/24 no agente com Groq
+([relatório](evaluations/results/red-team-v2-groq.json)).
 
 Resultados negativos ficam registrados: o piloto de embeddings E5 não superou a
 busca lexical com glossário ([Experimento 003](docs/EXPERIMENT_003.md)) e juízes
@@ -112,7 +117,7 @@ docker compose up --build              # stack completa com WhatsApp e Redis
 Testes:
 
 ```sh
-python -m unittest discover -s tests                  # aplicação (163)
+python -m unittest discover -s tests                  # aplicação (171)
 npm --prefix apps/web test                            # interface (10)
 (cd services/whatsapp-gateway && go test ./...)       # gateway (8)
 npm --prefix apps/web run e2e                         # E2E, com o servidor no ar
@@ -126,6 +131,8 @@ src/meal_discovery/
   llm/            porta ChatModel, adaptadores Gemini/Groq/local, resiliência, roteamento
   channels/       worker do WhatsApp
   policies.py     regras antes do modelo (alergênicos, injeção, preço)
+  privacy.py      mascaramento de dados pessoais antes do LLM
+  observability.py métricas Prometheus e traces OpenTelemetry
   tools.py        ferramentas somente leitura compartilhadas
   mcp_server.py   servidor MCP
   api.py          FastAPI: catálogo, recomendação, agente, SSE, operações

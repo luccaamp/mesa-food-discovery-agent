@@ -145,6 +145,17 @@ class AgentFlowTests(unittest.TestCase):
         run("pão", model, catalog)
         self.assertEqual(catalog.queries, [])
 
+    def test_unsearchable_model_query_is_rejected_not_crashing(self):
+        class Strict(Catalog):
+            def search(self, params):
+                if not any(ch.isalnum() for ch in params.query):
+                    raise ValueError("Query requires letters or numbers")
+                return super().search(params)
+        model = ScriptedModel(call("search_catalog", query="(((("), text("Pode reformular?"))
+        result = run("algo", model, Strict())
+        self.assertEqual(result["status"], "needs_clarification")
+        self.assertEqual(result["tools"], [])
+
     def test_provider_failure_uses_glossary_fallback(self):
         model = ScriptedModel(ProviderUnavailable("provider_http_429", provider="groq", attempts=1))
         result = run("arroz com frango", model)

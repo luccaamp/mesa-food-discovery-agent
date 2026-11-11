@@ -23,7 +23,8 @@ from langgraph.graph import END, START, StateGraph
 
 from .. import policies, tools
 from ..api_models import AssistantContext, AssistantRequest
-from ..assistant import GLOSSARY_WARNING, MODEL_UNAVAILABLE, cooldown_seconds, fallback_reason, log_unavailable
+from ..assistant import (GLOSSARY_WARNING, MODEL_UNAVAILABLE, PRIVACY_WARNING, cooldown_seconds, fallback_reason,
+                         log_unavailable)
 from ..discovery import expand_query
 from ..llm import ProviderUnavailable, ToolSpec, from_environment
 from .grounding import grounded_reply
@@ -76,6 +77,8 @@ def _deps(config):
 def guard(state: AgentState, config) -> dict:
     outcome = policies.apply(state["message"], state["context"])
     update: dict[str, Any] = {"context": outcome.context}
+    if outcome.redacted:
+        update["warnings"] = [PRIVACY_WARNING.format(kinds=", ".join(outcome.redacted))]
     if outcome.answer:
         return {**update, "answer": outcome.answer, "status": "needs_clarification", "planner": "policy"}
     if outcome.plan is not None:
@@ -169,7 +172,7 @@ def fallback(state: AgentState, config) -> dict:
     deps = _deps(config)
     provider = log_unavailable(error, getattr(deps["chat_model"], "provider", "disabled"))
     outcome = state.get("outcome")
-    warnings = [GLOSSARY_WARNING]
+    warnings = [*state.get("warnings", []), GLOSSARY_WARNING]
     if outcome is not None:  # a tool already ran; keep its grounded result
         return {"answer": outcome.answer, "status": "ok" if outcome.items else "no_results",
                 "planner": f"{state.get('provider') or provider}_agent", "warnings": warnings}

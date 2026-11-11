@@ -152,6 +152,8 @@ class Worker:
             return Handled("Pronto: apaguei o contexto da nossa conversa. Nenhum histórico seu fica guardado.", True)
         context = self.store.load(phone)
         response = self.agent(AssistantRequest(message=text[:500], context=context))
+        from ..observability import record_turn
+        record_turn("whatsapp", response)
         self.store.save(phone, AssistantContext.model_validate(response["context"]))
         return Handled(format_reply(response))
 

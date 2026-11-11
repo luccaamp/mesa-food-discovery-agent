@@ -12,6 +12,7 @@ import re
 
 from .api_models import AssistantContext, IntentPlan
 from .discovery import fold, guarded_constraint
+from .privacy import redact
 
 GREETING = re.compile(r"(?:oi|ola|bom dia|boa tarde|boa noite|hello|hi)[.!?\s]*")
 INJECTION = re.compile(r"ignore.*(instruc|regra)|system prompt|execute.*(sql|python|codigo)|https?://")
@@ -33,9 +34,17 @@ class PolicyResult:
     planning_message: str = ""         # message with structured parts (price) removed
     plan: IntentPlan | None = None     # set when the action is explicit, no model needed
     planner: str | None = None         # name of the deterministic rule that chose the plan
+    redacted: list[str] | None = None  # kinds of personal data masked before any model call
 
 
 def apply(message, context: AssistantContext) -> PolicyResult:
+    message, redacted = redact(message)
+    result = _apply(message, context)
+    result.redacted = redacted or None
+    return result
+
+
+def _apply(message, context: AssistantContext) -> PolicyResult:
     context = context.model_copy(deep=True)
     constraint = guarded_constraint(message)
     if constraint:

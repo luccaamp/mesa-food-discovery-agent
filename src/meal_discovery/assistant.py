@@ -24,6 +24,7 @@ KNOWN_PROVIDERS = {"gemini", "groq", "openai", "local"}
 MODEL_UNAVAILABLE = ("O modelo de linguagem está indisponível. Você pode usar a busca do catálogo ou pedir "
                      "um prato com termos como arroz, frango, pizza ou café.")
 GLOSSARY_WARNING = "Modelo indisponível ou cota atingida: usei somente o glossário explícito, sem inferência de LLM."
+PRIVACY_WARNING = "Removi dados pessoais da mensagem ({kinds}) antes de qualquer consulta à IA."
 
 
 def fallback_reason(error):
@@ -58,6 +59,8 @@ def run_assistant(request: AssistantRequest, reader, recommender, *, planner=Non
     state = {"planner": "policy", "model": None, "usage": {}, "fallback_reason": None, "retry_after_seconds": None}
     outcome = policies.apply(request.message, request.context)
     context = outcome.context
+    if outcome.redacted:
+        warnings.append(PRIVACY_WARNING.format(kinds=", ".join(outcome.redacted)))
 
     def finish(status, answer, items=None):
         return {"status": status, "answer": answer, "items": items or [], "context": context.model_dump(),

@@ -12,16 +12,18 @@ import os
 from .gemini import GeminiChatModel
 from .openai_compatible import OpenAICompatibleChatModel
 from . import resilience
+from ..observability import InstrumentedChatModel
 from .types import ChatResult, ProviderUnavailable
 
 KNOWN = ("gemini", "groq", "local", "openai")
 
 
 def build(provider, model=None):
+    """Create an adapter wrapped with tracing and metrics."""
     if provider == "gemini":
-        return GeminiChatModel(model=model)
+        return InstrumentedChatModel(GeminiChatModel(model=model))
     if provider in ("groq", "local", "openai"):
-        return OpenAICompatibleChatModel(provider, model=model)
+        return InstrumentedChatModel(OpenAICompatibleChatModel(provider, model=model))
     raise ProviderUnavailable("provider_disabled", provider=provider)
 
 
