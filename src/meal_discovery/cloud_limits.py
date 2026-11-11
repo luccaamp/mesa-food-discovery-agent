@@ -78,7 +78,8 @@ class ProviderCooldown:
 class PublicDemoGuard:
     """Bounded body buffering and heavy-request admission before domain execution."""
 
-    HEAVY = {"/v1/catalog/search", "/v1/discovery/search", "/v1/recommendations", "/v1/assistant"}
+    HEAVY = {"/v1/catalog/search", "/v1/discovery/search", "/v1/recommendations", "/v1/assistant",
+             "/v1/agent", "/v1/agent/stream"}
 
     def __init__(self, app, *, enabled=False, concurrency=4, requests_per_minute=60, body_bytes=8192):
         self.app, self.enabled = app, enabled

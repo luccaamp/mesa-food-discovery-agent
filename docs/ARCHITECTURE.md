@@ -35,6 +35,43 @@ Dados offline            dataset.py, singapore.py, benchmark.py, deployment.py
 4. **Rastro:** a resposta inclui ferramentas chamadas, argumentos, duração,
    provedor que respondeu, tokens e, se houve, o motivo do fallback.
 
+## Agente (LangGraph)
+
+`POST /v1/agent` e `POST /v1/agent/stream` (Server-Sent Events) executam um
+agente em que **o modelo escolhe as ferramentas** por tool calling:
+
+```text
+guard ──(política respondeu)──────────────────────────► fim
+  │
+agent ──(chamou ferramenta, orçamento restante)──► tools ──► agent
+  ├──(texto final ou orçamento esgotado)──► respond ──► fim
+  └──(provedor indisponível)────────────► fallback ─► fim
+```
+
+- `guard` aplica as mesmas políticas do modo planejador (`policies.py`) e
+  resolve sem modelo os refinamentos explícitos de preço e os pedidos de recomendação.
+- `agent` oferece `search_catalog` e `recommend_items`. No máximo três chamadas
+  ao modelo e duas execuções de ferramenta por turno; depois disso as
+  ferramentas deixam de ser oferecidas.
+- `tools` executa as mesmas funções de `tools.py` que o planejador usa. O
+  modelo recebe nomes e culinárias, nunca preços, para não repeti-los.
+- `respond` aceita a frase final do modelo só se ela passar pela verificação de
+  grounding (`agent/grounding.py`): sem moeda, links, alegações de dieta,
+  estoque ou entrega, e sem números que não existam nos resultados. Caso
+  contrário, usa a resposta montada a partir da ferramenta.
+- `fallback` repete o caminho explícito do glossário quando nenhum provedor
+  responde. Se uma ferramenta já tinha rodado, o resultado dela é mantido.
+
+O estado da conversa (última busca, filtros, itens escolhidos) viaja no
+`context` de cada requisição: o servidor é stateless e escala horizontalmente.
+O streaming emite eventos públicos (`plan`, `tool`, `fallback`, `result`),
+nunca o raciocínio interno do modelo.
+
+## MCP
+
+`mcp_server.py` expõe as ferramentas somente leitura pelo Model Context
+Protocol para clientes externos. [Uso e configuração](MCP.md).
+
 ## Camada de LLM
 
 - `types.py` define a porta `ChatModel` e o formato neutro de mensagens,

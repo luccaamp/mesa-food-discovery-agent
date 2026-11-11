@@ -13,7 +13,7 @@ from uuid import uuid4
 from fastapi import Depends, FastAPI, HTTPException, Path as PathParam, Query, Request
 from fastapi.exceptions import RequestValidationError, ResponseValidationError
 from fastapi.responses import JSONResponse
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, StreamingResponse
 from fastapi.staticfiles import StaticFiles
 from starlette.exceptions import HTTPException as StarletteHTTPException
 from pydantic import ValidationError
@@ -65,7 +65,7 @@ Identifier = Annotated[str, PathParam(min_length=1, max_length=200)]
 
 def create_app(index: Path | None = None) -> FastAPI:
     application = FastAPI(
-        title="Meal Discovery AI", version="0.8.0",
+        title="Mesa food discovery API", version="0.9.0",
         description="Read-only discovery over the official historical Singapore catalog. Prices are normalized dataset values, not currency. No live availability or allergy guarantees.",
         responses={422: {"model": ErrorResponse, "description": "Invalid query parameters"},
                    503: {"model": ErrorResponse, "description": "Verified catalog unavailable"}},
@@ -151,6 +151,19 @@ def create_app(index: Path | None = None) -> FastAPI:
             raise CatalogUnavailable("Recommendation and catalog sources differ")
         return result
 
+    if os.environ.get("WHATSAPP_WORKER") == "1":
+        # Free hosting has no separate worker service: consume the WhatsApp queue in a daemon thread.
+        import threading
+        from .channels.whatsapp import build_from_environment
+        worker = build_from_environment(application.state.catalog_reader, recommendations_for)
+        if worker is not None:
+            application.state.whatsapp_stop = threading.Event()
+            threading.Thread(target=worker.run_forever, args=(application.state.whatsapp_stop,),
+                             name="whatsapp-worker", daemon=True).start()
+            logger.info("whatsapp_worker_started")
+        else:
+            logger.warning("whatsapp_worker_not_configured")
+
     @application.post("/v1/recommendations", response_model=RecommendationResult, tags=["recommendations"])
     def recommendations(params: RecommendationParams):
         return recommendations_for(params.model_dump())
@@ -158,6 +171,25 @@ def create_app(index: Path | None = None) -> FastAPI:
     @application.post("/v1/assistant", response_model=AssistantResponse, tags=["assistant"])
     def assistant(params: AssistantRequest, reader: Reader):
         return run_assistant(params, reader, recommendations_for)
+
+    @application.post("/v1/agent", response_model=AssistantResponse, tags=["assistant"],
+                      summary="Multi-step tool-calling agent (LangGraph)")
+    def agent(params: AssistantRequest, reader: Reader):
+        from .agent import run_agent
+        return run_agent(params, reader, recommendations_for)
+
+    @application.post("/v1/agent/stream", tags=["assistant"], summary="Agent steps as Server-Sent Events",
+                      response_class=StreamingResponse)
+    def agent_stream(params: AssistantRequest, reader: Reader):
+        from .agent import stream_agent
+
+        def events():
+            for event in stream_agent(params, reader, recommendations_for):
+                if event["type"] == "result":
+                    event = {"type": "result", "response": AssistantResponse.model_validate(event["response"]).model_dump(mode="json")}
+                yield f"event: {event['type']}\ndata: {json.dumps(event, ensure_ascii=False)}\n\n"
+        return StreamingResponse(events(), media_type="text/event-stream",
+                                 headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"})
 
     @application.get("/v1/system", tags=["operations"])
     def system():
@@ -235,7 +267,16 @@ def create_app(index: Path | None = None) -> FastAPI:
                      if (directory / name).is_file()), directory / "relevance-decision-v1.json")
         if path.is_file():
             relevance_report = json.loads(path.read_text(encoding="utf-8"))
+        agent_comparison = None
+        # Held-out contracts first: they were frozen before any tuning of the agent.
+        for name, split in (("agent-provider-reserved-v1.json", "reserved"), ("agent-provider-comparison-v1.json", "development")):
+            path = directory / name
+            if path.is_file():
+                recorded = json.loads(path.read_text(encoding="utf-8"))
+                agent_comparison = {"created_at": recorded["created_at"], "split": split, "summaries": recorded["summaries"]}
+                break
         return {"schema_version": 1, "reports": reports, "assistant_evaluation": assistant_report,
+                "agent_comparison": agent_comparison,
                 "conversation_evaluation": conversation_report, "ai_evaluation": ai_report,
                 "public_assistant_evaluation": public_report, "relevance_evaluation": relevance_report,
                 "official_test_evaluated": False}
