@@ -431,7 +431,7 @@ export default function App() {
           <span className="dataset-dot" /> Dados reais, escolhas informadas
           <p>Um projeto independente de IA.</p>
           <a
-            href="https://github.com/luccaamp/mesa"
+            href="https://github.com/luccaamp/mesa-food-discovery-agent"
             target="_blank"
             rel="noreferrer"
           >
@@ -1041,7 +1041,7 @@ export default function App() {
                   )}
                   <p>A comparação adicional usou {relevanceEvaluation.queries} consultas em português e inglês, com regras sobre os nomes dos produtos. Mantivemos a busca lexical com glossário; o piloto semântico não foi promovido.</p>
                   <p className="chart-caption">Essas regras são aproximações de relevância, não preferências humanas. As consultas bilíngues formam pares; os resultados não medem generalização nem ingredientes.</p>
-                  <a href="https://github.com/luccaamp/mesa/blob/main/docs/RELEVANCE_REASONING_2026-11-10.md" target="_blank" rel="noreferrer">Ler a decisão e as evidências <ExternalLink size={14} /></a>
+                  <a href="https://github.com/luccaamp/mesa-food-discovery-agent/blob/main/docs/RELEVANCE_REASONING_2026-11-10.md" target="_blank" rel="noreferrer">Ler a decisão e as evidências <ExternalLink size={14} /></a>
                 </article>
               )}
               {conversationEvaluation && (
@@ -1056,7 +1056,7 @@ export default function App() {
                     <div><strong>{conversationEvaluation.llm_calls}</strong><span>chamadas ao modelo local</span></div>
                   </div>
                   <p className="chart-caption">A primeira execução passou em {conversationEvaluation.baseline_passed}/{conversationEvaluation.baseline_episodes}; foram corrigidas a interpretação de saudações e a troca de prato junto com preço. Perfis roteirizados não representam pessoas reais. Repetições com temperatura zero não provam robustez geral; este registro não mede o Gemini público. A análise qualitativa por IA é consultiva e separada da verificação dos fatos.</p>
-                  <a href="https://github.com/luccaamp/mesa/blob/main/docs/AUTOMATED_EVALUATION.md" target="_blank" rel="noreferrer">Consultar protocolo e limitações <ExternalLink size={14} /></a>
+                  <a href="https://github.com/luccaamp/mesa-food-discovery-agent/blob/main/docs/AUTOMATED_EVALUATION.md" target="_blank" rel="noreferrer">Consultar protocolo e limitações <ExternalLink size={14} /></a>
                 </article>
               )}
               {aiEvaluation && (
@@ -1235,7 +1235,7 @@ export default function App() {
                     estabelecimentos anonimizados.
                   </p>
                   <a
-                    href="https://github.com/luccaamp/mesa/tree/main/docs"
+                    href="https://github.com/luccaamp/mesa-food-discovery-agent/tree/main/docs"
                     target="_blank"
                     rel="noreferrer"
                   >

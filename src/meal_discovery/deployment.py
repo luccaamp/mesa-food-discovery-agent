@@ -17,7 +17,7 @@ from .dataset import file_hash
 CATALOG = "singapore-catalog-v1.sqlite"
 SERVING = "singapore-serving-v1.sqlite"
 NOTICE = "DATA-NOTICE.txt"
-ASSET_URL = "https://github.com/luccaamp/mesa/releases/download/mesa-data-sg-v1/catalog-serving-sg-v1.zip"
+ASSET_URL = "https://github.com/luccaamp/mesa-food-discovery-agent/releases/download/mesa-data-sg-v1/catalog-serving-sg-v1.zip"
 
 
 def validate_directory(directory, *, allow_test_data=False):

@@ -1,4 +1,4 @@
-# Meal Discovery AI
+# Mesa — food discovery agent
 
 Recomendação de refeições e busca conversacional com dados reais da Delivery Hero.
 

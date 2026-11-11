@@ -1,6 +1,6 @@
 {
   "artifact_version": "mesa-public-data-v1",
-  "download_url": "https://github.com/luccaamp/mesa/releases/download/mesa-data-sg-v1/catalog-serving-sg-v1.zip",
+  "download_url": "https://github.com/luccaamp/mesa-food-discovery-agent/releases/download/mesa-data-sg-v1/catalog-serving-sg-v1.zip",
   "bytes": 175769602,
   "sha256": "1efe99435dfe1bbd8c6286c7f2720560983fde378c2fb950b171c83310ac160e",
   "files": {
