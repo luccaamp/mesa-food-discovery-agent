@@ -136,7 +136,7 @@ def main():
                  for reply in replies]
         report["checks"]["replies_sent"] = len(replies)
         report["checks"]["graph_api_auth_header"] = all(entry["auth"] == "Bearer test-token" for entry in GraphMock.sent)
-        report["checks"]["first_reply_lists_catalog_items"] = "1. " in texts[0] and "u.n." in texts[0]
+        report["checks"]["first_reply_lists_catalog_items"] = "1. " in texts[0] and "dos itens de" in texts[0]
         report["checks"]["second_reply_keeps_dish_with_price_filter"] = "1. " in texts[1]
         report["checks"]["erasure_confirmed"] = "apaguei" in texts[2]
         report["checks"]["context_erased"] = not list(store.scan_iter("mesa:ctx:*"))

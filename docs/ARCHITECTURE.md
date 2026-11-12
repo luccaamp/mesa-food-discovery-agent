@@ -105,7 +105,9 @@ Nenhum log contém corpo de resposta do provedor, URL com parâmetros ou chave.
 ZIPs oficiais do DHRD conferidos por SHA-256 → normalização com quarentena
 por pedido → SQLite somente leitura → perfis de treino (dias 0–61) → índices de
 serviço. O teste oficial (dias 76–90) fica fisicamente separado e não foi usado
-para ajustar modelos. Os artefatos públicos contêm só catálogo, popularidade e
+para ajustar modelos; ele foi avaliado uma única vez, no
+[Experimento 004](EXPERIMENT_004.md). Os artefatos públicos contêm só
+catálogo, popularidade (geral e por região × horário), faixas de preço e
 vizinhança entre itens: nenhuma tabela individual de pedido ou cliente.
 
 ## Preço em faixas

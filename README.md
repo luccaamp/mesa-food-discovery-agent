@@ -1,4 +1,4 @@
-# Mesa — food discovery agent
+# Mesa: o que pedir quando você não sabe o que pedir
 
 [![CI](https://github.com/luccaamp/mesa-food-discovery-agent/actions/workflows/ci.yml/badge.svg)](https://github.com/luccaamp/mesa-food-discovery-agent/actions/workflows/ci.yml)
 [![Demo](https://img.shields.io/badge/demo-online-2e7d5b)](https://mesa-meal-discovery.onrender.com)
@@ -6,108 +6,100 @@
 [![OWASP LLM red team](https://img.shields.io/badge/OWASP%20LLM%20red%20team-24%2F24-2e7d5b)](evaluations/results/red-team-v2-gemini.json)
 [![License: MIT](https://img.shields.io/badge/license-MIT-lightgrey)](LICENSE)
 
-**Mesa ajuda quem não sabe o que pedir a decidir mais rápido.** Um agente de IA
-entende pedidos em português e inglês ("algo picante até 0,005", "agora uma
-bebida gelada"), consulta por ferramentas um catálogo real de **1.066.840
-itens** e recomenda o que costuma ser pedido junto, mostrando a evidência de
-cada sugestão. Funciona na web, no **Telegram** e no **WhatsApp**. Nenhum item,
-preço ou explicação é inventado pelo modelo, e isso é verificado por código.
+Em um app de delivery, a tela inicial decide boa parte do pedido. Analisei
+**1,7 milhão de pedidos reais** de 476 mil clientes de Singapura (dataset
+público da Delivery Hero, RecSys 2023) para responder **o que mostrar para cada
+pessoa**. Depois testei a resposta contra o próximo pedido real de cada cliente
+e a coloquei num produto: web, Telegram e um agente de IA que busca no catálogo
+por ferramentas, sem inventar itens nem preços.
 
-![O agente buscando no catálogo e respondendo com itens verificados](docs/screenshots/assistant-demo.gif)
-
-[Abrir a demo](https://mesa-meal-discovery.onrender.com) (a primeira abertura pode
-levar um minuto: o servidor gratuito hiberna) ·
+[Abrir a demo](https://mesa-meal-discovery.onrender.com) (o servidor gratuito
+pode levar um minuto para acordar) ·
 [Falar com o bot](https://t.me/mesa_food_discovery_bot) ·
-[Arquitetura](docs/ARCHITECTURE.md) · [Avaliação](evaluations/README.md) ·
-[Documentação](docs/README.md)
+[Análise de negócio](docs/BUSINESS_ANALYSIS.md) ·
+[Experimento](docs/EXPERIMENT_004.md) · [Arquitetura](docs/ARCHITECTURE.md)
 
-Dados: [Delivery Hero Recommendation Dataset](https://github.com/deliveryhero/dh-reco-dataset)
-(DHRD, RecSys 2023), pedidos reais de Singapura, com procedência verificada por hash.
+## 1. O que os dados mostram
 
-## Destaques
+| Achado | Número |
+| --- | --- |
+| A maioria dos pedidos de quem já é cliente é **exploração** | **63%** vão para um restaurante que a pessoa nunca usou; 43% mesmo entre quem tem 10+ pedidos |
+| **A popularidade é local** | O top-20 de cada região tem **0%** de sobreposição mediana com o top-20 da cidade |
+| **O horário muda o que se pede** | Café sai 3,7× mais de manhã; noodles 3,0× de madrugada |
+| **O cliente novo é frágil** | 58% não voltam em 30 dias, e o app não sabe nada sobre eles |
+| **Item sem preço não vende** | 28% do catálogo sem preço, 0,9% dos pedidos |
 
-- **Agente com tool calling em LangGraph**: o modelo escolhe entre busca e
-  recomendação, pode refazer uma busca vazia e tem orçamento de passos. As
-  etapas aparecem ao vivo por Server-Sent Events.
-- **Multi-provedor com fallback**: Gemini → Groq → glossário sem LLM, atrás de
-  uma porta `ChatModel` (arquitetura hexagonal), com retry limitado, cota e
-  pausa por provedor.
-- **Respostas ancoradas**: políticas determinísticas antes do modelo
-  (alergênicos, injeção, moeda) e verificação de grounding depois dele.
-- **Mensageria event-driven**: gateway em **Go** (segredo/HMAC, idempotência,
-  imagem de 15,7 MB) → **Redis Streams** → worker Python, no ar 24/7 no
-  Telegram. Privacidade por padrão: telefone só em hash, contexto expira em
-  24 h, "apagar meus dados".
-- **Servidor MCP**: as mesmas ferramentas para Claude Desktop, Claude Code e Cursor.
-- **Avaliação como produto**: contratos verificados por código contra o
-  catálogo, suíte reservada, comparação entre provedores, red team OWASP, E2E
-  com axe, tudo versionado em [`evaluations/`](evaluations/README.md).
-- **Segurança e operação**: dados pessoais mascarados antes do modelo,
-  métricas Prometheus e traces OpenTelemetry com convenções de GenAI.
-  [Detalhes](docs/SECURITY.md).
+![Mesmo clientes frequentes trocam de restaurante](docs/analysis/exploration-by-history.png)
 
-## Resultados
+Recomendar "peça de novo" atende a minoria dos pedidos. O sinal disponível para
+todo mundo, inclusive para quem acabou de chegar, é **onde** e **quando** a
+pessoa está pedindo. [Análise completa](docs/BUSINESS_ANALYSIS.md).
 
-**Agente e planejador** na suíte **reservada** (20 conversas congeladas antes de
-qualquer ajuste; cada item conferido no catálogo oficial):
+## 2. O teste: região e horário contra o próximo pedido real
 
-| Modo | Provedor | Aprovados | Latência p50 | p95 |
-| --- | --- | ---: | ---: | ---: |
-| Planejador | Groq · gpt-oss-120b | 20/20 | 0,57 s | 0,79 s |
-| Planejador | Gemini 3.1 Flash-Lite | 20/20 | 1,04 s | 4,6 s |
-| Agente (LangGraph) | Groq · gpt-oss-120b | 20/20 | 1,14 s | 1,75 s |
-| Agente (LangGraph) | Gemini 3.1 Flash-Lite | 20/20 | 2,00 s | 2,42 s |
+Protocolo congelado antes de rodar ([config](configs/discovery-experiment-v1.json)),
+escolha feita na validação e **uma única rodada no teste oficial do DHRD**
+(171.515 clientes, dias 76–90). [Experimento 004](docs/EXPERIMENT_004.md).
 
-Na suíte de desenvolvimento (40 conversas, 8 perfis), o agente com Groq começou
-em 35/40: traduzia "macarrão" como *pasta*. Passar ao agente os termos do
-glossário do próprio catálogo levou a 40/40, e a suíte reservada confirmou a
-correção. [Dados brutos](evaluations/results/agent-provider-reserved-v1.json) ·
-[script](evaluations/agent_comparison.py).
-
-**Segurança:** red team mapeado ao OWASP Top 10 para LLMs, com 24 ataques
-(injeção direta e indireta pelo catálogo, vazamento de prompt, dados pessoais,
-ferramentas inexistentes, links, alergênicos). Cada resposta é julgada por código:
-
-| Provedor | Aprovados | Respondidos pelo modelo | Barrados por política | Fallbacks |
-| --- | ---: | ---: | ---: | ---: |
-| Gemini 3.1 Flash-Lite | 24/24 | 15 | 9 | 0 |
-| Groq · gpt-oss-120b | 24/24 | 15 | 9 | 0 |
-
-[Gemini](evaluations/results/red-team-v2-gemini.json) ·
-[Groq](evaluations/results/red-team-v2-groq.json) · a rodada v1 fica registrada
-com um falso positivo do verificador, corrigido depois.
-
-**Recomendação** (validação temporal, 175.358 clientes, próxima cesta):
-
-| Modelo | Recall@10 | NDCG@10 |
+| O restaurante do pedido real está entre os 10 mostrados? | Todos | Cliente novo |
 | --- | ---: | ---: |
-| Popularidade global | 0,26% | 0,0012 |
-| Similaridade por cesta | 6,23% | 0,0398 |
-| Repetição pessoal | **14,44%** | **0,1157** |
+| Mais pedidos da cidade | 0,01% | 0,01% |
+| Mais pedidos **da região, no horário** | 10,4% | **10,2%** |
+| Ranker LightGBM (histórico + contexto) | **31,6%** | 9,0% |
 
-**Operação:** 52/52 cenários com o provedor fora do ar seguem respondendo pelo
-glossário; WhatsApp de ponta a ponta aprovado com o gateway respondendo em
-~5 ms ([relatório](evaluations/results/whatsapp-integration-v1.json)); 12/12
-testes E2E em desktop e celular sem violações sérias de acessibilidade.
+| Itens do pedido real entre os 10 sugeridos (Recall@10) | Todos | Cliente novo |
+| --- | ---: | ---: |
+| Repetição + cidade (melhor modelo anterior) | 14,52% | 0,21% |
+| **Repetição + região × horário** | **15,70%** | **2,88%** |
 
-Resultados negativos ficam registrados: o piloto de embeddings E5 não superou a
-busca lexical com glossário ([Experimento 003](docs/EXPERIMENT_003.md)) e juízes
-LLM de relevância reprovaram na calibração ([decisão](docs/RELEVANCE_REASONING_2026-11-10.md)).
+Para clientes novos, o contexto multiplica o acerto por 14 nos itens e leva o
+restaurante de praticamente zero para 1 em 10. O ranker é o melhor no total,
+mas perde para a regra simples justamente em quem não tem histórico. A decisão
+é segmentar, e o trade-off de reservar posições para descoberta também foi medido.
+
+![Laboratório com o experimento de descoberta no teste oficial](docs/screenshots/lab-desktop.png)
+
+## 3. O produto
+
+![Home com "em alta perto de você" e preço em faixas](docs/screenshots/home-desktop.png)
+
+- **Em alta perto de você, agora:** a home e o "me recomende algo" usam o
+  modelo que venceu para quem não tem histórico (região × horário de Singapura).
+- **Preço que uma pessoa entende:** o DHRD não publica moeda (o preço vai de
+  0,0004 a 1,0 numa escala oculta). Cada item mostra sua faixa dentro da própria
+  culinária ($, $$, $$$) e "mais barato que 72% dos itens de pizza". "Pizza
+  barata" vira filtro. [Como funciona](docs/ARCHITECTURE.md#preço-em-faixas).
+- **Agente com ferramentas (LangGraph):** entende português e inglês, escolhe
+  entre busca e recomendação, refaz uma busca vazia, e nenhum item, preço ou
+  frase sai sem verificação contra o catálogo. Gemini → Groq → glossário sem LLM.
+- **Os mesmos dados em todo canal:** web (React), Telegram 24/7 via gateway Go
+  e Redis Streams, WhatsApp pronto, servidor MCP para Claude, Cursor e IDEs.
+
+## 4. Como sei que funciona
+
+| Verificação | Resultado |
+| --- | --- |
+| Experimento de descoberta, teste oficial rodado uma vez | acima, com [dados brutos](evaluations/results/discovery-test-v1.json) |
+| Agente na suíte reservada (20 conversas, cada item conferido) | 20/20 com Gemini e com Groq |
+| Red team OWASP Top 10 para LLMs (24 ataques, julgados por código) | 24/24 com Gemini e com Groq |
+| Provedor fora do ar | 52/52 cenários seguem respondendo pelo glossário |
+| Testes automatizados | 196 backend · 21 avaliação · 11 interface · 14 Go · 12 E2E com axe |
+
+Resultados negativos ficam registrados: embeddings E5 não superaram a busca
+lexical ([Experimento 003](docs/EXPERIMENT_003.md)), e juízes LLM reprovaram na
+calibração ([decisão](docs/RELEVANCE_REASONING_2026-11-10.md)).
 
 ## Decisões de engenharia
 
 | Decisão | Alternativa descartada | Por quê |
 | --- | --- | --- |
-| O modelo escolhe ferramentas, mas nunca é fonte de fatos | Deixar o LLM descrever itens e preços | Itens e preços vêm só das ferramentas; a frase final passa por verificação de grounding e é trocada se citar algo que não está nos resultados |
-| Agente e planejador lado a lado, medidos na mesma suíte | Escolher um por intuição | Os dois passam na suíte reservada; o planejador usa metade das chamadas (13 × 25) e é mais rápido, enquanto o agente decide sozinho quando refazer uma busca ou recomendar. Os dois modos ficam disponíveis e o custo de cada um é medido |
-| Busca lexical (FTS5/BM25) com glossário PT→EN | Banco vetorial com embeddings | O E5 multilíngue perdeu para a lexical no mesmo protocolo e não foi promovido |
-| Avaliação por regras determinísticas | Juiz LLM | Os juízes testados reprovaram na calibração com controles; regras são reprodutíveis e auditáveis |
-| Gateway Go separado da API Python | Webhook direto no FastAPI | Webhooks exigem resposta em milissegundos e idempotência, independentes da latência do LLM |
-| Redis Streams com consumer group | Kafka | Mesma semântica de ack e reprocessamento, sem operar um cluster para este volume |
-| Fallback Gemini → Groq → glossário | Um provedor só | Cotas e quedas são normais na camada gratuita; o produto continua respondendo, e o motivo do fallback aparece na resposta |
-
-Mais decisões e o registro cronológico em [ARCHITECTURE.md](docs/ARCHITECTURE.md#decisões)
-e [DECISIONS.md](docs/DECISIONS.md).
+| Perguntar aos dados antes de escolher o modelo | Ir direto para um modelo mais sofisticado | A análise mostrou que o problema é descoberta e contexto, não recompra, e isso definiu o experimento |
+| Regra região × horário para quem não tem histórico | Usar o ranker para todos | O ranker perde para a regra nesse segmento; servir cada um onde vence |
+| Preço por posição dentro da culinária | Converter para moeda | A escala não é publicada; a posição vale para qualquer normalização que preserve a ordem |
+| O modelo escolhe ferramentas, mas nunca é fonte de fatos | Deixar o LLM descrever itens e preços | Itens e preços vêm só das ferramentas, e a frase final passa por verificação de grounding |
+| Busca lexical (FTS5/BM25) com glossário PT→EN | Banco vetorial | O E5 multilíngue perdeu no mesmo protocolo |
+| Avaliação por regras determinísticas | Juiz LLM | Os juízes reprovaram na calibração; regras são reprodutíveis |
+| Gateway Go + Redis Streams | Webhook direto no FastAPI | Webhooks exigem resposta em milissegundos e idempotência, independentes do LLM |
 
 ## Arquitetura
 
@@ -126,72 +118,40 @@ flowchart LR
   PORT --> GEM[Gemini] & GROQ[Groq] & QWEN[Qwen local]
   AG --> TOOLS[Ferramentas somente leitura]
   MCP --> TOOLS
-  TOOLS --> CAT[(Catálogo FTS5/BM25)] & REC[(Recomendador por cestas)]
+  TOOLS --> CAT[(Catálogo FTS5 + faixas de preço)] & REC[(Região × horário + cestas)]
 ```
 
-Detalhes em [ARCHITECTURE.md](docs/ARCHITECTURE.md).
-
-## Capturas
-
-| Laboratório: red team por risco OWASP | Telegram em produção |
-| --- | --- |
-| ![Tabela do red team no laboratório](docs/screenshots/lab-desktop.png) | ![Conversa com o bot no Telegram](docs/screenshots/telegram.png) |
-
-## Stack
-
-Python 3.11+, FastAPI, Pydantic, LangGraph, MCP SDK, SQLite FTS5 · Go
-(net/http, go-redis) · Redis Streams · React 19, TypeScript, Vite · Gemini,
-Groq, llama.cpp (Qwen 2.5), ONNX Runtime (E5) · Prometheus, OpenTelemetry ·
-Playwright, axe, Inspect AI · Docker, Render, GitHub Actions.
-
-## Rodar localmente
+## Rodar
 
 ```sh
 python -m venv .venv && .venv/Scripts/activate       # Linux/macOS: source .venv/bin/activate
 pip install -e ".[api,mcp,channels,test]"
 npm --prefix apps/web ci && npm --prefix apps/web run build
+python scripts/run_local.py --cloud    # Gemini -> Groq (chaves do ambiente); --no-llm para só o glossário
 
-python scripts/run_local.py --cloud    # Gemini -> Groq (chaves do ambiente)
-python scripts/run_local.py --no-llm   # só glossário, sem LLM
-docker compose up --build              # stack completa com gateway e Redis
+pip install -e ".[analysis]"           # pandas, matplotlib, LightGBM
+python analysis/business_analysis.py   # números e gráficos da análise
+python analysis/discovery_experiment.py
 ```
 
-Preparação dos dados e outros modos em [PRODUCT_GUIDE.md](docs/PRODUCT_GUIDE.md).
-
-| Suíte | Comando | Testes |
-| --- | --- | ---: |
-| Aplicação (domínio, agente, API, canais, privacidade) | `python -m unittest discover -s tests` | 180 |
-| Avaliação (suítes e calibração, Inspect AI) | `python -m unittest discover -s tests_eval` | 21 |
-| Interface | `npm --prefix apps/web test` | 10 |
-| Gateway | `cd services/whatsapp-gateway && go test -race ./...` | 14 |
-| E2E com acessibilidade (desktop e celular) | `npm --prefix apps/web run e2e` | 12 |
-
-## Estrutura
+Dados, deploy e outros modos em [PRODUCT_GUIDE.md](docs/PRODUCT_GUIDE.md);
+índice de toda a documentação em [docs/](docs/README.md).
 
 ```text
-src/meal_discovery/
-  agent/           grafo LangGraph, verificação de grounding
-  llm/             porta ChatModel, adaptadores Gemini/Groq/local, resiliência
-  channels/        worker de mensagens (WhatsApp, Telegram)
-  policies.py      regras antes do modelo (alergênicos, injeção, preço)
-  privacy.py       mascaramento de dados pessoais antes do LLM
-  observability.py métricas Prometheus e traces OpenTelemetry
-  tools.py         ferramentas somente leitura compartilhadas
-  mcp_server.py    servidor MCP
-  api.py           FastAPI: catálogo, recomendação, agente, SSE, operações
-services/whatsapp-gateway/   gateway Go (Telegram e WhatsApp)
-apps/web/                    interface React (design system, features, E2E)
-evaluations/                 suítes, red team, comparação de provedores, resultados
-docs/                        arquitetura, segurança, experimentos, decisões
+analysis/            análise de negócio e Experimento 004 (protocolo em configs/)
+src/meal_discovery/  agente, ferramentas, políticas, preço em faixas, região × horário, API, MCP
+services/            gateway Go (Telegram e WhatsApp)
+apps/web/            interface React com testes E2E e de acessibilidade
+evaluations/         suítes, red team, comparação de provedores e todos os resultados
+docs/                análise, experimentos, arquitetura, segurança
 ```
 
 ## Limitações
 
-O catálogo é histórico: não há estoque, entrega ou compra, e a sacola é uma
-simulação. Preços são normalizados pelo dataset, sem moeda; preço 0 significa
-preço não registrado. Nomes de produtos não comprovam ingredientes ou
-alergênicos. As avaliações são automatizadas; satisfação de pessoas reais não
-foi medida.
+O catálogo é histórico: não há estoque, entrega ou compra. Os experimentos são
+replays offline de pedidos reais: medem se o pedido teria aparecido, não
+conversão ou satisfação. Nomes de produtos não comprovam ingredientes ou
+alérgenos. Os nomes de bairro são uma aproximação do centro de cada região geohash.
 
 Desenvolvido com Claude Code como par de programação; arquitetura, decisões de
 produto e desenho da avaliação são meus.

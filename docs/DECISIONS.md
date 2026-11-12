@@ -59,3 +59,12 @@ Template dos próximos registros: hipótese → alteração → comparação →
 - Observação: o teste SG inclui dias 76–90, enquanto SE/TW incluem 76–89. No catálogo SG há 41 referências ausentes no treino e oito no teste. Não cortar o dia 90 nem esconder casos ausentes.
 - Decisão: fonte principal passa a ser a distribuição oficial; usar SG primeiro, SE como base secundária e TW depois. Manter treino/teste separados e não anexar o arquivo completo como observações extras. Fontes antigas e Experimento 001 permanecem para reprodução, sem relabeling retroativo.
 - Próxima ação: migrar explicitamente o adaptador para os originais e definir protocolo com teste oficial separado antes do próximo experimento. A auditoria não executou previsão ou ajuste de modelo sobre os testes oficiais.
+
+## 2026-11-12 — Foco no problema de descoberta; preço em faixas
+
+- Problema: o produto mostrava preços normalizados (0,0028) sem significado para uma pessoa, e a recomendação não estava ligada a uma pergunta de negócio.
+- Preço: o DHRD não publica a escala. Cada item passa a mostrar o tercil dentro da própria culinária e a fração de itens mais caros; "barato" vira filtro. Conversão para moeda descartada por ser inventada.
+- Análise de negócio sobre 1,7 milhão de pedidos: 63% dos pedidos de recorrentes vão a restaurante nunca usado; popularidade é local; horário muda o mix; 58% dos novos não voltam em 30 dias. Ver `BUSINESS_ANALYSIS.md`.
+- Experimento 004: protocolo congelado, validação no Git antes do teste oficial (dias 76–90), rodado uma vez. Região × horário leva o restaurante certo para clientes novos de 0,01% a 10,2%; itens de 14,52% para 15,70%. O ranker LightGBM é o melhor no total, mas perde para a regra em quem não tem histórico.
+- Decisão de produto: web e Telegram não identificam clientes, então servem região × horário. O ranker fica como passo seguinte para pessoas com histórico.
+- Limpeza: removidos diários datados, roadmap concluído, aceite de interface superado, workflow n8n, snapshots de juízes e 18 relatórios sem referência; tudo continua no histórico do Git.

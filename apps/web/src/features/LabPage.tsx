@@ -65,7 +65,8 @@ const DISCOVERY_MODELS: Record<string, string> = {
   ranker_6_plus_discovery_4: "Ranker 6 + descoberta 4",
   ranker_items: "Itens dos restaurantes do ranker",
 };
-const pct = (value: number) => `${(value * 100).toLocaleString("pt-BR", { maximumFractionDigits: 1 })}%`;
+const pct = (value: number) =>
+  `${(value * 100).toLocaleString("pt-BR", { maximumFractionDigits: value < 0.01 ? 2 : 1 })}%`;
 
 function DiscoveryTable({ label, rows, metric }: { label: string; rows: Record<string, Record<string, SegmentScores>>; metric: string }) {
   const best = Object.fromEntries(
@@ -181,10 +182,42 @@ export function LabPage({ meta }: { meta: Meta | null }) {
           <span>latência mediana por turno com modelo</span>
         </div>
         <div className="kpi">
-          <strong>14,4%</strong>
-          <span>Recall@10 da melhor referência de recomendação</span>
+          <strong>{discovery ? pct(discovery.restaurants.popular_region_slot.cold["hit@10"]) : "—"}</strong>
+          <span>
+            restaurante certo entre 10 para cliente novo, com região × horário (cidade:{" "}
+            {discovery ? pct(discovery.restaurants.popular_global.cold["hit@10"]) : "—"})
+          </span>
         </div>
       </section>
+
+      {discovery && (
+        <section aria-labelledby="discovery-title" style={{ display: "grid", gap: 12 }}>
+          <div>
+            <h2 id="discovery-title">O que mostrar na home: região e horário contam</h2>
+            <p className="muted">
+              {count(discovery.targets.customers)} próximos pedidos reais{" "}
+              {discovery.stage === "final_test"
+                ? "do teste oficial do DHRD (dias 76–90), avaliado uma única vez"
+                : "da validação (dias 62–75)"}
+              . Restaurantes: o restaurante do pedido real está entre os 10 mostrados (Hit@10).
+            </p>
+          </div>
+          <DiscoveryTable label="Tabela de restaurantes" rows={discovery.restaurants} metric="hit@10" />
+          <p className="muted">Itens: fração dos itens do pedido real entre os 10 sugeridos (Recall@10).</p>
+          <DiscoveryTable label="Tabela de itens" rows={discovery.items} metric="recall@10" />
+          <p className="muted" style={{ fontSize: 12 }}>
+            Protocolo congelado antes de rodar.{" "}
+            <a href={REPO + "docs/EXPERIMENT_004.md"} target="_blank" rel="noreferrer">
+              Experimento 004 <ExternalLink size={12} />
+            </a>{" "}
+            ·{" "}
+            <a href={REPO + "evaluations/results/" + discovery.report} target="_blank" rel="noreferrer">
+              dados brutos <ExternalLink size={12} />
+            </a>
+          </p>
+        </section>
+      )}
+
 
       {comparison.length > 0 && (
         <section aria-labelledby="comparison-title" style={{ display: "grid", gap: 12 }}>
@@ -333,34 +366,6 @@ export function LabPage({ meta }: { meta: Meta | null }) {
           </a>
         </p>
       </section>
-
-      {discovery && (
-        <section aria-labelledby="discovery-title" style={{ display: "grid", gap: 12 }}>
-          <div>
-            <h2 id="discovery-title">O que mostrar na home: região e horário contam</h2>
-            <p className="muted">
-              {count(discovery.targets.customers)} próximos pedidos reais{" "}
-              {discovery.stage === "final_test"
-                ? "do teste oficial do DHRD (dias 76–90), avaliado uma única vez"
-                : "da validação (dias 62–75)"}
-              . Restaurantes: o restaurante do pedido real está entre os 10 mostrados (Hit@10).
-            </p>
-          </div>
-          <DiscoveryTable label="Tabela de restaurantes" rows={discovery.restaurants} metric="hit@10" />
-          <p className="muted">Itens: fração dos itens do pedido real entre os 10 sugeridos (Recall@10).</p>
-          <DiscoveryTable label="Tabela de itens" rows={discovery.items} metric="recall@10" />
-          <p className="muted" style={{ fontSize: 12 }}>
-            Protocolo congelado antes de rodar.{" "}
-            <a href={REPO + "docs/EXPERIMENT_004.md"} target="_blank" rel="noreferrer">
-              Experimento 004 <ExternalLink size={12} />
-            </a>{" "}
-            ·{" "}
-            <a href={REPO + "evaluations/results/" + discovery.report} target="_blank" rel="noreferrer">
-              dados brutos <ExternalLink size={12} />
-            </a>
-          </p>
-        </section>
-      )}
 
       {recommendation && (
         <section aria-labelledby="rec-title" className="panel" style={{ display: "grid", gap: 10 }}>
