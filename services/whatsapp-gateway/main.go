@@ -1,4 +1,4 @@
-// Command whatsapp-gateway receives WhatsApp Cloud API webhooks, verifies
+// Command whatsapp-gateway receives WhatsApp Cloud API and Telegram webhooks, verifies
 // them, de-duplicates them and queues them for the Mesa agent worker.
 //
 // It answers Meta in milliseconds and never calls the language model itself:
@@ -47,8 +47,11 @@ func main() {
 		log.Warn("whatsapp_secrets_missing_webhooks_will_be_rejected")
 	}
 
+	telegram := &TelegramGateway{Secret: os.Getenv("TELEGRAM_WEBHOOK_SECRET"), Bus: bus, Metrics: metrics, Log: log}
+
 	mux := http.NewServeMux()
 	mux.Handle("/webhook", gateway)
+	mux.Handle("/telegram", telegram)
 	mux.Handle("/metrics", metrics)
 	mux.HandleFunc("/health", func(w http.ResponseWriter, _ *http.Request) {
 		w.Header().Set("Content-Type", "application/json")

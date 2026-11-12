@@ -67,17 +67,18 @@ class ConversationStore:
         self.redis.delete(self._key(phone))
 
 
-def format_reply(response) -> str:
-    """Plain-text WhatsApp message: the grounded answer plus up to five items."""
+def format_reply(response, channel="whatsapp") -> str:
+    """Plain-text chat message: the grounded answer plus up to five items."""
+    italic = (lambda s: f"_{s}_") if channel == "whatsapp" else (lambda s: s)
     lines = [response["answer"]]
     for index, item in enumerate(response.get("items", [])[:5], start=1):
         price = item.get("unit_price")
         price_text = "sem preço" if price is None else "0 na fonte" if price == 0 else f"{price:g}".replace(".", ",") + " u.n."
         lines.append(f"{index}. {item['name']} · {item['primary_cuisine']} · {price_text}")
     if response.get("items"):
-        lines.append("_Preços normalizados do catálogo histórico, sem moeda. Nomes não garantem ingredientes._")
+        lines.append(italic("Preços normalizados do catálogo histórico, sem moeda. Nomes não garantem ingredientes."))
     if response.get("fallback_reason"):
-        lines.append("_IA indisponível agora: usei o glossário do catálogo._")
+        lines.append(italic("IA indisponível agora: usei o glossário do catálogo."))
     return "\n".join(lines)[:4000]
 
 
@@ -132,9 +133,22 @@ class Handled:
     erased: bool = False
 
 
+WELCOME = ("Olá! Sou o assistente do Mesa: busco pratos e bebidas num catálogo real de delivery de Singapura "
+           "e sugiro o que costuma ser pedido junto. Experimente: \"quero arroz com frango\" ou \"me recomende algo\".")
+
+
+def identity(message):
+    """Conversation key: WhatsApp keeps the bare number (hashed); other channels are namespaced."""
+    channel = message.get("channel", "whatsapp")
+    return message["from"] if channel == "whatsapp" else f"{channel}:{message['from']}"
+
+
 class Worker:
-    def __init__(self, redis, agent, client, *, consumer="worker-1"):
+    """Consumes the shared inbound stream and answers on the channel each message came from."""
+
+    def __init__(self, redis, agent, client=None, *, telegram=None, consumer="worker-1"):
         self.redis, self.agent, self.client = redis, agent, client
+        self.clients = {"whatsapp": client, "telegram": telegram}
         self.store = ConversationStore(redis)
         self.consumer = consumer
 
@@ -146,25 +160,31 @@ class Worker:
                 raise
 
     def handle(self, message: dict) -> Handled:
-        phone, text = message["from"], message["text"]
+        user, text, channel = identity(message), message["text"], message.get("channel", "whatsapp")
+        if text.strip().lower() in {"/start", "/help"}:
+            return Handled(WELCOME)
         if ERASE.search(fold(text)):
-            self.store.forget(phone)
+            self.store.forget(user)
             return Handled("Pronto: apaguei o contexto da nossa conversa. Nenhum histórico seu fica guardado.", True)
-        context = self.store.load(phone)
+        context = self.store.load(user)
         response = self.agent(AssistantRequest(message=text[:500], context=context))
         from ..observability import record_turn
-        record_turn("whatsapp", response)
-        self.store.save(phone, AssistantContext.model_validate(response["context"]))
-        return Handled(format_reply(response))
+        record_turn(channel, response)
+        self.store.save(user, AssistantContext.model_validate(response["context"]))
+        return Handled(format_reply(response, channel))
 
     def process(self, entry_id, fields):
         started = time.perf_counter()
         user, outcome = "unknown", "ok"
         try:
             message = json.loads(fields[b"payload"] if b"payload" in fields else fields["payload"])
-            user = user_key(message["from"])[:12]
+            channel = message.get("channel", "whatsapp")
+            user = user_key(identity(message))[:12]
+            client = self.clients.get(channel)
+            if client is None:
+                raise SendFailed("no_client_" + channel)
             handled = self.handle(message)
-            self.client.send(message["from"], handled.reply, None if handled.erased else BUTTONS)
+            client.send(message["from"], handled.reply, None if handled.erased else BUTTONS)
         except SendFailed as error:
             outcome = "send_" + str(error)
             self.redis.xadd(DEAD_LETTER, {"entry": entry_id, "error": outcome}, maxlen=500, approximate=True)
@@ -200,10 +220,12 @@ class Worker:
 def build_from_environment(reader, recommender):
     """Create a worker bound to the given catalog tools, or None when not configured."""
     url = os.environ.get("REDIS_URL")
-    client = WhatsAppClient()
-    if not url or not client.configured:
+    from .telegram import TelegramClient
+    client, telegram = WhatsAppClient(), TelegramClient()
+    if not url or not (client.configured or telegram.configured):
         return None
     import redis
     from ..agent import run_agent
-    return Worker(redis.Redis.from_url(url), lambda request: run_agent(request, reader, recommender), client,
+    return Worker(redis.Redis.from_url(url), lambda request: run_agent(request, reader, recommender),
+                  client if client.configured else None, telegram=telegram if telegram.configured else None,
                   consumer=os.environ.get("WORKER_NAME", "worker-1"))

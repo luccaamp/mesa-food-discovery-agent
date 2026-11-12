@@ -44,6 +44,8 @@ services:
         sync: false
       - key: MESA_PRIVACY_SALT
         generateValue: true
+      - key: TELEGRAM_BOT_TOKEN
+        sync: false
 
   # Receives WhatsApp webhooks, verifies and de-duplicates them, and queues them.
   - type: web
@@ -65,6 +67,8 @@ services:
         sync: false
       - key: WHATSAPP_VERIFY_TOKEN
         sync: false
+      - key: TELEGRAM_WEBHOOK_SECRET
+        generateValue: true
 
   # Queue between the gateway and the agent worker. Internal network only.
   - type: keyvalue

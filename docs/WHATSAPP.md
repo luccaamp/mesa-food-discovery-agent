@@ -1,6 +1,16 @@
-# Canal WhatsApp
+# Canais de mensagem: WhatsApp e Telegram
 
-O mesmo agente do app web atende pelo WhatsApp, pela WhatsApp Cloud API da Meta.
+O mesmo agente do app web atende pelo WhatsApp (WhatsApp Cloud API da Meta) e
+pelo Telegram (Bot API). Os dois canais entram pelo mesmo gateway Go, pela
+mesma fila e pelo mesmo worker; só o adaptador de envio muda.
+
+| Canal | Autenticação do webhook | Rota no gateway | Estado |
+| --- | --- | --- | --- |
+| WhatsApp | HMAC-SHA256 do corpo (`X-Hub-Signature-256`) | `/webhook` | Integração aprovada com a Graph API simulada; envio real aguardando liberação da conta pela Meta (erro 131031, conta nova restringida pelo antifraude) |
+| Telegram | Token secreto (`X-Telegram-Bot-Api-Secret-Token`) | `/telegram` | Em uso real: [@mesa_food_discovery_bot](https://t.me/mesa_food_discovery_bot) |
+
+Para uma demo local sem URL pública, o Telegram também roda por long polling:
+`python -m meal_discovery.channels.telegram`.
 
 ```text
 Meta ──webhook──► gateway (Go) ──XADD──► Redis Stream ──XREADGROUP──► worker (Python) ──► agente ──► Graph API

@@ -21,6 +21,7 @@ const MaxBody = 1 << 20
 // Inbound is the minimal event handed to the agent worker. The phone number is
 // needed to reply; it is never logged and leaves the queue once processed.
 type Inbound struct {
+	Channel   string `json:"channel"`
 	MessageID string `json:"message_id"`
 	From      string `json:"from"`
 	Text      string `json:"text"`
@@ -194,7 +195,7 @@ func ParseMessages(body []byte) ([]Inbound, error) {
 				if len(text) > 500 {
 					text = text[:500]
 				}
-				out = append(out, Inbound{MessageID: message.ID, From: message.From, Text: text, Timestamp: message.Timestamp})
+				out = append(out, Inbound{Channel: "whatsapp", MessageID: message.ID, From: message.From, Text: text, Timestamp: message.Timestamp})
 			}
 		}
 	}

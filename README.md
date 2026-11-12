@@ -7,7 +7,7 @@
 entende pedidos em português e inglês ("algo picante até 0,005", "agora chá com
 leite"), consulta por ferramentas um catálogo real de **1.066.840 itens** e
 recomenda o que costuma ser pedido junto, mostrando a evidência de cada
-sugestão. Funciona na web e no **WhatsApp**. Nenhum item, preço ou explicação
+sugestão. Funciona na web, no **Telegram** e no **WhatsApp**. Nenhum item, preço ou explicação
 é inventado pelo modelo.
 
 Dados: [Delivery Hero Recommendation Dataset](https://github.com/deliveryhero/dh-reco-dataset)
@@ -15,7 +15,7 @@ Dados: [Delivery Hero Recommendation Dataset](https://github.com/deliveryhero/dh
 
 [Abrir a demo](https://mesa-meal-discovery.onrender.com) (a primeira abertura pode
 levar um minuto: o servidor gratuito hiberna) · [Arquitetura](docs/ARCHITECTURE.md) ·
-[WhatsApp](docs/WHATSAPP.md) · [MCP](docs/MCP.md) · [Avaliação](docs/AUTOMATED_EVALUATION.md)
+[WhatsApp e Telegram](docs/WHATSAPP.md) · [MCP](docs/MCP.md) · [Avaliação](docs/AUTOMATED_EVALUATION.md)
 
 ## Destaques
 
@@ -27,8 +27,9 @@ levar um minuto: o servidor gratuito hiberna) · [Arquitetura](docs/ARCHITECTURE
   por provedor.
 - **Respostas ancoradas**: políticas determinísticas antes do modelo
   (alergênicos, injeção, moeda) e verificação de grounding depois dele.
-- **WhatsApp event-driven**: gateway em **Go** (HMAC, idempotência, 15,7 MB) →
-  Redis Streams → worker Python. Privacidade por padrão: telefone só em hash,
+- **Mensageria event-driven**: gateway em **Go** (HMAC, idempotência, 15,7 MB) →
+  Redis Streams → worker Python, com WhatsApp e Telegram
+  ([fale com o bot](https://t.me/mesa_food_discovery_bot)). Privacidade por padrão: telefone só em hash,
   contexto expira em 24 h, "apagar meus dados".
 - **Servidor MCP**: as mesmas ferramentas para Claude Desktop, Claude Code e Cursor.
 - **Avaliação como produto**: contratos verificados por código contra o
@@ -117,9 +118,9 @@ docker compose up --build              # stack completa com WhatsApp e Redis
 Testes:
 
 ```sh
-python -m unittest discover -s tests                  # aplicação (171)
+python -m unittest discover -s tests                  # aplicação (178)
 npm --prefix apps/web test                            # interface (10)
-(cd services/whatsapp-gateway && go test ./...)       # gateway (8)
+(cd services/whatsapp-gateway && go test ./...)       # gateway (11)
 npm --prefix apps/web run e2e                         # E2E, com o servidor no ar
 ```
 
@@ -129,7 +130,7 @@ npm --prefix apps/web run e2e                         # E2E, com o servidor no a
 src/meal_discovery/
   agent/          grafo LangGraph, verificação de grounding
   llm/            porta ChatModel, adaptadores Gemini/Groq/local, resiliência, roteamento
-  channels/       worker do WhatsApp
+  channels/       worker de mensagens (WhatsApp, Telegram)
   policies.py     regras antes do modelo (alergênicos, injeção, preço)
   privacy.py      mascaramento de dados pessoais antes do LLM
   observability.py métricas Prometheus e traces OpenTelemetry
