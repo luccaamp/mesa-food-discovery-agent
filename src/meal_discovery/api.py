@@ -27,6 +27,7 @@ from .discovery import discover
 from .assistant import run_assistant
 from .llm import describe, resilience
 from .planner import IntentPlanner
+from .context_popularity import recommend_here, regions as context_regions, slot_at, SLOT_LABELS
 from .serving import recommend
 from .cloud_limits import PublicDemoGuard
 from .observability import HTTP, metrics_payload, record_turn, setup_tracing
@@ -147,6 +148,20 @@ def create_app(index: Path | None = None) -> FastAPI:
 
     def recommendations_for(arguments):
         params = RecommendationParams.model_validate(arguments)
+        if not params.seeds:
+            # Nothing selected: what people order in this region and time slot (Experiment 004).
+            reader = application.state.catalog_reader
+            here = recommend_here(reader.index, region=params.region, slot=params.slot, cuisine=params.cuisine,
+                                  min_price=params.min_price, max_price=params.max_price,
+                                  price_level=params.price_level, limit=params.limit, **reader.options)
+            if here["items"]:
+                rest = recommend(application.state.serving_index, [], cuisine=params.cuisine, min_price=params.min_price,
+                                 max_price=params.max_price, price_level=params.price_level, limit=params.limit)
+                chosen = {(item["vendor_id"], item["product_id"]) for item in here["items"]}
+                items = here["items"] + [item for item in rest["items"]
+                                         if (item["vendor_id"], item["product_id"]) not in chosen]
+                return {**rest, "items": items[:params.limit],
+                        "context": {key: here[key] for key in ("region", "slot", "slot_label")}}
         result = recommend(application.state.serving_index,
                          [(seed.vendor_id, seed.product_id) for seed in params.seeds],
                          cuisine=params.cuisine, min_price=params.min_price, max_price=params.max_price,
@@ -167,6 +182,13 @@ def create_app(index: Path | None = None) -> FastAPI:
             logger.info("whatsapp_worker_started")
         else:
             logger.warning("whatsapp_worker_not_configured")
+
+    @application.get("/v1/discovery/regions", tags=["discovery"],
+                     summary="Order regions with names and the current time slot in Singapore")
+    def discovery_regions():
+        slot = slot_at()
+        return {"regions": context_regions(), "slot": slot, "slot_label": SLOT_LABELS[slot],
+                "note": "Regions are DHRD order geohash cells, named after the nearest town (approximate)."}
 
     @application.post("/v1/recommendations", response_model=RecommendationResult, tags=["recommendations"])
     def recommendations(params: RecommendationParams):
@@ -307,11 +329,21 @@ def create_app(index: Path | None = None) -> FastAPI:
                                                             "model_fallbacks")},
                                  "created_at": recorded["created_at"], "report": path.name,
                                  "by_risk": sorted(by_risk.values(), key=lambda risk: risk["owasp"])})
+        discovery = None
+        # Experiment 004: the official test run once it exists, otherwise the validation run.
+        for stage in ("test", "validation"):
+            path = directory / f"discovery-{stage}-v1.json"
+            if path.is_file():
+                recorded = json.loads(path.read_text(encoding="utf-8"))
+                discovery = {"stage": recorded["stage"], "report": path.name, "created_at": recorded["created_at_utc"],
+                             "targets": recorded["targets"], "restaurants": recorded["restaurants"],
+                             "items": recorded["items"]}
+                break
         return {"schema_version": 1, "reports": reports, "assistant_evaluation": assistant_report,
-                "agent_comparison": agent_comparison, "red_team": red_team,
+                "agent_comparison": agent_comparison, "red_team": red_team, "discovery": discovery,
                 "conversation_evaluation": conversation_report, "ai_evaluation": ai_report,
                 "public_assistant_evaluation": public_report, "relevance_evaluation": relevance_report,
-                "official_test_evaluated": False}
+                "official_test_evaluated": bool(discovery and discovery["stage"] == "final_test")}
 
     @application.get("/v1/catalog/items/{vendor_id}/{product_id}", response_model=ItemResult,
                      responses={404: {"model": ErrorResponse, "description": "Item not found"}}, tags=["catalog"])

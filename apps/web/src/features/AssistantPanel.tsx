@@ -28,13 +28,14 @@ function describeStep(step: AgentEvent) {
   return "";
 }
 
-export function AssistantPanel({ open, onClose, pending, onPendingHandled, cart, onOpen }: {
+export function AssistantPanel({ open, onClose, pending, onPendingHandled, cart, onOpen, region }: {
   open: boolean;
   onClose: () => void;
   pending: string | null;
   onPendingHandled: () => void;
   cart: Cart;
   onOpen: (item: Item) => void;
+  region: string;
 }) {
   const [turns, setTurns] = useState<Turn[]>([]);
   const [context, setContext] = useState<Context>(EMPTY);
@@ -84,7 +85,7 @@ export function AssistantPanel({ open, onClose, pending, onPendingHandled, cart,
     try {
       const response = await streamAgent(
         message,
-        { ...context, selected_items: seedsOf(cart.lines.map((line) => line.item)) },
+        { ...context, region: region || null, selected_items: seedsOf(cart.lines.map((line) => line.item)) },
         (event) => {
           if (event.type !== "result") updateLast((turn) => ({ steps: [...turn.steps, event] }));
         },

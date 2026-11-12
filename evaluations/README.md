@@ -34,6 +34,4 @@ ficam registrados ao lado dos positivos. Protocolo completo e referências em
 
 - `*.py`: suítes, comparação de provedores, red team e calibração de juízes.
 - `results/`: relatórios versionados.
-- `snapshots/`: versões congeladas dos juízes reprovados, preservadas para reprodução.
-- `n8n/`: workflow que consome `GET /v1/evaluations` e gera o relatório consolidado.
 - `../tests_eval/`: testes das suítes (Inspect AI, ambiente isolado).

@@ -12,7 +12,7 @@ Publicado em [mesa-meal-discovery.onrender.com](https://mesa-meal-discovery.onre
 e no [@mesa_food_discovery_bot](https://t.me/mesa_food_discovery_bot).
 Gemini 3.1 Flash-Lite é o provedor principal e Groq (`openai/gpt-oss-120b`) o
 fallback; sem nenhum dos dois, o assistente responde pelo glossário.
-Qwen local, embeddings, preparação dos dados e n8n ficam fora da nuvem. Nenhum
+Qwen local, embeddings e preparação dos dados ficam fora da nuvem. Nenhum
 treinamento ou download de modelo acontece ao acordar o serviço.
 
 Evidências: [primeiro deploy](../evaluations/results/cloud-deployment-v1.json) ·

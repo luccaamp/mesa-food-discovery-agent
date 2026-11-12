@@ -44,7 +44,7 @@ TOOL_SPECS = [
               "required": ["query"]}),
     ToolSpec("recommend_items",
              "Suggest items frequently bought together with the user's selected items, "
-             "or historically popular items when nothing is selected.",
+             "or what is most ordered in the user's region and time of day when nothing is selected.",
              {"type": "object", "properties": {}}),
 ]
 

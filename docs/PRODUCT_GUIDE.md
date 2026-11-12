@@ -2,7 +2,7 @@
 
 ## Instalar
 
-Python 3.11+ e Node 22.15+ (Node 24 só para o n8n). Na raiz do repositório:
+Python 3.11+ e Node 22.15+. Na raiz do repositório:
 
 ```powershell
 python -m venv .venv
@@ -21,6 +21,23 @@ python -m meal_discovery prepare-official-singapore --output data/processed/sing
 python -m meal_discovery build-catalog --database data/processed/singapore-official-v1.sqlite --output data/processed/singapore-catalog-v1.sqlite
 python scripts/build_serving_model.py --database data/processed/singapore-official-v1.sqlite --output data/processed/singapore-serving-v1.sqlite
 python scripts/fetch_local_llm.py     # opcional: Qwen local, ~1,12 GB
+```
+
+Os dois artefatos pequenos que o produto usa já estão versionados em
+`src/meal_discovery/data/` e podem ser refeitos a partir dos dados oficiais:
+
+```powershell
+python scripts/build_price_bands.py          # faixas de preço por culinária
+python scripts/build_context_popularity.py   # mais pedidos por região e horário
+```
+
+## Análise e experimento
+
+```powershell
+python -m pip install -e ".[analysis]"       # pandas, matplotlib, LightGBM
+python analysis/business_analysis.py         # números e gráficos de docs/BUSINESS_ANALYSIS.md
+python analysis/discovery_experiment.py      # validação do Experimento 004 (~5 min)
+python analysis/discovery_experiment.py --final-test   # teste oficial, rodado uma vez
 ```
 
 As ferramentas recusam sobrescrever saídas existentes. Downloads são fixados por
@@ -44,17 +61,19 @@ em 8081.
 
 ## O que mostrar
 
-1. **Busca:** "chá com leite" ou "arroz com frango". A consulta é traduzida para
-   os termos do catálogo e os nomes originais aparecem.
-2. **Item:** a evidência (chave, culinária, preço normalizado) e o que costuma
-   ser pedido junto. Preço 0 significa preço não registrado na fonte, não gratuidade.
-3. **Assistente:** "algo picante até 0,005", depois "agora uma bebida gelada".
-   As etapas do agente aparecem ao vivo, com provedor, latência e tokens.
-4. **Limites:** "sem glúten" ou "em reais". As políticas explicam por que o
+1. **Home:** escolha uma região em "Você está perto de". A vitrine muda para o
+   que mais se pede ali na faixa horária atual de Singapura.
+2. **Busca:** "chá com leite" ou "arroz com frango". A consulta é traduzida para
+   os termos do catálogo, e o filtro de preço é por faixa ($, $$).
+3. **Item:** a faixa de preço comparada à culinária ("mais barato que 72% dos
+   itens de pizza") e o que costuma ser pedido junto.
+4. **Assistente:** "pizza barata", depois "agora uma bebida gelada", depois
+   "me recomende algo". As etapas do agente aparecem ao vivo.
+5. **Limites:** "sem glúten" ou "até R$ 20". As políticas explicam por que o
    catálogo não garante restrições nem converte moeda.
-5. **Laboratório:** comparação de provedores, red team OWASP e o resultado
-   negativo do piloto semântico.
-6. **MCP:** as mesmas ferramentas em um cliente MCP ([MCP.md](MCP.md)).
+6. **Laboratório:** o experimento de descoberta, comparação de provedores, red
+   team OWASP e os resultados negativos.
+7. **MCP:** as mesmas ferramentas em um cliente MCP ([MCP.md](MCP.md)).
 
 ## Garantias
 

@@ -18,8 +18,13 @@ test("home shows hero, cuisines and real popular items", async ({ page }) => {
   await page.goto("/");
   await expect(page.getByRole("heading", { name: "O que vamos pedir hoje?" })).toBeVisible();
   await expect(page.getByRole("region", { name: "Culinárias" }).getByRole("link").first()).toBeVisible();
-  const popular = page.getByRole("region", { name: "Mais pedidos em Singapura" });
-  await expect(popular.getByRole("article").first()).toBeVisible();
+  const city = page.getByRole("region", { name: /^Em alta em Singapura/ });
+  await expect(city.getByRole("article").first()).toBeVisible();
+  // Picking a region switches the rail to what is ordered there at this time of day.
+  await page.getByLabel("Você está perto de").selectOption({ label: "Tampines" });
+  const local = page.getByRole("region", { name: /^Em alta perto de Tampines/ });
+  await expect(local.getByRole("article").first()).toBeVisible();
+  await expect(local.getByText("Em alta aqui").first()).toBeVisible();
   await shots(page, "home");
   await axe(page);
 });

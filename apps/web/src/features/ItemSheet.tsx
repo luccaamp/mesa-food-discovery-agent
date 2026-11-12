@@ -65,7 +65,9 @@ export function ItemSheet({ item, cart, onClose, onOpen }: {
                   <dd>
                     {item.reason === "basket_association"
                       ? `Pedido junto com o que você escolheu em ${count(item.supporting_co_baskets ?? 0)} cestas reais`
-                      : `Popular: presente em ${count(item.training_baskets ?? 0)} cestas de treino`}
+                      : item.reason === "popular_here"
+                        ? `Em alta: está em ${count(item.context_orders ?? 0)} pedidos reais nesta região e faixa horária`
+                        : `Popular: presente em ${count(item.training_baskets ?? 0)} cestas de treino`}
                   </dd>
                 </div>
               )}

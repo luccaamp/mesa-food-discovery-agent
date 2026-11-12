@@ -18,6 +18,7 @@ mcp = ["mcp==2.3.0"]
 channels = ["redis==6.4.0"]
 test = ["httpx2==2.16.0", "fakeredis==2.40.0"]
 semantic = ["numpy==2.3.5", "onnxruntime==1.31.1", "tokenizers==0.23.3"]
+analysis = ["pandas==3.1.1", "matplotlib==3.11.2", "lightgbm==4.7.0"]
 
 [project.scripts]
 meal-discovery = "meal_discovery.__main__:main"

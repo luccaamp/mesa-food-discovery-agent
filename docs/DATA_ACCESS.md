@@ -1,6 +1,6 @@
 # Dados reais obtidos e acesso à distribuição original
 
-Atualizado em 7/11/2026. **Os três ZIPs oficiais e o README da distribuição foram obtidos. A distribuição completa foi verificada e extraída: quinze arquivos, três cidades e 4.400.000 pedidos.** Os hashes dos pacotes coincidem com a referência OmniRec, e a comparação dos campos de Singapura confirmou a cópia anterior. [Decisão de quais dados usar e auditoria](OFFICIAL_DATA_MIGRATION.md). O [registro da busca anterior](history/SOURCE_SEARCH_2026-11-06.md) foi mantido como histórico.
+Atualizado em 7/11/2026. **Os três ZIPs oficiais e o README da distribuição foram obtidos. A distribuição completa foi verificada e extraída: quinze arquivos, três cidades e 4.400.000 pedidos.** Os hashes dos pacotes coincidem com a referência OmniRec, e a comparação dos campos de Singapura confirmou a cópia anterior. [Decisão de quais dados usar e auditoria](OFFICIAL_DATA_MIGRATION.md).
 
 ## Fonte principal atual: distribuição oficial
 

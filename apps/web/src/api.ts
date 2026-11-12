@@ -15,6 +15,7 @@ export type Item = {
   price_band?: PriceBand | null;
   reason?: string;
   training_baskets?: number;
+  context_orders?: number | null;
   supporting_co_baskets?: number;
 };
 export type Meta = {
@@ -41,6 +42,7 @@ export type Discovery = {
 };
 export type Context = {
   last_query: string | null;
+  region?: string | null;
   cuisine: string | null;
   min_price: number | null;
   max_price: number | null;

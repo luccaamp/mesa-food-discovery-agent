@@ -15,7 +15,6 @@
 /configs/relevance-judge-controls-*.json -text whitespace=cr-at-eol
 /configs/retrieval-additional-*.json -text whitespace=cr-at-eol
 /configs/usage-additional-*.json -text whitespace=cr-at-eol
-/evaluations/snapshots/*.py -text whitespace=cr-at-eol
 /evaluations/results/relevance-judge-single-pair-*.json -text whitespace=cr-at-eol
 /evaluations/results/public-assistant-acceptance-v2.json -text whitespace=cr-at-eol
 /evaluations/results/public-assistant-acceptance-v3.json -text whitespace=cr-at-eol

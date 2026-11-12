@@ -8,7 +8,7 @@ import { ItemSheet } from "./features/ItemSheet";
 import { LabPage } from "./features/LabPage";
 import { SearchPage } from "./features/SearchPage";
 import { href, useRoute, type Route } from "./lib/route";
-import { useCart } from "./lib/store";
+import { useCart, useRegion } from "./lib/store";
 
 type Cuisine = { name: string; products: number };
 
@@ -22,6 +22,7 @@ const NAV: { page: Route["page"]; label: string; icon: typeof House }[] = [
 export default function App() {
   const route = useRoute();
   const baseCart = useCart();
+  const [region, setRegion] = useRegion();
   const [meta, setMeta] = useState<Meta | null>(null);
   const [cuisines, setCuisines] = useState<Cuisine[]>([]);
   const [detail, setDetail] = useState<Item | null>(null);
@@ -93,7 +94,9 @@ export default function App() {
       </header>
 
       <main id="main" tabIndex={-1}>
-        {route.page === "home" && <HomePage cart={cart} cuisines={cuisines} onAsk={ask} onOpen={setDetail} />}
+        {route.page === "home" && (
+          <HomePage cart={cart} cuisines={cuisines} onAsk={ask} onOpen={setDetail} region={region} onRegion={setRegion} />
+        )}
         {route.page === "search" && (
           <SearchPage
             initialQuery={route.query}
@@ -125,6 +128,7 @@ export default function App() {
         onPendingHandled={() => setPending(null)}
         cart={cart}
         onOpen={setDetail}
+        region={region}
       />
       <ItemSheet item={detail} cart={cart} onClose={() => setDetail(null)} onOpen={setDetail} />
 

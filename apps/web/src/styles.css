@@ -1045,6 +1045,13 @@ a {
   padding: 12px 0;
   border-bottom: 1px solid var(--line);
 }
+.cart-line .item-open {
+  max-width: 100%;
+  text-align: left;
+}
+.cart-line .item-name {
+  overflow-wrap: anywhere;
+}
 .cart-line:last-child {
   border-bottom: 0;
 }
@@ -1210,4 +1217,18 @@ details summary {
   .toast {
     bottom: 96px;
   }
+}
+
+.region-picker {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 28px;
+  color: var(--ink-2);
+  font-size: 15px;
+}
+.region-picker select {
+  font: inherit;
+  color: var(--ink);
 }

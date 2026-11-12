@@ -142,7 +142,7 @@ Detalhes em [ARCHITECTURE.md](docs/ARCHITECTURE.md).
 Python 3.11+, FastAPI, Pydantic, LangGraph, MCP SDK, SQLite FTS5 · Go
 (net/http, go-redis) · Redis Streams · React 19, TypeScript, Vite · Gemini,
 Groq, llama.cpp (Qwen 2.5), ONNX Runtime (E5) · Prometheus, OpenTelemetry ·
-Playwright, axe, Inspect AI · n8n · Docker, Render, GitHub Actions.
+Playwright, axe, Inspect AI · Docker, Render, GitHub Actions.
 
 ## Rodar localmente
 

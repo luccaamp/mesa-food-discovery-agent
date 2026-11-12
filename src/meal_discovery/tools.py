@@ -59,6 +59,8 @@ def recommend(recommender, context: AssistantContext) -> ToolOutcome:
     args = {"seeds": [item.model_dump() for item in context.selected_items], "cuisine": context.cuisine,
             "min_price": context.min_price, "max_price": context.max_price, "price_level": context.price_level,
             "limit": RESULT_LIMIT}
+    if context.region:
+        args["region"] = context.region
     with tool_span("recommend_items", seeds=len(context.selected_items)) as span:
         result = recommender(args)
         span.set_attribute("mesa.result_count", len(result["items"]))
@@ -68,6 +70,11 @@ def recommend(recommender, context: AssistantContext) -> ToolOutcome:
     if not items:
         answer = ("Não encontrei sugestões com esses filtros. "
                   "Amplie a faixa de preço ou escolha outra culinária.")
+    elif items[0].get("reason") == "popular_here":
+        here = result.get("context") or {}
+        place = f"em {here['region']['name']}" if here.get("region") else "em Singapura"
+        answer = (f"Sem itens selecionados, estes são os mais pedidos {place} "
+                  f"{here.get('slot_label', 'neste horário')}, segundo pedidos reais.")
     elif any(item.get("reason") == "basket_association" for item in items):
         answer = ("Estas sugestões usam associações de compra dos itens que você selecionou, "
                   "com complemento por popularidade histórica.")

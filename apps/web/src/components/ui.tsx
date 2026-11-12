@@ -99,7 +99,13 @@ export function Price({ band }: { band?: PriceBand | null }) {
 }
 
 export function reasonLabel(reason?: string) {
-  return reason === "basket_association" ? "Pedido junto" : reason === "historical_popularity" ? "Popular" : null;
+  return reason === "basket_association"
+    ? "Pedido junto"
+    : reason === "historical_popularity"
+      ? "Popular"
+      : reason === "popular_here"
+        ? "Em alta aqui"
+        : null;
 }
 
 export function ItemCard({ item, inCart, onOpen, onAdd, compact = false }: {

@@ -1,0 +1,105 @@
+{
+  "protocol_version": "discovery-experiment-v1",
+  "question": "Which restaurants and items should the app show when a customer opens it? Evaluated on the customer's next real order.",
+  "dataset_adapter": "singapore-official-v1",
+  "k": 10,
+  "time_slots": {
+    "madrugada": [
+      0,
+      5
+    ],
+    "manha": [
+      6,
+      10
+    ],
+    "almoco": [
+      11,
+      13
+    ],
+    "tarde": [
+      14,
+      16
+    ],
+    "jantar": [
+      17,
+      20
+    ],
+    "noite": [
+      21,
+      23
+    ]
+  },
+  "context_known_at_request_time": [
+    "order geohash (region)",
+    "hour of day",
+    "customer history up to the cutoff"
+  ],
+  "development": {
+    "history_end_day_inclusive": 47,
+    "targets_days_inclusive": [
+      48,
+      61
+    ],
+    "use": "fit the ranker"
+  },
+  "validation": {
+    "history_end_day_inclusive": 61,
+    "targets_days_inclusive": [
+      62,
+      75
+    ],
+    "use": "compare models and choose; same window as singapore-official-validation-v2"
+  },
+  "final_test": {
+    "history_end_day_inclusive": 75,
+    "targets": "official DHRD test file orders_sg_test.txt, days 76-90",
+    "ranker_fit": "same hyperparameters, refit on validation targets (history through day 61)",
+    "policy": "run once after validation results are committed; no change to models or features afterwards"
+  },
+  "target": "first order of each customer inside the target window",
+  "segments": {
+    "cold": "customer has no order in the history",
+    "warm_repeat": "history exists and the target restaurant was used before",
+    "warm_new": "history exists and the target restaurant was never used"
+  },
+  "restaurant_metrics": [
+    "hit@10: the restaurant of the real order is among the 10 shown",
+    "mrr@10"
+  ],
+  "item_metrics": [
+    "recall@10 over the items of the real order",
+    "hit@10"
+  ],
+  "restaurant_models": {
+    "popular_global": "most ordered restaurants in the city",
+    "popular_region": "most ordered restaurants in the order's geohash, backed off to the city",
+    "popular_region_slot": "most ordered in the geohash and time slot, backed off to region then city",
+    "repeat_then_region_slot": "restaurants the customer used (visits, then recency), filled with popular_region_slot",
+    "ranker": "LightGBM LambdaRank over candidates from history, region, region-slot and city lists",
+    "ranker_6_plus_discovery_4": "ranker's top 6, then 4 positions from popular_region_slot (added after the first validation run, before any test)"
+  },
+  "item_models": {
+    "popular_global": "most ordered items in the city (the v2 popularity baseline)",
+    "repeat_then_global": "items the customer bought (count, then recency), filled with city popularity (the v2 repeat baseline)",
+    "popular_region_slot": "most ordered items in the geohash and time slot, backed off to region then city",
+    "repeat_then_region_slot": "the customer's items, filled with popular_region_slot",
+    "ranker_items": "for the ranked restaurants in order: the customer's items there, then that restaurant's most ordered items, up to 3 per restaurant",
+    "repeat_6_plus_discovery_4": "the customer's top 6 items, then 4 positions from region-slot popularity (added after the first validation run, before any test)"
+  },
+  "ranker": {
+    "library": "lightgbm==4.7.0",
+    "objective": "lambdarank",
+    "n_estimators": 300,
+    "learning_rate": 0.05,
+    "num_leaves": 63,
+    "min_child_samples": 100,
+    "seed": 7,
+    "candidates": {
+      "history": 30,
+      "region_slot": 40,
+      "region": 20,
+      "city": 10
+    }
+  },
+  "limitations": "Offline replay of historical choices: it measures whether the real next order would have been shown, not conversion, revenue or satisfaction. Restaurants the customer never saw may still have been ordered elsewhere in the app."
+}

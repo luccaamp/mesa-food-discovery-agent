@@ -40,9 +40,71 @@ const OWASP: Record<string, string> = {
 
 const BOT = "https://t.me/mesa_food_discovery_bot";
 
+type SegmentScores = Record<string, number> & { customers: number };
+type Discovery = {
+  stage: "validation" | "final_test";
+  report: string;
+  targets: { customers: number; segments: Record<string, number> };
+  restaurants: Record<string, Record<string, SegmentScores>>;
+  items: Record<string, Record<string, SegmentScores>>;
+};
+const SEGMENTS: [string, string][] = [
+  ["all", "Todos"],
+  ["cold", "Cliente novo"],
+  ["warm_new", "Recorrente, restaurante novo"],
+  ["warm_repeat", "Recorrente, volta ao restaurante"],
+];
+const DISCOVERY_MODELS: Record<string, string> = {
+  popular_global: "Mais pedidos da cidade",
+  popular_region: "Mais pedidos da região",
+  popular_region_slot: "Região × horário",
+  repeat_then_global: "Repetição + cidade (baseline v2)",
+  repeat_then_region_slot: "Repetição + região × horário",
+  repeat_6_plus_discovery_4: "Repetição 6 + descoberta 4",
+  ranker: "Ranker LightGBM",
+  ranker_6_plus_discovery_4: "Ranker 6 + descoberta 4",
+  ranker_items: "Itens dos restaurantes do ranker",
+};
+const pct = (value: number) => `${(value * 100).toLocaleString("pt-BR", { maximumFractionDigits: 1 })}%`;
+
+function DiscoveryTable({ label, rows, metric }: { label: string; rows: Record<string, Record<string, SegmentScores>>; metric: string }) {
+  const best = Object.fromEntries(
+    SEGMENTS.map(([segment]) => [segment, Math.max(...Object.values(rows).map((row) => row[segment][metric]))]),
+  );
+  return (
+    <div className="table-wrap" tabIndex={0} role="region" aria-label={label}>
+      <table>
+        <thead>
+          <tr>
+            <th>Modelo</th>
+            {SEGMENTS.map(([segment, name]) => (
+              <th className="num" key={segment}>
+                {name}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {Object.entries(rows).map(([model, row]) => (
+            <tr key={model}>
+              <td>{DISCOVERY_MODELS[model] ?? model}</td>
+              {SEGMENTS.map(([segment]) => (
+                <td className="num" key={segment}>
+                  {row[segment][metric] === best[segment] ? <strong>{pct(row[segment][metric])}</strong> : pct(row[segment][metric])}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
 type Evaluations = {
   reports: Evaluation[];
   red_team?: RedTeamSummary[];
+  discovery?: Discovery | null;
   conversation_evaluation?: ConversationEvaluation | null;
   public_assistant_evaluation?: PublicAssistantEvaluation | null;
   agent_comparison?: { created_at: string; split: "reserved" | "development"; summaries: ComparisonSummary[] } | null;
@@ -89,6 +151,7 @@ export function LabPage({ meta }: { meta: Meta | null }) {
   const redTeam = data?.red_team ?? [];
   const risks = Array.from(new Set(redTeam.flatMap((run) => run.by_risk.map((risk) => risk.owasp)))).sort();
   const recommendation = data?.reports.find((report) => report.id === "recommendation");
+  const discovery = data?.discovery;
   const retrieval = data?.reports.find((report) => report.id === "retrieval");
 
   return (
@@ -270,6 +333,34 @@ export function LabPage({ meta }: { meta: Meta | null }) {
           </a>
         </p>
       </section>
+
+      {discovery && (
+        <section aria-labelledby="discovery-title" style={{ display: "grid", gap: 12 }}>
+          <div>
+            <h2 id="discovery-title">O que mostrar na home: região e horário contam</h2>
+            <p className="muted">
+              {count(discovery.targets.customers)} próximos pedidos reais{" "}
+              {discovery.stage === "final_test"
+                ? "do teste oficial do DHRD (dias 76–90), avaliado uma única vez"
+                : "da validação (dias 62–75)"}
+              . Restaurantes: o restaurante do pedido real está entre os 10 mostrados (Hit@10).
+            </p>
+          </div>
+          <DiscoveryTable label="Tabela de restaurantes" rows={discovery.restaurants} metric="hit@10" />
+          <p className="muted">Itens: fração dos itens do pedido real entre os 10 sugeridos (Recall@10).</p>
+          <DiscoveryTable label="Tabela de itens" rows={discovery.items} metric="recall@10" />
+          <p className="muted" style={{ fontSize: 12 }}>
+            Protocolo congelado antes de rodar.{" "}
+            <a href={REPO + "docs/EXPERIMENT_004.md"} target="_blank" rel="noreferrer">
+              Experimento 004 <ExternalLink size={12} />
+            </a>{" "}
+            ·{" "}
+            <a href={REPO + "evaluations/results/" + discovery.report} target="_blank" rel="noreferrer">
+              dados brutos <ExternalLink size={12} />
+            </a>
+          </p>
+        </section>
+      )}
 
       {recommendation && (
         <section aria-labelledby="rec-title" className="panel" style={{ display: "grid", gap: 10 }}>

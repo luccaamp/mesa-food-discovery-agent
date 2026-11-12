@@ -1,5 +1,5 @@
 import { useEffect, useState, type FormEvent } from "react";
-import { ArrowRight, Database, ShieldCheck, Sparkles } from "lucide-react";
+import { ArrowRight, Database, MapPin, ShieldCheck, Sparkles } from "lucide-react";
 import { api, keyOf, type Item } from "../api";
 import { CuisineIcon, ItemCard, SkeletonCards, cuisineStyle } from "../components/ui";
 import { href } from "../lib/route";
@@ -8,6 +8,8 @@ import { seedsOf, type Cart } from "../lib/store";
 const SUGGESTIONS = ["Pizza barata", "Arroz com frango", "Chá com leite gelado", "Me recomende algo"];
 
 type Cuisine = { name: string; products: number };
+type Region = { id: string; name: string; orders: number };
+type Regions = { regions: Region[]; slot: string; slot_label: string };
 
 function Rail({ title, subtitle, request, cart, onOpen, deps }: {
   title: string;
@@ -53,16 +55,57 @@ function Rail({ title, subtitle, request, cart, onOpen, deps }: {
   );
 }
 
+/** What people order in the chosen region at this time of day (Experiment 004). */
+function PopularHere({ region, onRegion, cart, onOpen }: {
+  region: string;
+  onRegion: (region: string) => void;
+  cart: Cart;
+  onOpen: (item: Item) => void;
+}) {
+  const [regions, setRegions] = useState<Regions | null>(null);
+  useEffect(() => {
+    api<Regions>("/v1/discovery/regions").then(setRegions).catch(() => undefined);
+  }, []);
+  const name = regions?.regions.find((value) => value.id === region)?.name;
+  const when = regions?.slot_label ?? "agora";
+  return (
+    <>
+      <div className="region-picker">
+        <MapPin size={18} aria-hidden="true" />
+        <label htmlFor="region">Você está perto de</label>
+        <select id="region" className="chip" value={region} onChange={(event) => onRegion(event.target.value)}>
+          <option value="">Singapura inteira</option>
+          {regions?.regions.map((value) => (
+            <option key={value.id} value={value.id}>
+              {value.name}
+            </option>
+          ))}
+        </select>
+      </div>
+      <Rail
+        title={name ? `Em alta perto de ${name} ${when}` : `Em alta em Singapura ${when}`}
+        subtitle="O que mais se pede nesta região e faixa horária, em pedidos reais."
+        request={() => recommend({ region: region || null })}
+        deps={[region]}
+        cart={cart}
+        onOpen={onOpen}
+      />
+    </>
+  );
+}
+
 const recommend = (body: Record<string, unknown>) =>
   api<{ items: Item[] }>("/v1/recommendations", { method: "POST", body: JSON.stringify({ limit: 10, ...body }) }).then(
     (result) => result.items,
   );
 
-export function HomePage({ cart, cuisines, onAsk, onOpen }: {
+export function HomePage({ cart, cuisines, onAsk, onOpen, region, onRegion }: {
   cart: Cart;
   cuisines: Cuisine[];
   onAsk: (message: string) => void;
   onOpen: (item: Item) => void;
+  region: string;
+  onRegion: (region: string) => void;
 }) {
   const [draft, setDraft] = useState("");
   const top = [...cuisines].sort((a, b) => b.products - a.products).slice(0, 12);
@@ -108,6 +151,8 @@ export function HomePage({ cart, cuisines, onAsk, onOpen }: {
         </div>
       </section>
 
+      <PopularHere region={region} onRegion={onRegion} cart={cart} onOpen={onOpen} />
+
       {top.length > 0 && (
         <section className="section" aria-label="Culinárias">
           <div className="section-head">
@@ -151,14 +196,7 @@ export function HomePage({ cart, cuisines, onAsk, onOpen }: {
           </div>
         </section>
       )}
-      <Rail
-        title="Mais pedidos em Singapura"
-        subtitle="Popularidade nos pedidos de treino"
-        request={() => recommend({})}
-        deps={[]}
-        cart={cart}
-        onOpen={onOpen}
-      />
+
       {top.slice(0, 2).map((cuisine) => (
         <Rail
           key={cuisine.name}

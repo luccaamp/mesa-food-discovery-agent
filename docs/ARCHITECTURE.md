@@ -108,6 +108,23 @@ serviço. O teste oficial (dias 76–90) fica fisicamente separado e não foi us
 para ajustar modelos. Os artefatos públicos contêm só catálogo, popularidade e
 vizinhança entre itens: nenhuma tabela individual de pedido ou cliente.
 
+## Preço em faixas
+
+O DHRD publica preços normalizados numa escala não divulgada: o máximo é 1,0 e
+um prato de chicken rice fica perto de 0,0028. Converter para moeda seria
+inventar. O que sobrevive a qualquer normalização que preserve a ordem é a
+**posição**. Por isso, [`pricing.py`](../src/meal_discovery/pricing.py) calcula,
+para cada item, o tercil dentro da própria culinária ($, $$, $$$) e a fração de
+itens dessa culinária que custam mais ("mais barato que 72% dos itens de pizza").
+
+A distribuição vem de um artefato versionado de 77 KB (`price-bands-v1.json`,
+com 772.298 itens com preço em 78 culinárias), gerado por
+[`scripts/build_price_bands.py`](../scripts/build_price_bands.py). O filtro
+`price_level` vira SQL (`unit_price <= CASE primary_cuisine WHEN ... END`) na
+busca e na recomendação. "Barato", "não muito caro" e "qualquer preço" são
+convertidos em faixa pela camada de políticas, antes do modelo. Um preço
+registrado como 0 é "não informado": não recebe faixa e nunca casa com um filtro.
+
 ## Canais: Telegram e WhatsApp
 
 ```text

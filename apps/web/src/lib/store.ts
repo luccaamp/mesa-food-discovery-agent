@@ -20,6 +20,13 @@ function write(key: string, value: unknown) {
   }
 }
 
+/** The order region the person picked (DHRD geohash); kept only in this browser. */
+export function useRegion() {
+  const [region, setRegion] = useState<string>(() => read("mesa.region", ""));
+  useEffect(() => write("mesa.region", region), [region]);
+  return [region, setRegion] as const;
+}
+
 /** Session personalization lives only in this browser: no account, no server-side profile. */
 export function useCart() {
   const [lines, setLines] = useState<CartLine[]>(() => read("mesa.cart", []));

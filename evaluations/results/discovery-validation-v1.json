@@ -1,0 +1,345 @@
+{
+  "schema_version": 1,
+  "protocol_version": "discovery-experiment-v1",
+  "protocol_sha256": "c962025a3a77b31fb2e742ae4a8920361a0064d0df265173d3565b8c678d3429",
+  "implementation_sha256": "7cdfe71e436308d823f12e50c39aef6e8124f340486f9903192400b1c2c165cf",
+  "created_at_utc": "2026-11-12T05:08:20+00:00",
+  "data_kind": "official_dhrd",
+  "city": "Singapore",
+  "source_hashes": {
+    "vendors_sg.txt": "34d92d1c423db48156c59de74fa5cd3246c94d80eec3e7e759c5f46ae32da641",
+    "products_sg.txt": "63e981a45619a3a7e62af8a037ffb641e7410fee35e26b4882f9db6de5e1385c",
+    "orders_sg_train.txt": "4e4cbfbdf9731531ef0dde02538e62096b523b73a00a5c20bc3e5d6d6c7244e0"
+  },
+  "stage": "validation",
+  "history_end_day_inclusive": 61,
+  "targets": {
+    "customers": 175358,
+    "segments": {
+      "cold": 40767,
+      "warm_repeat": 44035,
+      "warm_new": 90556
+    },
+    "candidate_recall": 0.46667
+  },
+  "ranker": {
+    "fitted_on_history_end_day": 47,
+    "fitted_on_targets_days": [
+      48,
+      61
+    ],
+    "fitted_targets_with_positive": 82917,
+    "feature_gain": {
+      "visit_share": 2893265,
+      "region_slot_share": 361397,
+      "pop_region_slot": 137472,
+      "slot_share": 126174,
+      "cuisine_share": 124127,
+      "pop_city": 110152,
+      "customer_orders": 101964,
+      "pop_recent": 78873,
+      "rank_region": 78633,
+      "pop_region": 76170,
+      "cuisine_slot_lift": 70907,
+      "rank_region_slot": 67023,
+      "days_since_visit": 25765,
+      "visits": 14999,
+      "chain_visits": 4831,
+      "same_region": 1714
+    }
+  },
+  "restaurants": {
+    "popular_global": {
+      "all": {
+        "customers": 175358,
+        "hit@10": 0.00052,
+        "mrr@10": 7e-05
+      },
+      "cold": {
+        "customers": 40767,
+        "hit@10": 0.00056,
+        "mrr@10": 7e-05
+      },
+      "warm_repeat": {
+        "customers": 44035,
+        "hit@10": 0.00055,
+        "mrr@10": 7e-05
+      },
+      "warm_new": {
+        "customers": 90556,
+        "hit@10": 0.0005,
+        "mrr@10": 6e-05
+      }
+    },
+    "popular_region": {
+      "all": {
+        "customers": 175358,
+        "hit@10": 0.05047,
+        "mrr@10": 0.01392
+      },
+      "cold": {
+        "customers": 40767,
+        "hit@10": 0.0519,
+        "mrr@10": 0.01473
+      },
+      "warm_repeat": {
+        "customers": 44035,
+        "hit@10": 0.06161,
+        "mrr@10": 0.01688
+      },
+      "warm_new": {
+        "customers": 90556,
+        "hit@10": 0.0444,
+        "mrr@10": 0.01211
+      }
+    },
+    "popular_region_slot": {
+      "all": {
+        "customers": 175358,
+        "hit@10": 0.10098,
+        "mrr@10": 0.0345
+      },
+      "cold": {
+        "customers": 40767,
+        "hit@10": 0.09726,
+        "mrr@10": 0.03297
+      },
+      "warm_repeat": {
+        "customers": 44035,
+        "hit@10": 0.12283,
+        "mrr@10": 0.04364
+      },
+      "warm_new": {
+        "customers": 90556,
+        "hit@10": 0.09202,
+        "mrr@10": 0.03075
+      }
+    },
+    "repeat_then_region_slot": {
+      "all": {
+        "customers": 175358,
+        "hit@10": 0.30546,
+        "mrr@10": 0.19306
+      },
+      "cold": {
+        "customers": 40767,
+        "hit@10": 0.09726,
+        "mrr@10": 0.03297
+      },
+      "warm_repeat": {
+        "customers": 44035,
+        "hit@10": 0.99026,
+        "mrr@10": 0.7121
+      },
+      "warm_new": {
+        "customers": 90556,
+        "hit@10": 0.06618,
+        "mrr@10": 0.01274
+      }
+    },
+    "ranker": {
+      "all": {
+        "customers": 175358,
+        "hit@10": 0.31337,
+        "mrr@10": 0.207
+      },
+      "cold": {
+        "customers": 40767,
+        "hit@10": 0.09037,
+        "mrr@10": 0.03111
+      },
+      "warm_repeat": {
+        "customers": 44035,
+        "hit@10": 0.99207,
+        "mrr@10": 0.75523
+      },
+      "warm_new": {
+        "customers": 90556,
+        "hit@10": 0.08373,
+        "mrr@10": 0.0196
+      }
+    },
+    "ranker_6_plus_discovery_4": {
+      "all": {
+        "customers": 175358,
+        "hit@10": 0.30875,
+        "mrr@10": 0.20642
+      },
+      "cold": {
+        "customers": 40767,
+        "hit@10": 0.09748,
+        "mrr@10": 0.03198
+      },
+      "warm_repeat": {
+        "customers": 44035,
+        "hit@10": 0.97055,
+        "mrr@10": 0.75249
+      },
+      "warm_new": {
+        "customers": 90556,
+        "hit@10": 0.08205,
+        "mrr@10": 0.01941
+      }
+    }
+  },
+  "items": {
+    "popular_global": {
+      "all": {
+        "customers": 175358,
+        "recall@10": 0.00261,
+        "hit@10": 0.00303,
+        "ndcg@10": 0.00124
+      },
+      "cold": {
+        "customers": 40767,
+        "recall@10": 0.00297,
+        "hit@10": 0.00351,
+        "ndcg@10": 0.00144
+      },
+      "warm_repeat": {
+        "customers": 44035,
+        "recall@10": 0.0027,
+        "hit@10": 0.00318,
+        "ndcg@10": 0.00125
+      },
+      "warm_new": {
+        "customers": 90556,
+        "recall@10": 0.0024,
+        "hit@10": 0.00275,
+        "ndcg@10": 0.00115
+      }
+    },
+    "repeat_then_global": {
+      "all": {
+        "customers": 175358,
+        "recall@10": 0.14436,
+        "hit@10": 0.17773,
+        "ndcg@10": 0.11495
+      },
+      "cold": {
+        "customers": 40767,
+        "recall@10": 0.00297,
+        "hit@10": 0.00351,
+        "ndcg@10": 0.00144
+      },
+      "warm_repeat": {
+        "customers": 44035,
+        "recall@10": 0.56968,
+        "hit@10": 0.70165,
+        "ndcg@10": 0.45552
+      },
+      "warm_new": {
+        "customers": 90556,
+        "recall@10": 0.00119,
+        "hit@10": 0.00139,
+        "ndcg@10": 0.00045
+      }
+    },
+    "popular_region_slot": {
+      "all": {
+        "customers": 175358,
+        "recall@10": 0.02924,
+        "hit@10": 0.04226,
+        "ndcg@10": 0.01691
+      },
+      "cold": {
+        "customers": 40767,
+        "recall@10": 0.02922,
+        "hit@10": 0.04111,
+        "ndcg@10": 0.01718
+      },
+      "warm_repeat": {
+        "customers": 44035,
+        "recall@10": 0.03757,
+        "hit@10": 0.05416,
+        "ndcg@10": 0.02148
+      },
+      "warm_new": {
+        "customers": 90556,
+        "recall@10": 0.0252,
+        "hit@10": 0.03698,
+        "ndcg@10": 0.01457
+      }
+    },
+    "repeat_then_region_slot": {
+      "all": {
+        "customers": 175358,
+        "recall@10": 0.15711,
+        "hit@10": 0.19595,
+        "ndcg@10": 0.12144
+      },
+      "cold": {
+        "customers": 40767,
+        "recall@10": 0.02922,
+        "hit@10": 0.04111,
+        "ndcg@10": 0.01718
+      },
+      "warm_repeat": {
+        "customers": 44035,
+        "recall@10": 0.57164,
+        "hit@10": 0.70335,
+        "ndcg@10": 0.45634
+      },
+      "warm_new": {
+        "customers": 90556,
+        "recall@10": 0.01311,
+        "hit@10": 0.01892,
+        "ndcg@10": 0.00551
+      }
+    },
+    "repeat_6_plus_discovery_4": {
+      "all": {
+        "customers": 175358,
+        "recall@10": 0.14545,
+        "hit@10": 0.18462,
+        "ndcg@10": 0.11678
+      },
+      "cold": {
+        "customers": 40767,
+        "recall@10": 0.02922,
+        "hit@10": 0.04111,
+        "ndcg@10": 0.01718
+      },
+      "warm_repeat": {
+        "customers": 44035,
+        "recall@10": 0.5171,
+        "hit@10": 0.64562,
+        "ndcg@10": 0.43491
+      },
+      "warm_new": {
+        "customers": 90556,
+        "recall@10": 0.01704,
+        "hit@10": 0.02506,
+        "ndcg@10": 0.00692
+      }
+    },
+    "ranker_items": {
+      "all": {
+        "customers": 175358,
+        "recall@10": 0.15392,
+        "hit@10": 0.19479,
+        "ndcg@10": 0.12045
+      },
+      "cold": {
+        "customers": 40767,
+        "recall@10": 0.01527,
+        "hit@10": 0.02205,
+        "ndcg@10": 0.00891
+      },
+      "warm_repeat": {
+        "customers": 44035,
+        "recall@10": 0.58176,
+        "hit@10": 0.73006,
+        "ndcg@10": 0.46378
+      },
+      "warm_new": {
+        "customers": 90556,
+        "recall@10": 0.0083,
+        "hit@10": 0.01227,
+        "ndcg@10": 0.00371
+      }
+    }
+  },
+  "runtime_seconds": 288.9,
+  "limitations": "Offline replay of historical choices: it measures whether the real next order would have been shown, not conversion, revenue or satisfaction. Restaurants the customer never saw may still have been ordered elsewhere in the app."
+}

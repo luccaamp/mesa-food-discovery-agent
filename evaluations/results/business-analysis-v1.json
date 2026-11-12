@@ -1,0 +1,242 @@
+{
+  "schema_version": 1,
+  "analysis_version": "business-analysis-v1",
+  "created_at_utc": "2026-11-12T04:52:27+00:00",
+  "data_kind": "official_dhrd",
+  "city": "Singapore",
+  "source_hashes": {
+    "vendors_sg.txt": "34d92d1c423db48156c59de74fa5cd3246c94d80eec3e7e759c5f46ae32da641",
+    "products_sg.txt": "63e981a45619a3a7e62af8a037ffb641e7410fee35e26b4882f9db6de5e1385c",
+    "orders_sg_train.txt": "4e4cbfbdf9731531ef0dde02538e62096b523b73a00a5c20bc3e5d6d6c7244e0"
+  },
+  "relative_days": [
+    0,
+    75
+  ],
+  "lookback_start_day": 30,
+  "customers_and_retention": {
+    "customers": 476143,
+    "orders": 1709379,
+    "single_order_customers_share": 0.41456453208384875,
+    "orders_from_customers_with_5_plus": 0.6128295714408566,
+    "new_customer_cohort": 80675,
+    "new_customers_returning_within_30_days": 0.42404710257204836,
+    "orders_per_customer_median": 2.0
+  },
+  "exploration": {
+    "returning_orders": 853838,
+    "new_vendor_share": 0.6274902264832438,
+    "new_chain_share": 0.6101344751580511,
+    "repeated_item_share": 0.22862542813030542,
+    "orders_with_any_repeated_item": 0.2883650060081655,
+    "by_prior_orders": [
+      {
+        "prior_orders": "1",
+        "orders": 140361,
+        "new_vendor_share": 0.8354528679618982,
+        "new_chain_share": 0.822771282621241
+      },
+      {
+        "prior_orders": "2–4",
+        "orders": 275770,
+        "new_vendor_share": 0.7128222794357617,
+        "new_chain_share": 0.695866120317656
+      },
+      {
+        "prior_orders": "5–9",
+        "orders": 220719,
+        "new_vendor_share": 0.5847752119210399,
+        "new_chain_share": 0.5655154291202842
+      },
+      {
+        "prior_orders": "10+",
+        "orders": 216988,
+        "new_vendor_share": 0.4279683669142994,
+        "new_chain_share": 0.40901801021254636
+      }
+    ]
+  },
+  "context": {
+    "hour_share": {
+      "0": 0.0107,
+      "1": 0.0071,
+      "2": 0.0049,
+      "3": 0.0032,
+      "4": 0.0022,
+      "5": 0.0016,
+      "6": 0.0023,
+      "7": 0.0074,
+      "8": 0.02,
+      "9": 0.0293,
+      "10": 0.0468,
+      "11": 0.1058,
+      "12": 0.1037,
+      "13": 0.0719,
+      "14": 0.0523,
+      "15": 0.0446,
+      "16": 0.0511,
+      "17": 0.0852,
+      "18": 0.1096,
+      "19": 0.102,
+      "20": 0.0682,
+      "21": 0.0352,
+      "22": 0.02,
+      "23": 0.015
+    },
+    "lunch_11_13_share": 0.2814185736457509,
+    "dinner_17_20_share": 0.3649886888747317,
+    "slot_order_share": {
+      "jantar": 0.365,
+      "almoço": 0.2814,
+      "tarde": 0.148,
+      "manhã": 0.1058,
+      "noite": 0.0702,
+      "madrugada": 0.0297
+    },
+    "slot_leaders": {
+      "madrugada": {
+        "indian": 0.1515,
+        "noodles": 0.1449,
+        "dim sum": 0.0933
+      },
+      "manhã": {
+        "coffee": 0.1643,
+        "noodles": 0.0819,
+        "indian": 0.0642
+      },
+      "almoço": {
+        "chinese": 0.0896,
+        "noodles": 0.0544,
+        "indian": 0.0499
+      },
+      "tarde": {
+        "bubble tea": 0.0861,
+        "chinese": 0.0772,
+        "dessert": 0.0616
+      },
+      "jantar": {
+        "chinese": 0.1126,
+        "indian": 0.0551,
+        "bubble tea": 0.0522
+      },
+      "noite": {
+        "indian": 0.1199,
+        "chinese": 0.1127,
+        "american": 0.0654
+      }
+    },
+    "cuisine_lift_by_slot": {
+      "madrugada": {
+        "chinese": 0.82,
+        "indian": 2.51,
+        "noodles": 3.01,
+        "bubble tea": 0.12,
+        "coffee": 1.62,
+        "dessert": 0.17,
+        "western": 0.67,
+        "japanese": 0.25,
+        "fried chicken": 0.23,
+        "pizza": 0.69
+      },
+      "manhã": {
+        "chinese": 0.55,
+        "indian": 1.06,
+        "noodles": 1.7,
+        "bubble tea": 0.17,
+        "coffee": 3.7,
+        "dessert": 1.01,
+        "western": 0.47,
+        "japanese": 0.47,
+        "fried chicken": 0.82,
+        "pizza": 0.36
+      },
+      "almoço": {
+        "chinese": 0.96,
+        "indian": 0.83,
+        "noodles": 1.13,
+        "bubble tea": 0.84,
+        "coffee": 0.88,
+        "dessert": 0.7,
+        "western": 0.89,
+        "japanese": 1.18,
+        "fried chicken": 0.92,
+        "pizza": 0.71
+      },
+      "tarde": {
+        "chinese": 0.83,
+        "indian": 0.73,
+        "noodles": 0.63,
+        "bubble tea": 1.81,
+        "coffee": 0.92,
+        "dessert": 1.55,
+        "western": 1.06,
+        "japanese": 0.96,
+        "fried chicken": 1.1,
+        "pizza": 1.02
+      },
+      "jantar": {
+        "chinese": 1.21,
+        "indian": 0.91,
+        "noodles": 0.69,
+        "bubble tea": 1.1,
+        "coffee": 0.35,
+        "dessert": 1.07,
+        "western": 1.22,
+        "japanese": 1.21,
+        "fried chicken": 1.14,
+        "pizza": 1.3
+      },
+      "noite": {
+        "chinese": 1.21,
+        "indian": 1.99,
+        "noodles": 0.97,
+        "bubble tea": 1.02,
+        "coffee": 0.69,
+        "dessert": 1.01,
+        "western": 1.1,
+        "japanese": 0.37,
+        "fried chicken": 0.99,
+        "pizza": 1.67
+      }
+    },
+    "same_geohash_share": 0.6809554814935717,
+    "customer_regions": 45,
+    "regions_with_5000_orders": 24,
+    "regional_top20_overlap_with_city_top20": {
+      "median": 0.0,
+      "min": 0.0,
+      "max": 0.1
+    }
+  },
+  "catalog": {
+    "catalog_items": 1066840,
+    "items_ever_ordered": 242545,
+    "never_ordered_share": 0.7726510067114094,
+    "top_1pct_items_order_share": 0.13512173798463556,
+    "top_10pct_items_order_share": 0.5055152370056463,
+    "vendors_with_orders": 7203,
+    "top_10pct_vendors_order_share": 0.23951037189529062,
+    "items_per_order_mean": 1.9579151259024477
+  },
+  "price_bands": {
+    "catalog_band_share": {
+      "unknown": 0.2761,
+      "1": 0.2752,
+      "2": 0.2246,
+      "3": 0.2242
+    },
+    "ordered_item_band_share": {
+      "1": 0.4452,
+      "2": 0.3397,
+      "3": 0.2058,
+      "unknown": 0.0094
+    },
+    "note": "Bands are tertiles of recorded prices within each cuisine; unknown = price recorded as 0."
+  },
+  "limitations": [
+    "76 observed days; behaviour before day 0 is unknown, so history-based numbers use days 30+.",
+    "Vendor identifiers are outlets; chain_id groups outlets of the same brand when present.",
+    "Geohash is the anonymized order region (~5 km cells), not an exact address.",
+    "Observational data: shares describe behaviour, they do not prove causes."
+  ]
+}

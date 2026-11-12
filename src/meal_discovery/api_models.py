@@ -117,6 +117,9 @@ class ItemRef(BaseModel):
 class RecommendationParams(BaseModel):
     model_config = ConfigDict(extra="forbid", allow_inf_nan=False)
     seeds: list[ItemRef] = Field(default_factory=list, max_length=5)
+    region: str | None = Field(default=None, pattern=r"^[0-9a-z]{5}$", description="DHRD order region (geohash); see /v1/discovery/regions")
+    slot: Literal["madrugada", "manha", "almoco", "tarde", "jantar", "noite"] | None = Field(
+        default=None, description="Time slot in Singapore; defaults to now")
     cuisine: str | None = Field(default=None, min_length=1, max_length=200)
     min_price: float | None = Field(default=None, ge=0)
     max_price: float | None = Field(default=None, ge=0)
@@ -136,7 +139,8 @@ class RecommendedItem(Item):
     score: float | None
     supporting_co_baskets: int
     training_baskets: int
-    reason: Literal["basket_association", "historical_popularity"]
+    context_orders: int | None = Field(default=None, description="Orders with this item in the region and time slot")
+    reason: Literal["basket_association", "historical_popularity", "popular_here"]
 
 
 class RecommendationResult(BaseModel):
@@ -144,6 +148,7 @@ class RecommendationResult(BaseModel):
     seeds: list[ItemRef]
     filters: Filters
     provenance: dict
+    context: dict | None = None
 
 
 class DiscoveryResult(BaseModel):
@@ -158,6 +163,7 @@ class DiscoveryResult(BaseModel):
 class AssistantContext(BaseModel):
     model_config = ConfigDict(extra="forbid", allow_inf_nan=False)
     last_query: str | None = Field(default=None, max_length=200)
+    region: str | None = Field(default=None, pattern=r"^[0-9a-z]{5}$", description="DHRD order region (geohash); see /v1/discovery/regions")
     cuisine: str | None = Field(default=None, min_length=1, max_length=200)
     min_price: float | None = Field(default=None, ge=0)
     max_price: float | None = Field(default=None, ge=0)

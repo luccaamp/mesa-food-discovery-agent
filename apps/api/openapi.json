@@ -454,6 +454,45 @@
         }
       }
     },
+    "/v1/discovery/regions": {
+      "get": {
+        "tags": [
+          "discovery"
+        ],
+        "summary": "Order regions with names and the current time slot in Singapore",
+        "operationId": "discovery_regions_v1_discovery_regions_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Invalid query parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Verified catalog unavailable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/recommendations": {
       "post": {
         "tags": [
@@ -820,6 +859,19 @@
               }
             ],
             "title": "Last Query"
+          },
+          "region": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[0-9a-z]{5}$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Region",
+            "description": "DHRD order region (geohash); see /v1/discovery/regions"
           },
           "cuisine": {
             "anyOf": [
@@ -1506,6 +1558,39 @@
             "maxItems": 5,
             "title": "Seeds"
           },
+          "region": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[0-9a-z]{5}$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Region",
+            "description": "DHRD order region (geohash); see /v1/discovery/regions"
+          },
+          "slot": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "madrugada",
+                  "manha",
+                  "almoco",
+                  "tarde",
+                  "jantar",
+                  "noite"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Slot",
+            "description": "Time slot in Singapore; defaults to now"
+          },
           "cuisine": {
             "anyOf": [
               {
@@ -1592,6 +1677,18 @@
             "additionalProperties": true,
             "type": "object",
             "title": "Provenance"
+          },
+          "context": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Context"
           }
         },
         "type": "object",
@@ -1662,11 +1759,24 @@
             "type": "integer",
             "title": "Training Baskets"
           },
+          "context_orders": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Context Orders",
+            "description": "Orders with this item in the region and time slot"
+          },
           "reason": {
             "type": "string",
             "enum": [
               "basket_association",
-              "historical_popularity"
+              "historical_popularity",
+              "popular_here"
             ],
             "title": "Reason"
           }

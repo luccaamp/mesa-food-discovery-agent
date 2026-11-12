@@ -20,8 +20,8 @@ novos controles de admissão.
   delimitador final do raciocínio. A falha não pode ser corrigida extraindo
   um JSON intermediário do raciocínio.
 
-Os arquivos executados desses dois diagnósticos estão em
-`evaluations/snapshots/`, com hashes correspondentes aos relatórios.
+Os relatórios guardam o SHA-256 dos arquivos executados; as versões
+correspondentes ficam no histórico do Git.
 Nenhum raciocínio interno foi armazenado nos relatórios ou mostrado no produto.
 
 ## Candidato com duas fases
