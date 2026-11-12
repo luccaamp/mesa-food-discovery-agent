@@ -278,10 +278,13 @@ def create_app(index: Path | None = None) -> FastAPI:
                              "restaurants": recorded["restaurants"], "items": recorded["items"],
                              "intervals": recorded.get("intervals")}
                 break
-        agent_discovery = load("agent-discovery-v1.json")
-        if agent_discovery:
-            agent_discovery = {key: agent_discovery[key] for key in ("arms", "cases", "provider", "model", "created_at_utc")
-                               if key in agent_discovery} | {"report": "agent-discovery-v1.json"}
+        agent_discovery = None
+        for name in ("agent-discovery-v2.json", "agent-discovery-v1.json"):  # v2 repeats v1 without quota fallbacks
+            recorded = load(name)
+            if recorded:
+                agent_discovery = {key: recorded[key] for key in ("arms", "cases", "provider", "model", "created_at_utc",
+                                                                  "llm_usage") if key in recorded} | {"report": name}
+                break
         agent_comparison = None
         recorded = load("agent-provider-reserved-v1.json")
         if recorded:  # held-out contracts, frozen before any tuning of the agent

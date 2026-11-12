@@ -73,18 +73,51 @@ minuto da camada gratuita, e o produto respondeu pelo glossário, como projetado
 Esses casos ficam dentro do braço "agente", porque é assim que o produto se
 comporta sob cota.
 
+## Rodada v2: sem fallbacks, com o produto atual
+
+A primeira rodada (acima, v1) perdeu 39 dos 120 casos para o limite de tokens
+por minuto do provedor gratuito. A v2
+([protocolo](../configs/agent-discovery-v2.json),
+[dados por caso](../evaluations/results/agent-discovery-v2.json)) repete os
+mesmos clientes com pausa de 12 s, uma nova tentativa quando o provedor recusa
+por cota e parada (em vez de fallback) se a cota acabar. Ela também mede o
+agente **como está hoje no produto**, que já ordena a busca pela demanda da
+região (decisão 4, abaixo).
+
+**101 dos 120 casos concluídos, 0 fallbacks.** A cota diária acabou no caso 102;
+os 19 restantes são retomados de onde pararam.
+
+| 5 sugestões, 101 clientes | Restaurante real | Itens da culinária pedida | Sem resultado |
+| --- | ---: | ---: | ---: |
+| Home | 4,0% | 2,8% | 0% |
+| Busca em português | 3,0% | 25,9% | 52,5% |
+| Busca com a palavra do catálogo | 5,0% | **73,9%** | 1,0% |
+| Busca com a palavra do catálogo, reordenada | **13,9%** | 70,3% | 1,0% |
+| **Agente (produto atual)** | 10,9% | 53,1% | **1,0%** |
+
+| Comparação pareada (IC 95%) | Restaurante real | Itens da culinária pedida | Sem resultado |
+| --- | ---: | ---: | ---: |
+| Agente − busca em português | **+7,9 (2,9 a 13,9)** | **+27,1 (18,6 a 36,4)** | **−51,5 (−60,4 a −41,6)** |
+| Agente − busca com a palavra do catálogo | +5,9 (0,0 a 11,9) | −20,8 (−29,9 a −11,7) | 0,0 |
+
+
+**Custo:** 202 chamadas, 183 mil tokens e 1,2 s de latência mediana. Em 23
+casos o agente chamou "recomendar" em vez de "buscar".
+
 ## O que isso significa
 
 1. **O LLM entrega o que promete: entender a pessoa.** Comparado com a busca
-   que recebe o português, ele reduz em 38 pontos as buscas sem resultado e
-   aumenta em 21 pontos os itens da culinária pedida. É o trabalho de traduzir
+   que recebe o português, ele reduz as buscas sem resultado (−38 pontos na v1,
+   −52 na v2) e aumenta os itens da culinária pedida (+21 na v1, +27 na v2). É o trabalho de traduzir
    "comida japonesa" para o vocabulário do catálogo.
 2. **Ele não substitui saber a palavra certa.** Contra a busca que já recebe o
-   termo exato do catálogo, o agente perde 25 pontos em itens da culinária
-   pedida. Parte disso vem dos 32% de fallbacks e dos casos em que ele
-   recomendou em vez de buscar. É o teto a perseguir: mais termos do catálogo no
+   termo exato do catálogo, o agente perde 21 pontos em itens da culinária
+   pedida, mesmo sem fallbacks (v2). O motivo principal são os 23 casos em que
+   ele recomendou em vez de buscar. É o teto a perseguir: mais termos do catálogo no
    contexto do agente e menos recomendação quando há intenção clara.
-3. **Achar o restaurante certo é contexto, não linguagem.** Nenhum braço que
+3. **Achar o restaurante certo é contexto, não linguagem.** Com a ordenação
+   regional no produto, o agente vai a 10,9% e supera a busca em português por
+   7,9 pontos (IC de 2,9 a 13,9). Nenhum braço que
    ignora a região passa de 5% no restaurante real. Reordenar pela demanda local
    leva a busca de 2,3% para 12,1% nos 36.766 clientes, e o agente de 4,2% para
    9,2% na amostra.

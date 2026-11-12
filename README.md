@@ -57,28 +57,28 @@ o IC 95% por bootstrap). [Experimento de descoberta](docs/EXPERIMENT_DISCOVERY.m
 
 Para cada cliente novo do teste oficial, um usuário simulado (gerado por
 código, sem LLM) diz a culinária do pedido real: "Estou com vontade de comida
-japonesa". Foram 36.766 clientes nos braços sem LLM e uma amostra de 120 com o
-agente. [Experimento do agente](docs/EXPERIMENT_AGENT.md).
+japonesa". Foram 36.766 clientes nos braços sem LLM e 101 com o agente do
+produto, sem nenhum fallback. [Experimento do agente](docs/EXPERIMENT_AGENT.md).
 
-| 5 sugestões, amostra de 120 clientes | Itens da culinária pedida | Sem resultado | Restaurante real |
+| 5 sugestões, 101 clientes | Itens da culinária pedida | Sem resultado | Restaurante real |
 | --- | ---: | ---: | ---: |
-| Busca com o texto em português ("comida japonesa") | 26,5% | 53% | 2,5% |
-| **Agente (LLM com ferramentas)** | **47,7%** | **15%** | 4,2% |
-| Busca com a palavra exata do catálogo ("japanese") | 72,5% | 1% | 5,0% |
-| Busca com a palavra exata, ordenada pela demanda da região | 70,2% | 1% | **15,0%** |
+| Busca com o texto em português ("comida japonesa") | 25,9% | 52,5% | 3,0% |
+| **Agente (LLM com ferramentas)** | **53,1%** | **1,0%** | **10,9%** |
+| Busca com a palavra exata do catálogo ("japanese") | 73,9% | 1,0% | 5,0% |
+| Busca com a palavra exata, ordenada pela demanda da região | 70,3% | 1,0% | 13,9% |
 
-- **O LLM traduz o português da pessoa para o vocabulário do catálogo.** Contra
-  a busca que recebe o texto em português, ele tem 38 pontos a menos de buscas
-  vazias e 21 pontos a mais de itens da culinária pedida. Essas são as
-  diferenças que se sustentam (IC 95% pareado).
+- **O LLM traduz o português da pessoa para o vocabulário do catálogo.**
+  Contra a busca que recebe o português, o agente zera as buscas vazias (−51,5
+  pontos) e dobra os itens da culinária pedida (+27 pontos), com IC 95% pareado.
 - **Quem já sabe o termo do catálogo não precisa dele.** A busca com a palavra
-  exata vence o agente: 72,5% contra 47,7% nos itens da culinária pedida.
-- **Para o restaurante real, 120 casos não distinguem os braços** (4,2% contra
-  2,5% são 5 casos contra 3). Nos 36.766 clientes, o que move esse número é o
-  contexto: ordenar pela demanda da região leva a busca de 2,3% para 12,1%. A
-  busca do agente passou a ordenar assim quando a região é conhecida.
-- **Ressalva:** 32% dos casos caíram no fallback por cota do provedor gratuito,
-  então o valor do agente sem cota ainda está em aberto.
+  exata vence o agente em itens da culinária pedida: 73,9% contra 53,1%. Em 23
+  casos o agente recomendou em vez de buscar.
+- **Achar o restaurante real é contexto, não linguagem.** Ordenar pela demanda
+  da região leva a busca de 2,3% para 12,1% nos 36.766 clientes. Com essa
+  ordenação no produto, o agente supera a busca em português por 7,9 pontos (IC
+  de 2,9 a 13,9).
+- **Uma primeira rodada (v1) perdeu 32% dos casos por cota do provedor;** a v2
+  repetiu com pausas e sem fallbacks. As duas estão no documento.
 
 ## 4. O produto
 

@@ -1,0 +1,7226 @@
+{
+  "schema_version": 1,
+  "protocol_version": "agent-discovery-v2",
+  "protocol_sha256": "a2c2924cb5d5c13c6fd9affbf6c14b25f0b441f211e76c6235c4584cbb6a658d",
+  "implementation_sha256": "7b4d720687680f774edcbee2d760c1ec460bf55597061d2b7c5364f67a75cb59",
+  "created_at_utc": "2026-11-12T06:45:05+00:00",
+  "provider": "groq",
+  "model": "openai/gpt-oss-120b",
+  "cases": {
+    "new_customers": 36766,
+    "llm_sample": 101,
+    "llm_sample_planned": 120,
+    "model_answered": 101
+  },
+  "arms": {
+    "all_new_customers": {
+      "home": {
+        "restaurant_hit": {
+          "mean": 0.03647,
+          "ci95": [
+            0.03454,
+            0.03832
+          ]
+        },
+        "item_hit": {
+          "mean": 0.0244,
+          "ci95": [
+            0.02296,
+            0.02614
+          ]
+        },
+        "cuisine_match": {
+          "mean": 0.04,
+          "ci95": [
+            0.03898,
+            0.0411
+          ]
+        },
+        "empty": {
+          "mean": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "cases": 36766
+      },
+      "search_pt": {
+        "restaurant_hit": {
+          "mean": 0.01115,
+          "ci95": [
+            0.01006,
+            0.01221
+          ]
+        },
+        "item_hit": {
+          "mean": 0.00155,
+          "ci95": [
+            0.00117,
+            0.00196
+          ]
+        },
+        "cuisine_match": {
+          "mean": 0.31794,
+          "ci95": [
+            0.31372,
+            0.32222
+          ]
+        },
+        "empty": {
+          "mean": 0.39947,
+          "ci95": [
+            0.39447,
+            0.40461
+          ]
+        },
+        "cases": 36766
+      },
+      "search_pt_local": {
+        "restaurant_hit": {
+          "mean": 0.0612,
+          "ci95": [
+            0.05872,
+            0.06357
+          ]
+        },
+        "item_hit": {
+          "mean": 0.00835,
+          "ci95": [
+            0.00743,
+            0.00927
+          ]
+        },
+        "cuisine_match": {
+          "mean": 0.32094,
+          "ci95": [
+            0.31685,
+            0.32505
+          ]
+        },
+        "empty": {
+          "mean": 0.39947,
+          "ci95": [
+            0.39493,
+            0.40396
+          ]
+        },
+        "cases": 36766
+      },
+      "search_en": {
+        "restaurant_hit": {
+          "mean": 0.02309,
+          "ci95": [
+            0.02162,
+            0.02462
+          ]
+        },
+        "item_hit": {
+          "mean": 0.0019,
+          "ci95": [
+            0.00147,
+            0.00237
+          ]
+        },
+        "cuisine_match": {
+          "mean": 0.67107,
+          "ci95": [
+            0.66714,
+            0.67496
+          ]
+        },
+        "empty": {
+          "mean": 0.00898,
+          "ci95": [
+            0.00805,
+            0.00987
+          ]
+        },
+        "cases": 36766
+      },
+      "search_en_local": {
+        "restaurant_hit": {
+          "mean": 0.12057,
+          "ci95": [
+            0.11731,
+            0.124
+          ]
+        },
+        "item_hit": {
+          "mean": 0.01148,
+          "ci95": [
+            0.01039,
+            0.01259
+          ]
+        },
+        "cuisine_match": {
+          "mean": 0.6649,
+          "ci95": [
+            0.66079,
+            0.66887
+          ]
+        },
+        "empty": {
+          "mean": 0.00898,
+          "ci95": [
+            0.00802,
+            0.00995
+          ]
+        },
+        "cases": 36766
+      }
+    },
+    "llm_sample": {
+      "home": {
+        "restaurant_hit": {
+          "mean": 0.0396,
+          "ci95": [
+            0.0099,
+            0.08911
+          ]
+        },
+        "item_hit": {
+          "mean": 0.0198,
+          "ci95": [
+            0.0,
+            0.0495
+          ]
+        },
+        "cuisine_match": {
+          "mean": 0.02772,
+          "ci95": [
+            0.01386,
+            0.04361
+          ]
+        },
+        "empty": {
+          "mean": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "cases": 101
+      },
+      "search_pt": {
+        "restaurant_hit": {
+          "mean": 0.0297,
+          "ci95": [
+            0.0,
+            0.06931
+          ]
+        },
+        "item_hit": {
+          "mean": 0.0099,
+          "ci95": [
+            0.0,
+            0.0297
+          ]
+        },
+        "cuisine_match": {
+          "mean": 0.25941,
+          "ci95": [
+            0.18614,
+            0.33861
+          ]
+        },
+        "empty": {
+          "mean": 0.52475,
+          "ci95": [
+            0.43564,
+            0.62376
+          ]
+        },
+        "cases": 101
+      },
+      "search_pt_local": {
+        "restaurant_hit": {
+          "mean": 0.0396,
+          "ci95": [
+            0.0099,
+            0.07921
+          ]
+        },
+        "item_hit": {
+          "mean": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "cuisine_match": {
+          "mean": 0.25743,
+          "ci95": [
+            0.18609,
+            0.33074
+          ]
+        },
+        "empty": {
+          "mean": 0.52475,
+          "ci95": [
+            0.43564,
+            0.62376
+          ]
+        },
+        "cases": 101
+      },
+      "search_en": {
+        "restaurant_hit": {
+          "mean": 0.0495,
+          "ci95": [
+            0.0099,
+            0.09901
+          ]
+        },
+        "item_hit": {
+          "mean": 0.0099,
+          "ci95": [
+            0.0,
+            0.0297
+          ]
+        },
+        "cuisine_match": {
+          "mean": 0.73861,
+          "ci95": [
+            0.66733,
+            0.8099
+          ]
+        },
+        "empty": {
+          "mean": 0.0099,
+          "ci95": [
+            0.0,
+            0.0396
+          ]
+        },
+        "cases": 101
+      },
+      "search_en_local": {
+        "restaurant_hit": {
+          "mean": 0.13861,
+          "ci95": [
+            0.07896,
+            0.21782
+          ]
+        },
+        "item_hit": {
+          "mean": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "cuisine_match": {
+          "mean": 0.70297,
+          "ci95": [
+            0.62767,
+            0.77228
+          ]
+        },
+        "empty": {
+          "mean": 0.0099,
+          "ci95": [
+            0.0,
+            0.0297
+          ]
+        },
+        "cases": 101
+      },
+      "agent": {
+        "restaurant_hit": {
+          "mean": 0.10891,
+          "ci95": [
+            0.0495,
+            0.16832
+          ]
+        },
+        "item_hit": {
+          "mean": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "cuisine_match": {
+          "mean": 0.53069,
+          "ci95": [
+            0.45144,
+            0.61782
+          ]
+        },
+        "empty": {
+          "mean": 0.0099,
+          "ci95": [
+            0.0,
+            0.0297
+          ]
+        },
+        "cases": 101
+      },
+      "agent_local": {
+        "restaurant_hit": {
+          "mean": 0.11881,
+          "ci95": [
+            0.06906,
+            0.18812
+          ]
+        },
+        "item_hit": {
+          "mean": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "cuisine_match": {
+          "mean": 0.52475,
+          "ci95": [
+            0.44158,
+            0.61193
+          ]
+        },
+        "empty": {
+          "mean": 0.0099,
+          "ci95": [
+            0.0,
+            0.0297
+          ]
+        },
+        "cases": 101
+      }
+    },
+    "model_answered": {
+      "home": {
+        "restaurant_hit": {
+          "mean": 0.0396,
+          "ci95": [
+            0.0099,
+            0.07921
+          ]
+        },
+        "item_hit": {
+          "mean": 0.0198,
+          "ci95": [
+            0.0,
+            0.0495
+          ]
+        },
+        "cuisine_match": {
+          "mean": 0.02772,
+          "ci95": [
+            0.01386,
+            0.04554
+          ]
+        },
+        "empty": {
+          "mean": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "cases": 101
+      },
+      "search_pt": {
+        "restaurant_hit": {
+          "mean": 0.0297,
+          "ci95": [
+            0.0,
+            0.05941
+          ]
+        },
+        "item_hit": {
+          "mean": 0.0099,
+          "ci95": [
+            0.0,
+            0.0297
+          ]
+        },
+        "cuisine_match": {
+          "mean": 0.25941,
+          "ci95": [
+            0.19203,
+            0.3347
+          ]
+        },
+        "empty": {
+          "mean": 0.52475,
+          "ci95": [
+            0.42574,
+            0.61386
+          ]
+        },
+        "cases": 101
+      },
+      "search_pt_local": {
+        "restaurant_hit": {
+          "mean": 0.0396,
+          "ci95": [
+            0.0099,
+            0.07921
+          ]
+        },
+        "item_hit": {
+          "mean": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "cuisine_match": {
+          "mean": 0.25743,
+          "ci95": [
+            0.18812,
+            0.33267
+          ]
+        },
+        "empty": {
+          "mean": 0.52475,
+          "ci95": [
+            0.42574,
+            0.61386
+          ]
+        },
+        "cases": 101
+      },
+      "search_en": {
+        "restaurant_hit": {
+          "mean": 0.0495,
+          "ci95": [
+            0.0099,
+            0.09901
+          ]
+        },
+        "item_hit": {
+          "mean": 0.0099,
+          "ci95": [
+            0.0,
+            0.0297
+          ]
+        },
+        "cuisine_match": {
+          "mean": 0.73861,
+          "ci95": [
+            0.66733,
+            0.80792
+          ]
+        },
+        "empty": {
+          "mean": 0.0099,
+          "ci95": [
+            0.0,
+            0.0297
+          ]
+        },
+        "cases": 101
+      },
+      "search_en_local": {
+        "restaurant_hit": {
+          "mean": 0.13861,
+          "ci95": [
+            0.07921,
+            0.20792
+          ]
+        },
+        "item_hit": {
+          "mean": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "cuisine_match": {
+          "mean": 0.70297,
+          "ci95": [
+            0.6297,
+            0.77426
+          ]
+        },
+        "empty": {
+          "mean": 0.0099,
+          "ci95": [
+            0.0,
+            0.0297
+          ]
+        },
+        "cases": 101
+      },
+      "agent": {
+        "restaurant_hit": {
+          "mean": 0.10891,
+          "ci95": [
+            0.0495,
+            0.16832
+          ]
+        },
+        "item_hit": {
+          "mean": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "cuisine_match": {
+          "mean": 0.53069,
+          "ci95": [
+            0.4455,
+            0.61391
+          ]
+        },
+        "empty": {
+          "mean": 0.0099,
+          "ci95": [
+            0.0,
+            0.0297
+          ]
+        },
+        "cases": 101
+      },
+      "agent_local": {
+        "restaurant_hit": {
+          "mean": 0.11881,
+          "ci95": [
+            0.05941,
+            0.17822
+          ]
+        },
+        "item_hit": {
+          "mean": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "cuisine_match": {
+          "mean": 0.52475,
+          "ci95": [
+            0.44351,
+            0.61188
+          ]
+        },
+        "empty": {
+          "mean": 0.0099,
+          "ci95": [
+            0.0,
+            0.02995
+          ]
+        },
+        "cases": 101
+      }
+    }
+  },
+  "paired_on_llm_sample": {
+    "agent_vs_search_pt": {
+      "restaurant_hit": {
+        "difference": 0.07921,
+        "ci95": [
+          0.02946,
+          0.13861
+        ]
+      },
+      "cuisine_match": {
+        "difference": 0.27129,
+        "ci95": [
+          0.18609,
+          0.36436
+        ]
+      },
+      "empty": {
+        "difference": -0.51485,
+        "ci95": [
+          -0.60396,
+          -0.41584
+        ]
+      }
+    },
+    "agent_vs_search_en": {
+      "restaurant_hit": {
+        "difference": 0.05941,
+        "ci95": [
+          0.0,
+          0.11881
+        ]
+      },
+      "cuisine_match": {
+        "difference": -0.20792,
+        "ci95": [
+          -0.29906,
+          -0.11683
+        ]
+      },
+      "empty": {
+        "difference": 0.0,
+        "ci95": [
+          0.0,
+          0.0
+        ]
+      }
+    },
+    "agent_local_vs_home": {
+      "restaurant_hit": {
+        "difference": 0.07921,
+        "ci95": [
+          0.0099,
+          0.15842
+        ]
+      },
+      "cuisine_match": {
+        "difference": 0.49703,
+        "ci95": [
+          0.4198,
+          0.58416
+        ]
+      },
+      "empty": {
+        "difference": 0.0099,
+        "ci95": [
+          0.0,
+          0.0297
+        ]
+      }
+    },
+    "agent_local_vs_agent": {
+      "restaurant_hit": {
+        "difference": 0.0099,
+        "ci95": [
+          0.0,
+          0.0297
+        ]
+      },
+      "cuisine_match": {
+        "difference": -0.00594,
+        "ci95": [
+          -0.04163,
+          0.02772
+        ]
+      },
+      "empty": {
+        "difference": 0.0,
+        "ci95": [
+          0.0,
+          0.0
+        ]
+      }
+    },
+    "search_en_local_vs_search_en": {
+      "restaurant_hit": {
+        "difference": 0.08911,
+        "ci95": [
+          0.0297,
+          0.14851
+        ]
+      },
+      "cuisine_match": {
+        "difference": -0.03564,
+        "ci95": [
+          -0.09505,
+          0.02178
+        ]
+      },
+      "empty": {
+        "difference": 0.0,
+        "ci95": [
+          0.0,
+          0.0
+        ]
+      }
+    }
+  },
+  "llm_usage": {
+    "provider_attempts": 202,
+    "tokens": 182602,
+    "fallbacks": 0,
+    "tools": {
+      "recommend_items": 23,
+      "search_catalog": 79
+    },
+    "latency_seconds_p50": 1.17
+  },
+  "messages_example": [
+    "Estou com vontade de algo de padaria",
+    "Estou com vontade de algo de padaria, algo barato",
+    "Estou com vontade de algo saudável",
+    "Estou com vontade de algo saudável, algo barato",
+    "Estou com vontade de arroz com frango",
+    "Estou com vontade de arroz com frango, algo barato",
+    "Estou com vontade de arroz frito",
+    "Estou com vontade de arroz frito, algo barato"
+  ],
+  "limitations": "Code-generated intents, not people; one turn; the region is known to the home and the agent but plain search has no region input, which is the product as built. Offline replay: measures whether the real choice would have been shown, not satisfaction.",
+  "per_case": [
+    {
+      "index": 137,
+      "message": "Estou com vontade de comida de Singapura",
+      "planner": "groq_agent",
+      "fallback_reason": null,
+      "retried": false,
+      "tools": [
+        "recommend_items"
+      ],
+      "search": null,
+      "attempts": 2,
+      "tokens": 1761,
+      "seconds": 2.66,
+      "scores": {
+        "home": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_pt": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_pt_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_en": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.6,
+          "empty": false
+        },
+        "search_en_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.4,
+          "empty": false
+        },
+        "agent": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "agent_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        }
+      }
+    },
+    {
+      "index": 193,
+      "message": "Estou com vontade de algo de padaria",
+      "planner": "groq_agent",
+      "fallback_reason": null,
+      "retried": false,
+      "tools": [
+        "search_catalog"
+      ],
+      "search": {
+        "query": "bakery",
+        "cuisine": null,
+        "min_price": null,
+        "max_price": null,
+        "price_level": null,
+        "limit": 50,
+        "ranking": "local_demand"
+      },
+      "attempts": 2,
+      "tokens": 1835,
+      "seconds": 1.44,
+      "scores": {
+        "home": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_pt": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_pt_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_en": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "search_en_local": {
+          "restaurant_hit": true,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "agent": {
+          "restaurant_hit": true,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "agent_local": {
+          "restaurant_hit": true,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        }
+      }
+    },
+    {
+      "index": 432,
+      "message": "Estou com vontade de comida chinesa",
+      "planner": "groq_agent",
+      "fallback_reason": null,
+      "retried": false,
+      "tools": [
+        "recommend_items"
+      ],
+      "search": null,
+      "attempts": 2,
+      "tokens": 1759,
+      "seconds": 1.17,
+      "scores": {
+        "home": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.2,
+          "empty": false
+        },
+        "search_pt": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_pt_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_en": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "search_en_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "agent": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.2,
+          "empty": false
+        },
+        "agent_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.2,
+          "empty": false
+        }
+      }
+    },
+    {
+      "index": 1309,
+      "message": "Estou com vontade de comida japonesa, algo barato",
+      "planner": "groq_agent",
+      "fallback_reason": null,
+      "retried": false,
+      "tools": [
+        "search_catalog"
+      ],
+      "search": {
+        "query": "Japanese",
+        "cuisine": null,
+        "min_price": null,
+        "max_price": null,
+        "price_level": 1,
+        "limit": 50,
+        "ranking": "local_demand"
+      },
+      "attempts": 2,
+      "tokens": 1788,
+      "seconds": 1.07,
+      "scores": {
+        "home": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_pt": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_pt_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_en": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "search_en_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "agent": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "agent_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        }
+      }
+    },
+    {
+      "index": 1547,
+      "message": "Estou com vontade de frango frito",
+      "planner": "groq_agent",
+      "fallback_reason": null,
+      "retried": false,
+      "tools": [
+        "search_catalog"
+      ],
+      "search": {
+        "query": "fried chicken",
+        "cuisine": null,
+        "min_price": null,
+        "max_price": null,
+        "price_level": null,
+        "limit": 50,
+        "ranking": "local_demand"
+      },
+      "attempts": 2,
+      "tokens": 1830,
+      "seconds": 1.82,
+      "scores": {
+        "home": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_pt": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.2,
+          "empty": false
+        },
+        "search_pt_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_en": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.2,
+          "empty": false
+        },
+        "search_en_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "agent": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "agent_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        }
+      }
+    },
+    {
+      "index": 1612,
+      "message": "Estou com vontade de pizza, algo barato",
+      "planner": "groq_agent",
+      "fallback_reason": null,
+      "retried": false,
+      "tools": [
+        "search_catalog"
+      ],
+      "search": {
+        "query": "pizza",
+        "cuisine": null,
+        "min_price": null,
+        "max_price": null,
+        "price_level": 1,
+        "limit": 50,
+        "ranking": "local_demand"
+      },
+      "attempts": 2,
+      "tokens": 2578,
+      "seconds": 2.28,
+      "scores": {
+        "home": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_pt": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "search_pt_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "search_en": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "search_en_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "agent": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "agent_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        }
+      }
+    },
+    {
+      "index": 2035,
+      "message": "Estou com vontade de bubble tea, algo barato",
+      "planner": "groq_agent",
+      "fallback_reason": null,
+      "retried": false,
+      "tools": [
+        "search_catalog"
+      ],
+      "search": {
+        "query": "bubble tea",
+        "cuisine": null,
+        "min_price": null,
+        "max_price": null,
+        "price_level": 1,
+        "limit": 50,
+        "ranking": "local_demand"
+      },
+      "attempts": 2,
+      "tokens": 1790,
+      "seconds": 0.99,
+      "scores": {
+        "home": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_pt": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.4,
+          "empty": false
+        },
+        "search_pt_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.8,
+          "empty": false
+        },
+        "search_en": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.4,
+          "empty": false
+        },
+        "search_en_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.8,
+          "empty": false
+        },
+        "agent": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.6,
+          "empty": false
+        },
+        "agent_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.8,
+          "empty": false
+        }
+      }
+    },
+    {
+      "index": 2177,
+      "message": "Estou com vontade de frango frito",
+      "planner": "groq_agent",
+      "fallback_reason": null,
+      "retried": false,
+      "tools": [
+        "search_catalog"
+      ],
+      "search": {
+        "query": "fried chicken",
+        "cuisine": null,
+        "min_price": null,
+        "max_price": null,
+        "price_level": null,
+        "limit": 50,
+        "ranking": "local_demand"
+      },
+      "attempts": 2,
+      "tokens": 1826,
+      "seconds": 1.12,
+      "scores": {
+        "home": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_pt": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.2,
+          "empty": false
+        },
+        "search_pt_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_en": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.2,
+          "empty": false
+        },
+        "search_en_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "agent": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "agent_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        }
+      }
+    },
+    {
+      "index": 3361,
+      "message": "Estou com vontade de algo de padaria",
+      "planner": "groq_agent",
+      "fallback_reason": null,
+      "retried": false,
+      "tools": [
+        "search_catalog"
+      ],
+      "search": {
+        "query": "bakery",
+        "cuisine": null,
+        "min_price": null,
+        "max_price": null,
+        "price_level": null,
+        "limit": 50,
+        "ranking": "local_demand"
+      },
+      "attempts": 2,
+      "tokens": 1844,
+      "seconds": 2.15,
+      "scores": {
+        "home": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_pt": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_pt_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_en": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "search_en_local": {
+          "restaurant_hit": true,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "agent": {
+          "restaurant_hit": true,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "agent_local": {
+          "restaurant_hit": true,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        }
+      }
+    },
+    {
+      "index": 3568,
+      "message": "Estou com vontade de hambúrguer",
+      "planner": "groq_agent",
+      "fallback_reason": null,
+      "retried": false,
+      "tools": [
+        "search_catalog"
+      ],
+      "search": {
+        "query": "burger",
+        "cuisine": null,
+        "min_price": null,
+        "max_price": null,
+        "price_level": null,
+        "limit": 50,
+        "ranking": "local_demand"
+      },
+      "attempts": 2,
+      "tokens": 1832,
+      "seconds": 1.47,
+      "scores": {
+        "home": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_pt": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.2,
+          "empty": false
+        },
+        "search_pt_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_en": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "search_en_local": {
+          "restaurant_hit": true,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "agent": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "agent_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        }
+      }
+    },
+    {
+      "index": 3977,
+      "message": "Estou com vontade de macarrão oriental",
+      "planner": "groq_agent",
+      "fallback_reason": null,
+      "retried": false,
+      "tools": [
+        "search_catalog"
+      ],
+      "search": {
+        "query": "noodles oriental",
+        "cuisine": null,
+        "min_price": null,
+        "max_price": null,
+        "price_level": null,
+        "limit": 50,
+        "ranking": "local_demand"
+      },
+      "attempts": 2,
+      "tokens": 1834,
+      "seconds": 0.95,
+      "scores": {
+        "home": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_pt": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "search_pt_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "search_en": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "search_en_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "agent": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "agent_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        }
+      }
+    },
+    {
+      "index": 4209,
+      "message": "Estou com vontade de comida de Singapura",
+      "planner": "groq_agent",
+      "fallback_reason": null,
+      "retried": false,
+      "tools": [
+        "recommend_items"
+      ],
+      "search": null,
+      "attempts": 2,
+      "tokens": 1746,
+      "seconds": 0.92,
+      "scores": {
+        "home": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_pt": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_pt_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_en": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.6,
+          "empty": false
+        },
+        "search_en_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.4,
+          "empty": false
+        },
+        "agent": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "agent_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        }
+      }
+    },
+    {
+      "index": 4366,
+      "message": "Estou com vontade de comida indiana",
+      "planner": "groq_agent",
+      "fallback_reason": null,
+      "retried": false,
+      "tools": [
+        "search_catalog"
+      ],
+      "search": {
+        "query": "Indian",
+        "cuisine": null,
+        "min_price": null,
+        "max_price": null,
+        "price_level": null,
+        "limit": 50,
+        "ranking": "local_demand"
+      },
+      "attempts": 2,
+      "tokens": 1786,
+      "seconds": 1.74,
+      "scores": {
+        "home": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_pt": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_pt_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_en": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "search_en_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "agent": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "agent_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        }
+      }
+    },
+    {
+      "index": 4819,
+      "message": "Estou com vontade de arroz com frango",
+      "planner": "groq_agent",
+      "fallback_reason": null,
+      "retried": false,
+      "tools": [
+        "search_catalog"
+      ],
+      "search": {
+        "query": "chicken rice",
+        "cuisine": null,
+        "min_price": null,
+        "max_price": null,
+        "price_level": null,
+        "limit": 50,
+        "ranking": "local_demand"
+      },
+      "attempts": 2,
+      "tokens": 1840,
+      "seconds": 1.25,
+      "scores": {
+        "home": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_pt": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_pt_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.8,
+          "empty": false
+        },
+        "search_en": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_en_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.8,
+          "empty": false
+        },
+        "agent": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.4,
+          "empty": false
+        },
+        "agent_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.8,
+          "empty": false
+        }
+      }
+    },
+    {
+      "index": 5194,
+      "message": "Estou com vontade de hambúrguer, algo barato",
+      "planner": "groq_agent",
+      "fallback_reason": null,
+      "retried": false,
+      "tools": [
+        "search_catalog"
+      ],
+      "search": {
+        "query": "burger",
+        "cuisine": null,
+        "min_price": null,
+        "max_price": null,
+        "price_level": 1,
+        "limit": 50,
+        "ranking": "local_demand"
+      },
+      "attempts": 2,
+      "tokens": 1808,
+      "seconds": 0.88,
+      "scores": {
+        "home": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_pt": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_pt_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.4,
+          "empty": false
+        },
+        "search_en": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.8,
+          "empty": false
+        },
+        "search_en_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "agent": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "agent_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.4,
+          "empty": false
+        }
+      }
+    },
+    {
+      "index": 5521,
+      "message": "Estou com vontade de frutos do mar",
+      "planner": "groq_agent",
+      "fallback_reason": null,
+      "retried": false,
+      "tools": [
+        "search_catalog"
+      ],
+      "search": {
+        "query": "seafood",
+        "cuisine": null,
+        "min_price": null,
+        "max_price": null,
+        "price_level": null,
+        "limit": 50,
+        "ranking": "local_demand"
+      },
+      "attempts": 2,
+      "tokens": 1778,
+      "seconds": 1.04,
+      "scores": {
+        "home": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_pt": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_pt_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_en": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "search_en_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.8,
+          "empty": false
+        },
+        "agent": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.8,
+          "empty": false
+        },
+        "agent_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.8,
+          "empty": false
+        }
+      }
+    },
+    {
+      "index": 5672,
+      "message": "Estou com vontade de pizza",
+      "planner": "groq_agent",
+      "fallback_reason": null,
+      "retried": false,
+      "tools": [
+        "search_catalog"
+      ],
+      "search": {
+        "query": "pizza",
+        "cuisine": null,
+        "min_price": null,
+        "max_price": null,
+        "price_level": null,
+        "limit": 50,
+        "ranking": "local_demand"
+      },
+      "attempts": 2,
+      "tokens": 1808,
+      "seconds": 0.89,
+      "scores": {
+        "home": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_pt": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "search_pt_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "search_en": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "search_en_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "agent": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "agent_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        }
+      }
+    },
+    {
+      "index": 5878,
+      "message": "Estou com vontade de dim sum, algo barato",
+      "planner": "groq_agent",
+      "fallback_reason": null,
+      "retried": false,
+      "tools": [
+        "search_catalog"
+      ],
+      "search": {
+        "query": "dim sum",
+        "cuisine": null,
+        "min_price": null,
+        "max_price": null,
+        "price_level": 1,
+        "limit": 50,
+        "ranking": "local_demand"
+      },
+      "attempts": 2,
+      "tokens": 1813,
+      "seconds": 0.91,
+      "scores": {
+        "home": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_pt": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "search_pt_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "search_en": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "search_en_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "agent": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "agent_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        }
+      }
+    },
+    {
+      "index": 6840,
+      "message": "Estou com vontade de uma sobremesa, algo barato",
+      "planner": "groq_agent",
+      "fallback_reason": null,
+      "retried": false,
+      "tools": [
+        "search_catalog"
+      ],
+      "search": {
+        "query": "dessert",
+        "cuisine": null,
+        "min_price": null,
+        "max_price": null,
+        "price_level": 1,
+        "limit": 50,
+        "ranking": "local_demand"
+      },
+      "attempts": 2,
+      "tokens": 1834,
+      "seconds": 0.9,
+      "scores": {
+        "home": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_pt": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.8,
+          "empty": false
+        },
+        "search_pt_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.2,
+          "empty": false
+        },
+        "search_en": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.8,
+          "empty": false
+        },
+        "search_en_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.2,
+          "empty": false
+        },
+        "agent": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.8,
+          "empty": false
+        },
+        "agent_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.2,
+          "empty": false
+        }
+      }
+    },
+    {
+      "index": 7063,
+      "message": "Estou com vontade de uma sopa, algo barato",
+      "planner": "groq_agent",
+      "fallback_reason": null,
+      "retried": false,
+      "tools": [
+        "search_catalog"
+      ],
+      "search": {
+        "query": "soup",
+        "cuisine": null,
+        "min_price": null,
+        "max_price": null,
+        "price_level": 1,
+        "limit": 50,
+        "ranking": "local_demand"
+      },
+      "attempts": 2,
+      "tokens": 1820,
+      "seconds": 0.93,
+      "scores": {
+        "home": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_pt": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_pt_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.6,
+          "empty": false
+        },
+        "search_en": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_en_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.2,
+          "empty": false
+        },
+        "agent": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "agent_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.6,
+          "empty": false
+        }
+      }
+    },
+    {
+      "index": 7365,
+      "message": "Estou com vontade de comida chinesa",
+      "planner": "groq_agent",
+      "fallback_reason": null,
+      "retried": false,
+      "tools": [
+        "recommend_items"
+      ],
+      "search": null,
+      "attempts": 2,
+      "tokens": 1740,
+      "seconds": 1.09,
+      "scores": {
+        "home": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_pt": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_pt_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_en": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "search_en_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "agent": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "agent_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        }
+      }
+    },
+    {
+      "index": 7899,
+      "message": "Estou com vontade de comida indiana",
+      "planner": "groq_agent",
+      "fallback_reason": null,
+      "retried": false,
+      "tools": [
+        "search_catalog"
+      ],
+      "search": {
+        "query": "Indian",
+        "cuisine": null,
+        "min_price": null,
+        "max_price": null,
+        "price_level": null,
+        "limit": 50,
+        "ranking": "local_demand"
+      },
+      "attempts": 2,
+      "tokens": 1777,
+      "seconds": 1.26,
+      "scores": {
+        "home": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_pt": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_pt_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_en": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "search_en_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "agent": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "agent_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        }
+      }
+    },
+    {
+      "index": 8254,
+      "message": "Estou com vontade de comida ocidental",
+      "planner": "groq_agent",
+      "fallback_reason": null,
+      "retried": false,
+      "tools": [
+        "recommend_items"
+      ],
+      "search": null,
+      "attempts": 2,
+      "tokens": 1742,
+      "seconds": 1.04,
+      "scores": {
+        "home": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_pt": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_pt_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_en": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "search_en_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.2,
+          "empty": false
+        },
+        "agent": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "agent_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        }
+      }
+    },
+    {
+      "index": 8294,
+      "message": "Estou com vontade de sushi",
+      "planner": "groq_agent",
+      "fallback_reason": null,
+      "retried": false,
+      "tools": [
+        "search_catalog"
+      ],
+      "search": {
+        "query": "sushi",
+        "cuisine": null,
+        "min_price": null,
+        "max_price": null,
+        "price_level": null,
+        "limit": 50,
+        "ranking": "local_demand"
+      },
+      "attempts": 2,
+      "tokens": 1819,
+      "seconds": 0.97,
+      "scores": {
+        "home": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_pt": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.4,
+          "empty": false
+        },
+        "search_pt_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.6,
+          "empty": false
+        },
+        "search_en": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.4,
+          "empty": false
+        },
+        "search_en_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.6,
+          "empty": false
+        },
+        "agent": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.6,
+          "empty": false
+        },
+        "agent_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.6,
+          "empty": false
+        }
+      }
+    },
+    {
+      "index": 8982,
+      "message": "Estou com vontade de pho",
+      "planner": "groq_agent",
+      "fallback_reason": null,
+      "retried": false,
+      "tools": [
+        "search_catalog"
+      ],
+      "search": {
+        "query": "pho",
+        "cuisine": null,
+        "min_price": null,
+        "max_price": null,
+        "price_level": null,
+        "limit": 50,
+        "ranking": "local_demand"
+      },
+      "attempts": 2,
+      "tokens": 1779,
+      "seconds": 0.87,
+      "scores": {
+        "home": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_pt": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.6,
+          "empty": false
+        },
+        "search_pt_local": {
+          "restaurant_hit": true,
+          "item_hit": false,
+          "cuisine_match": 0.4,
+          "empty": false
+        },
+        "search_en": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.6,
+          "empty": false
+        },
+        "search_en_local": {
+          "restaurant_hit": true,
+          "item_hit": false,
+          "cuisine_match": 0.4,
+          "empty": false
+        },
+        "agent": {
+          "restaurant_hit": true,
+          "item_hit": false,
+          "cuisine_match": 0.4,
+          "empty": false
+        },
+        "agent_local": {
+          "restaurant_hit": true,
+          "item_hit": false,
+          "cuisine_match": 0.4,
+          "empty": false
+        }
+      }
+    },
+    {
+      "index": 9086,
+      "message": "Estou com vontade de arroz frito",
+      "planner": "groq_agent",
+      "fallback_reason": null,
+      "retried": false,
+      "tools": [
+        "search_catalog"
+      ],
+      "search": {
+        "query": "fried rice",
+        "cuisine": null,
+        "min_price": null,
+        "max_price": null,
+        "price_level": null,
+        "limit": 50,
+        "ranking": "local_demand"
+      },
+      "attempts": 2,
+      "tokens": 1817,
+      "seconds": 1.21,
+      "scores": {
+        "home": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_pt": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "search_pt_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_en": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "search_en_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "agent": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "agent_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        }
+      }
+    },
+    {
+      "index": 9346,
+      "message": "Estou com vontade de frango",
+      "planner": "groq_agent",
+      "fallback_reason": null,
+      "retried": false,
+      "tools": [
+        "search_catalog"
+      ],
+      "search": {
+        "query": "chicken",
+        "cuisine": null,
+        "min_price": null,
+        "max_price": null,
+        "price_level": null,
+        "limit": 50,
+        "ranking": "local_demand"
+      },
+      "attempts": 2,
+      "tokens": 1804,
+      "seconds": 1.24,
+      "scores": {
+        "home": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.2,
+          "empty": false
+        },
+        "search_pt": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "search_pt_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "search_en": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "search_en_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "agent": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "agent_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        }
+      }
+    },
+    {
+      "index": 9773,
+      "message": "Estou com vontade de mala xiang guo, algo barato",
+      "planner": "groq_agent",
+      "fallback_reason": null,
+      "retried": false,
+      "tools": [
+        "search_catalog"
+      ],
+      "search": {
+        "query": "mala xiang guo",
+        "cuisine": null,
+        "min_price": null,
+        "max_price": null,
+        "price_level": 1,
+        "limit": 50,
+        "ranking": "local_demand"
+      },
+      "attempts": 2,
+      "tokens": 1870,
+      "seconds": 1.66,
+      "scores": {
+        "home": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_pt": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.4,
+          "empty": false
+        },
+        "search_pt_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.6,
+          "empty": false
+        },
+        "search_en": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.4,
+          "empty": false
+        },
+        "search_en_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.6,
+          "empty": false
+        },
+        "agent": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.6,
+          "empty": false
+        },
+        "agent_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.6,
+          "empty": false
+        }
+      }
+    },
+    {
+      "index": 9828,
+      "message": "Estou com vontade de macarrão oriental",
+      "planner": "groq_agent",
+      "fallback_reason": null,
+      "retried": false,
+      "tools": [
+        "search_catalog"
+      ],
+      "search": {
+        "query": "noodles oriental",
+        "cuisine": null,
+        "min_price": null,
+        "max_price": null,
+        "price_level": null,
+        "limit": 50,
+        "ranking": "local_demand"
+      },
+      "attempts": 2,
+      "tokens": 2601,
+      "seconds": 0.92,
+      "scores": {
+        "home": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_pt": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "search_pt_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "search_en": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "search_en_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "agent": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "agent_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        }
+      }
+    },
+    {
+      "index": 10209,
+      "message": "Estou com vontade de um sanduíche",
+      "planner": "groq_agent",
+      "fallback_reason": null,
+      "retried": false,
+      "tools": [
+        "search_catalog"
+      ],
+      "search": {
+        "query": "sandwich",
+        "cuisine": null,
+        "min_price": null,
+        "max_price": null,
+        "price_level": null,
+        "limit": 50,
+        "ranking": "local_demand"
+      },
+      "attempts": 2,
+      "tokens": 1827,
+      "seconds": 1.39,
+      "scores": {
+        "home": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_pt": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.6,
+          "empty": false
+        },
+        "search_pt_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.2,
+          "empty": false
+        },
+        "search_en": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_en_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "agent": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.2,
+          "empty": false
+        },
+        "agent_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.2,
+          "empty": false
+        }
+      }
+    },
+    {
+      "index": 10449,
+      "message": "Estou com vontade de frango",
+      "planner": "groq_agent",
+      "fallback_reason": null,
+      "retried": false,
+      "tools": [
+        "search_catalog"
+      ],
+      "search": {
+        "query": "chicken",
+        "cuisine": null,
+        "min_price": null,
+        "max_price": null,
+        "price_level": null,
+        "limit": 50,
+        "ranking": "local_demand"
+      },
+      "attempts": 2,
+      "tokens": 1800,
+      "seconds": 1.22,
+      "scores": {
+        "home": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_pt": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "search_pt_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "search_en": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "search_en_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "agent": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "agent_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        }
+      }
+    },
+    {
+      "index": 11002,
+      "message": "Estou com vontade de uma sopa",
+      "planner": "groq_agent",
+      "fallback_reason": null,
+      "retried": false,
+      "tools": [
+        "search_catalog"
+      ],
+      "search": {
+        "query": "soup",
+        "cuisine": null,
+        "min_price": null,
+        "max_price": null,
+        "price_level": null,
+        "limit": 50,
+        "ranking": "local_demand"
+      },
+      "attempts": 2,
+      "tokens": 1796,
+      "seconds": 1.07,
+      "scores": {
+        "home": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_pt": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_pt_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.4,
+          "empty": false
+        },
+        "search_en": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_en_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "agent": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.4,
+          "empty": false
+        },
+        "agent_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.4,
+          "empty": false
+        }
+      }
+    },
+    {
+      "index": 11111,
+      "message": "Estou com vontade de macarrão oriental, algo barato",
+      "planner": "groq_agent",
+      "fallback_reason": null,
+      "retried": false,
+      "tools": [
+        "search_catalog",
+        "search_catalog"
+      ],
+      "search": {
+        "query": "noodles",
+        "cuisine": null,
+        "min_price": null,
+        "max_price": null,
+        "price_level": 1,
+        "limit": 50,
+        "ranking": "local_demand"
+      },
+      "attempts": 3,
+      "tokens": 2694,
+      "seconds": 1.59,
+      "scores": {
+        "home": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.2,
+          "empty": false
+        },
+        "search_pt": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_pt_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_en": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "search_en_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.8,
+          "empty": false
+        },
+        "agent": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.8,
+          "empty": false
+        },
+        "agent_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.8,
+          "empty": false
+        }
+      }
+    },
+    {
+      "index": 11873,
+      "message": "Estou com vontade de comida chinesa, algo barato",
+      "planner": "groq_agent",
+      "fallback_reason": null,
+      "retried": false,
+      "tools": [
+        "search_catalog"
+      ],
+      "search": {
+        "query": "Chinese",
+        "cuisine": null,
+        "min_price": null,
+        "max_price": null,
+        "price_level": 1,
+        "limit": 50,
+        "ranking": "local_demand"
+      },
+      "attempts": 2,
+      "tokens": 1806,
+      "seconds": 1.08,
+      "scores": {
+        "home": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_pt": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_pt_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_en": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "search_en_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "agent": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "agent_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        }
+      }
+    },
+    {
+      "index": 12510,
+      "message": "Estou com vontade de panqueca ou waffle",
+      "planner": "groq_agent",
+      "fallback_reason": null,
+      "retried": false,
+      "tools": [
+        "search_catalog",
+        "search_catalog"
+      ],
+      "search": {
+        "query": "pancake",
+        "cuisine": null,
+        "min_price": null,
+        "max_price": null,
+        "price_level": null,
+        "limit": 50,
+        "ranking": "local_demand"
+      },
+      "attempts": 3,
+      "tokens": 2633,
+      "seconds": 1.52,
+      "scores": {
+        "home": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_pt": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_pt_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_en": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.8,
+          "empty": false
+        },
+        "search_en_local": {
+          "restaurant_hit": true,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "agent": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "agent_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        }
+      }
+    },
+    {
+      "index": 12526,
+      "message": "Estou com vontade de hambúrguer",
+      "planner": "groq_agent",
+      "fallback_reason": null,
+      "retried": false,
+      "tools": [
+        "search_catalog"
+      ],
+      "search": {
+        "query": "burger",
+        "cuisine": null,
+        "min_price": null,
+        "max_price": null,
+        "price_level": null,
+        "limit": 50,
+        "ranking": "local_demand"
+      },
+      "attempts": 2,
+      "tokens": 1807,
+      "seconds": 0.88,
+      "scores": {
+        "home": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_pt": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.2,
+          "empty": false
+        },
+        "search_pt_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_en": {
+          "restaurant_hit": true,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "search_en_local": {
+          "restaurant_hit": true,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "agent": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "agent_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        }
+      }
+    },
+    {
+      "index": 13275,
+      "message": "Estou com vontade de comida ocidental, algo barato",
+      "planner": "groq_agent",
+      "fallback_reason": null,
+      "retried": false,
+      "tools": [
+        "search_catalog"
+      ],
+      "search": {
+        "query": "Western",
+        "cuisine": null,
+        "min_price": null,
+        "max_price": null,
+        "price_level": 1,
+        "limit": 50,
+        "ranking": "local_demand"
+      },
+      "attempts": 2,
+      "tokens": 1783,
+      "seconds": 1.24,
+      "scores": {
+        "home": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_pt": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_pt_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_en": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "search_en_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.6,
+          "empty": false
+        },
+        "agent": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.8,
+          "empty": false
+        },
+        "agent_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.6,
+          "empty": false
+        }
+      }
+    },
+    {
+      "index": 13569,
+      "message": "Estou com vontade de comida vietnamita",
+      "planner": "groq_agent",
+      "fallback_reason": null,
+      "retried": false,
+      "tools": [
+        "search_catalog"
+      ],
+      "search": {
+        "query": "vietnamese",
+        "cuisine": null,
+        "min_price": null,
+        "max_price": null,
+        "price_level": null,
+        "limit": 50,
+        "ranking": "local_demand"
+      },
+      "attempts": 2,
+      "tokens": 1796,
+      "seconds": 0.95,
+      "scores": {
+        "home": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_pt": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_pt_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_en": {
+          "restaurant_hit": true,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "search_en_local": {
+          "restaurant_hit": true,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "agent": {
+          "restaurant_hit": true,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "agent_local": {
+          "restaurant_hit": true,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        }
+      }
+    },
+    {
+      "index": 13926,
+      "message": "Estou com vontade de comida japonesa",
+      "planner": "groq_agent",
+      "fallback_reason": null,
+      "retried": false,
+      "tools": [
+        "search_catalog"
+      ],
+      "search": {
+        "query": "Japanese",
+        "cuisine": null,
+        "min_price": null,
+        "max_price": null,
+        "price_level": null,
+        "limit": 50,
+        "ranking": "local_demand"
+      },
+      "attempts": 2,
+      "tokens": 1776,
+      "seconds": 1.97,
+      "scores": {
+        "home": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_pt": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_pt_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_en": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "search_en_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "agent": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "agent_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        }
+      }
+    },
+    {
+      "index": 13949,
+      "message": "Estou com vontade de ayam penyet",
+      "planner": "groq_agent",
+      "fallback_reason": null,
+      "retried": false,
+      "tools": [
+        "search_catalog"
+      ],
+      "search": {
+        "query": "ayam penyet",
+        "cuisine": null,
+        "min_price": null,
+        "max_price": null,
+        "price_level": null,
+        "limit": 50,
+        "ranking": "local_demand"
+      },
+      "attempts": 2,
+      "tokens": 1795,
+      "seconds": 1.16,
+      "scores": {
+        "home": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_pt": {
+          "restaurant_hit": true,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "search_pt_local": {
+          "restaurant_hit": true,
+          "item_hit": false,
+          "cuisine_match": 0.2,
+          "empty": false
+        },
+        "search_en": {
+          "restaurant_hit": true,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "search_en_local": {
+          "restaurant_hit": true,
+          "item_hit": false,
+          "cuisine_match": 0.2,
+          "empty": false
+        },
+        "agent": {
+          "restaurant_hit": true,
+          "item_hit": false,
+          "cuisine_match": 0.6,
+          "empty": false
+        },
+        "agent_local": {
+          "restaurant_hit": true,
+          "item_hit": false,
+          "cuisine_match": 0.2,
+          "empty": false
+        }
+      }
+    },
+    {
+      "index": 14026,
+      "message": "Estou com vontade de comida de Singapura",
+      "planner": "groq_agent",
+      "fallback_reason": null,
+      "retried": false,
+      "tools": [
+        "recommend_items"
+      ],
+      "search": null,
+      "attempts": 2,
+      "tokens": 1741,
+      "seconds": 1.56,
+      "scores": {
+        "home": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_pt": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_pt_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_en": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.6,
+          "empty": false
+        },
+        "search_en_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "agent": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "agent_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        }
+      }
+    },
+    {
+      "index": 14247,
+      "message": "Estou com vontade de um sanduíche",
+      "planner": "groq_agent",
+      "fallback_reason": null,
+      "retried": false,
+      "tools": [
+        "search_catalog"
+      ],
+      "search": {
+        "query": "sandwich",
+        "cuisine": null,
+        "min_price": null,
+        "max_price": null,
+        "price_level": null,
+        "limit": 50,
+        "ranking": "local_demand"
+      },
+      "attempts": 2,
+      "tokens": 1842,
+      "seconds": 1.0,
+      "scores": {
+        "home": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_pt": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.6,
+          "empty": false
+        },
+        "search_pt_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.6,
+          "empty": false
+        },
+        "search_en": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_en_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "agent": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.6,
+          "empty": false
+        },
+        "agent_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.6,
+          "empty": false
+        }
+      }
+    },
+    {
+      "index": 14420,
+      "message": "Estou com vontade de uma sopa, algo barato",
+      "planner": "groq_agent",
+      "fallback_reason": null,
+      "retried": false,
+      "tools": [
+        "search_catalog"
+      ],
+      "search": {
+        "query": "soup",
+        "cuisine": null,
+        "min_price": null,
+        "max_price": null,
+        "price_level": 1,
+        "limit": 50,
+        "ranking": "local_demand"
+      },
+      "attempts": 2,
+      "tokens": 1854,
+      "seconds": 1.09,
+      "scores": {
+        "home": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.2,
+          "empty": false
+        },
+        "search_pt": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_pt_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "search_en": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_en_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "agent": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.8,
+          "empty": false
+        },
+        "agent_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        }
+      }
+    },
+    {
+      "index": 14741,
+      "message": "Estou com vontade de um sanduíche",
+      "planner": "groq_agent",
+      "fallback_reason": null,
+      "retried": false,
+      "tools": [
+        "search_catalog"
+      ],
+      "search": {
+        "query": "sandwich",
+        "cuisine": null,
+        "min_price": null,
+        "max_price": null,
+        "price_level": null,
+        "limit": 50,
+        "ranking": "local_demand"
+      },
+      "attempts": 2,
+      "tokens": 1845,
+      "seconds": 1.12,
+      "scores": {
+        "home": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_pt": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.6,
+          "empty": false
+        },
+        "search_pt_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.6,
+          "empty": false
+        },
+        "search_en": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_en_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "agent": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.8,
+          "empty": false
+        },
+        "agent_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.6,
+          "empty": false
+        }
+      }
+    },
+    {
+      "index": 16201,
+      "message": "Estou com vontade de comida de Singapura",
+      "planner": "groq_agent",
+      "fallback_reason": null,
+      "retried": false,
+      "tools": [
+        "recommend_items"
+      ],
+      "search": null,
+      "attempts": 2,
+      "tokens": 1755,
+      "seconds": 1.34,
+      "scores": {
+        "home": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_pt": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_pt_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_en": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.6,
+          "empty": false
+        },
+        "search_en_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.4,
+          "empty": false
+        },
+        "agent": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "agent_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        }
+      }
+    },
+    {
+      "index": 16320,
+      "message": "Estou com vontade de frutos do mar",
+      "planner": "groq_agent",
+      "fallback_reason": null,
+      "retried": false,
+      "tools": [
+        "search_catalog"
+      ],
+      "search": {
+        "query": "seafood",
+        "cuisine": null,
+        "min_price": null,
+        "max_price": null,
+        "price_level": null,
+        "limit": 50,
+        "ranking": "local_demand"
+      },
+      "attempts": 2,
+      "tokens": 1775,
+      "seconds": 1.92,
+      "scores": {
+        "home": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_pt": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_pt_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_en": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "search_en_local": {
+          "restaurant_hit": true,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "agent": {
+          "restaurant_hit": true,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "agent_local": {
+          "restaurant_hit": true,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        }
+      }
+    },
+    {
+      "index": 16322,
+      "message": "Estou com vontade de macarrão oriental",
+      "planner": "groq_agent",
+      "fallback_reason": null,
+      "retried": false,
+      "tools": [
+        "search_catalog"
+      ],
+      "search": {
+        "query": "noodles oriental",
+        "cuisine": null,
+        "min_price": null,
+        "max_price": null,
+        "price_level": null,
+        "limit": 50,
+        "ranking": "local_demand"
+      },
+      "attempts": 2,
+      "tokens": 1833,
+      "seconds": 1.03,
+      "scores": {
+        "home": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_pt": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "search_pt_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "search_en": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "search_en_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "agent": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "agent_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        }
+      }
+    },
+    {
+      "index": 17104,
+      "message": "Estou com vontade de comida de Singapura",
+      "planner": "groq_agent",
+      "fallback_reason": null,
+      "retried": false,
+      "tools": [
+        "recommend_items"
+      ],
+      "search": null,
+      "attempts": 2,
+      "tokens": 1759,
+      "seconds": 1.49,
+      "scores": {
+        "home": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_pt": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_pt_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_en": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.6,
+          "empty": false
+        },
+        "search_en_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.2,
+          "empty": false
+        },
+        "agent": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "agent_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        }
+      }
+    },
+    {
+      "index": 17109,
+      "message": "Estou com vontade de massa",
+      "planner": "groq_agent",
+      "fallback_reason": null,
+      "retried": false,
+      "tools": [
+        "search_catalog"
+      ],
+      "search": {
+        "query": "pasta",
+        "cuisine": null,
+        "min_price": null,
+        "max_price": null,
+        "price_level": null,
+        "limit": 50,
+        "ranking": "local_demand"
+      },
+      "attempts": 2,
+      "tokens": 1811,
+      "seconds": 1.19,
+      "scores": {
+        "home": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_pt": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "search_pt_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "search_en": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "search_en_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "agent": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "agent_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        }
+      }
+    },
+    {
+      "index": 17157,
+      "message": "Estou com vontade de comida ocidental",
+      "planner": "groq_agent",
+      "fallback_reason": null,
+      "retried": false,
+      "tools": [
+        "recommend_items"
+      ],
+      "search": null,
+      "attempts": 2,
+      "tokens": 1759,
+      "seconds": 0.77,
+      "scores": {
+        "home": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_pt": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_pt_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_en": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "search_en_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "agent": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "agent_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        }
+      }
+    },
+    {
+      "index": 17396,
+      "message": "Estou com vontade de comida chinesa",
+      "planner": "groq_agent",
+      "fallback_reason": null,
+      "retried": false,
+      "tools": [
+        "recommend_items"
+      ],
+      "search": null,
+      "attempts": 2,
+      "tokens": 1778,
+      "seconds": 1.0,
+      "scores": {
+        "home": {
+          "restaurant_hit": true,
+          "item_hit": false,
+          "cuisine_match": 0.2,
+          "empty": false
+        },
+        "search_pt": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_pt_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_en": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "search_en_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "agent": {
+          "restaurant_hit": true,
+          "item_hit": false,
+          "cuisine_match": 0.2,
+          "empty": false
+        },
+        "agent_local": {
+          "restaurant_hit": true,
+          "item_hit": false,
+          "cuisine_match": 0.2,
+          "empty": false
+        }
+      }
+    },
+    {
+      "index": 17536,
+      "message": "Estou com vontade de comida ocidental",
+      "planner": "groq_agent",
+      "fallback_reason": null,
+      "retried": false,
+      "tools": [
+        "recommend_items"
+      ],
+      "search": null,
+      "attempts": 2,
+      "tokens": 1747,
+      "seconds": 1.18,
+      "scores": {
+        "home": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_pt": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_pt_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_en": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "search_en_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.6,
+          "empty": false
+        },
+        "agent": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "agent_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        }
+      }
+    },
+    {
+      "index": 17957,
+      "message": "Estou com vontade de comida coreana",
+      "planner": "groq_agent",
+      "fallback_reason": null,
+      "retried": false,
+      "tools": [
+        "search_catalog"
+      ],
+      "search": {
+        "query": "Korean",
+        "cuisine": null,
+        "min_price": null,
+        "max_price": null,
+        "price_level": null,
+        "limit": 50,
+        "ranking": "local_demand"
+      },
+      "attempts": 2,
+      "tokens": 1794,
+      "seconds": 1.47,
+      "scores": {
+        "home": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_pt": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_pt_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_en": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "search_en_local": {
+          "restaurant_hit": true,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "agent": {
+          "restaurant_hit": true,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "agent_local": {
+          "restaurant_hit": true,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        }
+      }
+    },
+    {
+      "index": 18239,
+      "message": "Estou com vontade de sopa de peixe",
+      "planner": "groq_agent",
+      "fallback_reason": null,
+      "retried": false,
+      "tools": [
+        "search_catalog"
+      ],
+      "search": {
+        "query": "fish soup",
+        "cuisine": null,
+        "min_price": null,
+        "max_price": null,
+        "price_level": null,
+        "limit": 50,
+        "ranking": "local_demand"
+      },
+      "attempts": 2,
+      "tokens": 1886,
+      "seconds": 1.18,
+      "scores": {
+        "home": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_pt": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_pt_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_en": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_en_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "agent": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "agent_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        }
+      }
+    },
+    {
+      "index": 18322,
+      "message": "Estou com vontade de comida indiana",
+      "planner": "groq_agent",
+      "fallback_reason": null,
+      "retried": false,
+      "tools": [
+        "search_catalog"
+      ],
+      "search": {
+        "query": "Indian",
+        "cuisine": null,
+        "min_price": null,
+        "max_price": null,
+        "price_level": null,
+        "limit": 50,
+        "ranking": "local_demand"
+      },
+      "attempts": 2,
+      "tokens": 1776,
+      "seconds": 2.74,
+      "scores": {
+        "home": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_pt": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_pt_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_en": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "search_en_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "agent": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "agent_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        }
+      }
+    },
+    {
+      "index": 18504,
+      "message": "Estou com vontade de ayam penyet",
+      "planner": "groq_agent",
+      "fallback_reason": null,
+      "retried": false,
+      "tools": [
+        "search_catalog"
+      ],
+      "search": {
+        "query": "ayam penyet",
+        "cuisine": null,
+        "min_price": null,
+        "max_price": null,
+        "price_level": null,
+        "limit": 50,
+        "ranking": "local_demand"
+      },
+      "attempts": 2,
+      "tokens": 1797,
+      "seconds": 1.89,
+      "scores": {
+        "home": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.2,
+          "empty": false
+        },
+        "search_pt": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "search_pt_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.2,
+          "empty": false
+        },
+        "search_en": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "search_en_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.2,
+          "empty": false
+        },
+        "agent": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.2,
+          "empty": false
+        },
+        "agent_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.2,
+          "empty": false
+        }
+      }
+    },
+    {
+      "index": 18657,
+      "message": "Estou com vontade de dim sum",
+      "planner": "groq_agent",
+      "fallback_reason": null,
+      "retried": false,
+      "tools": [
+        "search_catalog"
+      ],
+      "search": {
+        "query": "dim sum",
+        "cuisine": null,
+        "min_price": null,
+        "max_price": null,
+        "price_level": null,
+        "limit": 50,
+        "ranking": "local_demand"
+      },
+      "attempts": 2,
+      "tokens": 1799,
+      "seconds": 0.99,
+      "scores": {
+        "home": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_pt": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "search_pt_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "search_en": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "search_en_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "agent": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "agent_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        }
+      }
+    },
+    {
+      "index": 18686,
+      "message": "Estou com vontade de frango",
+      "planner": "groq_agent",
+      "fallback_reason": null,
+      "retried": false,
+      "tools": [
+        "search_catalog"
+      ],
+      "search": {
+        "query": "chicken",
+        "cuisine": null,
+        "min_price": null,
+        "max_price": null,
+        "price_level": null,
+        "limit": 50,
+        "ranking": "local_demand"
+      },
+      "attempts": 2,
+      "tokens": 1819,
+      "seconds": 1.48,
+      "scores": {
+        "home": {
+          "restaurant_hit": true,
+          "item_hit": true,
+          "cuisine_match": 0.2,
+          "empty": false
+        },
+        "search_pt": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "search_pt_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "search_en": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "search_en_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "agent": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "agent_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        }
+      }
+    },
+    {
+      "index": 18725,
+      "message": "Estou com vontade de comida indiana",
+      "planner": "groq_agent",
+      "fallback_reason": null,
+      "retried": false,
+      "tools": [
+        "search_catalog"
+      ],
+      "search": {
+        "query": "Indian",
+        "cuisine": null,
+        "min_price": null,
+        "max_price": null,
+        "price_level": null,
+        "limit": 50,
+        "ranking": "local_demand"
+      },
+      "attempts": 2,
+      "tokens": 1774,
+      "seconds": 0.88,
+      "scores": {
+        "home": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_pt": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_pt_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_en": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "search_en_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "agent": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "agent_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        }
+      }
+    },
+    {
+      "index": 18871,
+      "message": "Estou com vontade de donut, algo barato",
+      "planner": "groq_agent",
+      "fallback_reason": null,
+      "retried": false,
+      "tools": [
+        "search_catalog"
+      ],
+      "search": {
+        "query": "donut",
+        "cuisine": null,
+        "min_price": null,
+        "max_price": null,
+        "price_level": 1,
+        "limit": 50,
+        "ranking": "local_demand"
+      },
+      "attempts": 2,
+      "tokens": 1787,
+      "seconds": 0.97,
+      "scores": {
+        "home": {
+          "restaurant_hit": true,
+          "item_hit": true,
+          "cuisine_match": 0.2,
+          "empty": false
+        },
+        "search_pt": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_pt_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_en": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_en_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "agent": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "agent_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        }
+      }
+    },
+    {
+      "index": 18895,
+      "message": "Estou com vontade de açaí",
+      "planner": "groq_agent",
+      "fallback_reason": null,
+      "retried": false,
+      "tools": [
+        "search_catalog"
+      ],
+      "search": {
+        "query": "acai",
+        "cuisine": null,
+        "min_price": null,
+        "max_price": null,
+        "price_level": null,
+        "limit": 50,
+        "ranking": "local_demand"
+      },
+      "attempts": 2,
+      "tokens": 1779,
+      "seconds": 1.2,
+      "scores": {
+        "home": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_pt": {
+          "restaurant_hit": true,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "search_pt_local": {
+          "restaurant_hit": true,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "search_en": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_en_local": {
+          "restaurant_hit": true,
+          "item_hit": false,
+          "cuisine_match": 0.6,
+          "empty": false
+        },
+        "agent": {
+          "restaurant_hit": true,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "agent_local": {
+          "restaurant_hit": true,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        }
+      }
+    },
+    {
+      "index": 19604,
+      "message": "Estou com vontade de pho",
+      "planner": "groq_agent",
+      "fallback_reason": null,
+      "retried": false,
+      "tools": [
+        "search_catalog"
+      ],
+      "search": {
+        "query": "pho",
+        "cuisine": null,
+        "min_price": null,
+        "max_price": null,
+        "price_level": null,
+        "limit": 50,
+        "ranking": "local_demand"
+      },
+      "attempts": 2,
+      "tokens": 1775,
+      "seconds": 1.17,
+      "scores": {
+        "home": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_pt": {
+          "restaurant_hit": true,
+          "item_hit": true,
+          "cuisine_match": 0.6,
+          "empty": false
+        },
+        "search_pt_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.6,
+          "empty": false
+        },
+        "search_en": {
+          "restaurant_hit": true,
+          "item_hit": true,
+          "cuisine_match": 0.6,
+          "empty": false
+        },
+        "search_en_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.6,
+          "empty": false
+        },
+        "agent": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.6,
+          "empty": false
+        },
+        "agent_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.6,
+          "empty": false
+        }
+      }
+    },
+    {
+      "index": 19882,
+      "message": "Estou com vontade de hambúrguer, algo barato",
+      "planner": "groq_agent",
+      "fallback_reason": null,
+      "retried": false,
+      "tools": [
+        "search_catalog"
+      ],
+      "search": {
+        "query": "burger",
+        "cuisine": null,
+        "min_price": null,
+        "max_price": null,
+        "price_level": 1,
+        "limit": 50,
+        "ranking": "local_demand"
+      },
+      "attempts": 2,
+      "tokens": 1810,
+      "seconds": 0.83,
+      "scores": {
+        "home": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_pt": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_pt_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_en": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.8,
+          "empty": false
+        },
+        "search_en_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.8,
+          "empty": false
+        },
+        "agent": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "agent_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        }
+      }
+    },
+    {
+      "index": 20301,
+      "message": "Estou com vontade de comida ocidental",
+      "planner": "groq_agent",
+      "fallback_reason": null,
+      "retried": false,
+      "tools": [
+        "recommend_items"
+      ],
+      "search": null,
+      "attempts": 2,
+      "tokens": 1751,
+      "seconds": 1.39,
+      "scores": {
+        "home": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_pt": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_pt_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_en": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "search_en_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.4,
+          "empty": false
+        },
+        "agent": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "agent_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        }
+      }
+    },
+    {
+      "index": 21152,
+      "message": "Estou com vontade de comida malaia, algo barato",
+      "planner": "groq_agent",
+      "fallback_reason": null,
+      "retried": false,
+      "tools": [
+        "search_catalog"
+      ],
+      "search": {
+        "query": "Malay",
+        "cuisine": null,
+        "min_price": null,
+        "max_price": null,
+        "price_level": 1,
+        "limit": 50,
+        "ranking": "local_demand"
+      },
+      "attempts": 2,
+      "tokens": 1816,
+      "seconds": 1.56,
+      "scores": {
+        "home": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_pt": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_pt_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_en": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.6,
+          "empty": false
+        },
+        "search_en_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.6,
+          "empty": false
+        },
+        "agent": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.4,
+          "empty": false
+        },
+        "agent_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.4,
+          "empty": false
+        }
+      }
+    },
+    {
+      "index": 21194,
+      "message": "Estou com vontade de comida chinesa",
+      "planner": "groq_agent",
+      "fallback_reason": null,
+      "retried": false,
+      "tools": [
+        "recommend_items"
+      ],
+      "search": null,
+      "attempts": 2,
+      "tokens": 1747,
+      "seconds": 2.14,
+      "scores": {
+        "home": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_pt": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_pt_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_en": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "search_en_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "agent": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "agent_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        }
+      }
+    },
+    {
+      "index": 21365,
+      "message": "Estou com vontade de macarrão oriental",
+      "planner": "groq_agent",
+      "fallback_reason": null,
+      "retried": false,
+      "tools": [
+        "search_catalog"
+      ],
+      "search": {
+        "query": "noodles",
+        "cuisine": null,
+        "min_price": null,
+        "max_price": null,
+        "price_level": null,
+        "limit": 50,
+        "ranking": "local_demand"
+      },
+      "attempts": 2,
+      "tokens": 1833,
+      "seconds": 1.08,
+      "scores": {
+        "home": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.2,
+          "empty": false
+        },
+        "search_pt": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "search_pt_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "search_en": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "search_en_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "agent": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "agent_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        }
+      }
+    },
+    {
+      "index": 21691,
+      "message": "Estou com vontade de comida indiana",
+      "planner": "groq_agent",
+      "fallback_reason": null,
+      "retried": false,
+      "tools": [
+        "search_catalog"
+      ],
+      "search": {
+        "query": "Indian",
+        "cuisine": null,
+        "min_price": null,
+        "max_price": null,
+        "price_level": null,
+        "limit": 50,
+        "ranking": "local_demand"
+      },
+      "attempts": 2,
+      "tokens": 1775,
+      "seconds": 2.08,
+      "scores": {
+        "home": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_pt": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_pt_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_en": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "search_en_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "agent": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "agent_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        }
+      }
+    },
+    {
+      "index": 21983,
+      "message": "Estou com vontade de comida japonesa, algo barato",
+      "planner": "groq_agent",
+      "fallback_reason": null,
+      "retried": false,
+      "tools": [
+        "search_catalog"
+      ],
+      "search": {
+        "query": "Japanese",
+        "cuisine": null,
+        "min_price": null,
+        "max_price": null,
+        "price_level": 1,
+        "limit": 50,
+        "ranking": "local_demand"
+      },
+      "attempts": 2,
+      "tokens": 1781,
+      "seconds": 1.22,
+      "scores": {
+        "home": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_pt": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_pt_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_en": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "search_en_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "agent": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "agent_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        }
+      }
+    },
+    {
+      "index": 21991,
+      "message": "Estou com vontade de comida tailandesa",
+      "planner": "groq_agent",
+      "fallback_reason": null,
+      "retried": false,
+      "tools": [
+        "recommend_items"
+      ],
+      "search": null,
+      "attempts": 2,
+      "tokens": 1740,
+      "seconds": 0.96,
+      "scores": {
+        "home": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_pt": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_pt_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_en": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.8,
+          "empty": false
+        },
+        "search_en_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "agent": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "agent_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        }
+      }
+    },
+    {
+      "index": 22475,
+      "message": "Estou com vontade de bolo",
+      "planner": "groq_agent",
+      "fallback_reason": null,
+      "retried": false,
+      "tools": [
+        "search_catalog"
+      ],
+      "search": {
+        "query": "cake",
+        "cuisine": null,
+        "min_price": null,
+        "max_price": null,
+        "price_level": null,
+        "limit": 50,
+        "ranking": "local_demand"
+      },
+      "attempts": 2,
+      "tokens": 1787,
+      "seconds": 1.07,
+      "scores": {
+        "home": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_pt": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_pt_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_en": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.6,
+          "empty": false
+        },
+        "search_en_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.6,
+          "empty": false
+        },
+        "agent": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.6,
+          "empty": false
+        },
+        "agent_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.6,
+          "empty": false
+        }
+      }
+    },
+    {
+      "index": 22522,
+      "message": "Estou com vontade de algo saudável",
+      "planner": "groq_agent",
+      "fallback_reason": null,
+      "retried": false,
+      "tools": [
+        "recommend_items"
+      ],
+      "search": null,
+      "attempts": 2,
+      "tokens": 1731,
+      "seconds": 1.02,
+      "scores": {
+        "home": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_pt": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_pt_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_en": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.2,
+          "empty": false
+        },
+        "search_en_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.2,
+          "empty": false
+        },
+        "agent": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "agent_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        }
+      }
+    },
+    {
+      "index": 22677,
+      "message": "Estou com vontade de frutos do mar",
+      "planner": "groq_agent",
+      "fallback_reason": null,
+      "retried": false,
+      "tools": [
+        "search_catalog"
+      ],
+      "search": {
+        "query": "seafood",
+        "cuisine": null,
+        "min_price": null,
+        "max_price": null,
+        "price_level": null,
+        "limit": 50,
+        "ranking": "local_demand"
+      },
+      "attempts": 2,
+      "tokens": 1772,
+      "seconds": 1.53,
+      "scores": {
+        "home": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_pt": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_pt_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_en": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "search_en_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "agent": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "agent_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        }
+      }
+    },
+    {
+      "index": 22824,
+      "message": "Estou com vontade de nasi lemak",
+      "planner": "groq_agent",
+      "fallback_reason": null,
+      "retried": false,
+      "tools": [
+        "search_catalog"
+      ],
+      "search": {
+        "query": "nasi lemak",
+        "cuisine": null,
+        "min_price": null,
+        "max_price": null,
+        "price_level": null,
+        "limit": 50,
+        "ranking": "local_demand"
+      },
+      "attempts": 2,
+      "tokens": 1802,
+      "seconds": 0.95,
+      "scores": {
+        "home": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_pt": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.4,
+          "empty": false
+        },
+        "search_pt_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.4,
+          "empty": false
+        },
+        "search_en": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.4,
+          "empty": false
+        },
+        "search_en_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.4,
+          "empty": false
+        },
+        "agent": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.4,
+          "empty": false
+        },
+        "agent_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.4,
+          "empty": false
+        }
+      }
+    },
+    {
+      "index": 22908,
+      "message": "Estou com vontade de sushi",
+      "planner": "groq_agent",
+      "fallback_reason": null,
+      "retried": false,
+      "tools": [
+        "search_catalog"
+      ],
+      "search": {
+        "query": "sushi",
+        "cuisine": null,
+        "min_price": null,
+        "max_price": null,
+        "price_level": null,
+        "limit": 50,
+        "ranking": "local_demand"
+      },
+      "attempts": 2,
+      "tokens": 1835,
+      "seconds": 1.5,
+      "scores": {
+        "home": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_pt": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.4,
+          "empty": false
+        },
+        "search_pt_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "search_en": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.4,
+          "empty": false
+        },
+        "search_en_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "agent": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.4,
+          "empty": false
+        },
+        "agent_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        }
+      }
+    },
+    {
+      "index": 23095,
+      "message": "Estou com vontade de comida indiana",
+      "planner": "groq_agent",
+      "fallback_reason": null,
+      "retried": false,
+      "tools": [
+        "search_catalog"
+      ],
+      "search": {
+        "query": "Indian",
+        "cuisine": null,
+        "min_price": null,
+        "max_price": null,
+        "price_level": null,
+        "limit": 50,
+        "ranking": "local_demand"
+      },
+      "attempts": 2,
+      "tokens": 1779,
+      "seconds": 0.89,
+      "scores": {
+        "home": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_pt": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_pt_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_en": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "search_en_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "agent": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "agent_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        }
+      }
+    },
+    {
+      "index": 23500,
+      "message": "Estou com vontade de comida chinesa, algo barato",
+      "planner": "groq_agent",
+      "fallback_reason": null,
+      "retried": false,
+      "tools": [
+        "search_catalog"
+      ],
+      "search": {
+        "query": "Chinese",
+        "cuisine": null,
+        "min_price": null,
+        "max_price": null,
+        "price_level": 1,
+        "limit": 50,
+        "ranking": "local_demand"
+      },
+      "attempts": 2,
+      "tokens": 1791,
+      "seconds": 1.09,
+      "scores": {
+        "home": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_pt": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_pt_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_en": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "search_en_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "agent": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "agent_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        }
+      }
+    },
+    {
+      "index": 23638,
+      "message": "Estou com vontade de frango",
+      "planner": "groq_agent",
+      "fallback_reason": null,
+      "retried": false,
+      "tools": [
+        "search_catalog"
+      ],
+      "search": {
+        "query": "chicken",
+        "cuisine": null,
+        "min_price": null,
+        "max_price": null,
+        "price_level": null,
+        "limit": 50,
+        "ranking": "local_demand"
+      },
+      "attempts": 2,
+      "tokens": 1830,
+      "seconds": 1.45,
+      "scores": {
+        "home": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.4,
+          "empty": false
+        },
+        "search_pt": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "search_pt_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "search_en": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "search_en_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "agent": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "agent_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        }
+      }
+    },
+    {
+      "index": 24262,
+      "message": "Estou com vontade de mala xiang guo",
+      "planner": "groq_agent",
+      "fallback_reason": null,
+      "retried": false,
+      "tools": [
+        "search_catalog"
+      ],
+      "search": {
+        "query": "mala xiang guo",
+        "cuisine": null,
+        "min_price": null,
+        "max_price": null,
+        "price_level": null,
+        "limit": 50,
+        "ranking": "local_demand"
+      },
+      "attempts": 2,
+      "tokens": 1854,
+      "seconds": 0.83,
+      "scores": {
+        "home": {
+          "restaurant_hit": true,
+          "item_hit": false,
+          "cuisine_match": 0.4,
+          "empty": false
+        },
+        "search_pt": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.8,
+          "empty": false
+        },
+        "search_pt_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.6,
+          "empty": false
+        },
+        "search_en": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.8,
+          "empty": false
+        },
+        "search_en_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.6,
+          "empty": false
+        },
+        "agent": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.6,
+          "empty": false
+        },
+        "agent_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.6,
+          "empty": false
+        }
+      }
+    },
+    {
+      "index": 24373,
+      "message": "Estou com vontade de comida japonesa",
+      "planner": "groq_agent",
+      "fallback_reason": null,
+      "retried": false,
+      "tools": [
+        "search_catalog"
+      ],
+      "search": {
+        "query": "Japanese",
+        "cuisine": null,
+        "min_price": null,
+        "max_price": null,
+        "price_level": null,
+        "limit": 50,
+        "ranking": "local_demand"
+      },
+      "attempts": 2,
+      "tokens": 1775,
+      "seconds": 1.17,
+      "scores": {
+        "home": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_pt": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_pt_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_en": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "search_en_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "agent": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "agent_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        }
+      }
+    },
+    {
+      "index": 25074,
+      "message": "Estou com vontade de comida coreana, algo barato",
+      "planner": "groq_agent",
+      "fallback_reason": null,
+      "retried": false,
+      "tools": [
+        "search_catalog"
+      ],
+      "search": {
+        "query": "Korean",
+        "cuisine": null,
+        "min_price": null,
+        "max_price": null,
+        "price_level": 1,
+        "limit": 50,
+        "ranking": "local_demand"
+      },
+      "attempts": 2,
+      "tokens": 1797,
+      "seconds": 1.48,
+      "scores": {
+        "home": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_pt": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_pt_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_en": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "search_en_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "agent": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "agent_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        }
+      }
+    },
+    {
+      "index": 25209,
+      "message": "Estou com vontade de comida chinesa",
+      "planner": "groq_agent",
+      "fallback_reason": null,
+      "retried": false,
+      "tools": [
+        "recommend_items"
+      ],
+      "search": null,
+      "attempts": 2,
+      "tokens": 1738,
+      "seconds": 2.99,
+      "scores": {
+        "home": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_pt": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_pt_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_en": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "search_en_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "agent": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "agent_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        }
+      }
+    },
+    {
+      "index": 25408,
+      "message": "Estou com vontade de comida ocidental",
+      "planner": "groq_agent",
+      "fallback_reason": null,
+      "retried": false,
+      "tools": [
+        "recommend_items"
+      ],
+      "search": null,
+      "attempts": 2,
+      "tokens": 1759,
+      "seconds": 0.93,
+      "scores": {
+        "home": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_pt": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_pt_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_en": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "search_en_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "agent": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "agent_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        }
+      }
+    },
+    {
+      "index": 25688,
+      "message": "Estou com vontade de comida indiana",
+      "planner": "groq_agent",
+      "fallback_reason": null,
+      "retried": false,
+      "tools": [
+        "search_catalog"
+      ],
+      "search": {
+        "query": "Indian",
+        "cuisine": null,
+        "min_price": null,
+        "max_price": null,
+        "price_level": null,
+        "limit": 50,
+        "ranking": "local_demand"
+      },
+      "attempts": 2,
+      "tokens": 1776,
+      "seconds": 2.35,
+      "scores": {
+        "home": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_pt": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_pt_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_en": {
+          "restaurant_hit": true,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "search_en_local": {
+          "restaurant_hit": true,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "agent": {
+          "restaurant_hit": true,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "agent_local": {
+          "restaurant_hit": true,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        }
+      }
+    },
+    {
+      "index": 26005,
+      "message": "Estou com vontade de comida de Singapura",
+      "planner": "groq_agent",
+      "fallback_reason": null,
+      "retried": false,
+      "tools": [
+        "recommend_items"
+      ],
+      "search": null,
+      "attempts": 2,
+      "tokens": 1757,
+      "seconds": 0.85,
+      "scores": {
+        "home": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_pt": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_pt_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_en": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.6,
+          "empty": false
+        },
+        "search_en_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.2,
+          "empty": false
+        },
+        "agent": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "agent_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        }
+      }
+    },
+    {
+      "index": 26383,
+      "message": "Estou com vontade de comida de Singapura",
+      "planner": "groq_agent",
+      "fallback_reason": null,
+      "retried": false,
+      "tools": [
+        "recommend_items"
+      ],
+      "search": null,
+      "attempts": 2,
+      "tokens": 1753,
+      "seconds": 0.95,
+      "scores": {
+        "home": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_pt": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_pt_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_en": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.6,
+          "empty": false
+        },
+        "search_en_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.6,
+          "empty": false
+        },
+        "agent": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "agent_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        }
+      }
+    },
+    {
+      "index": 26473,
+      "message": "Estou com vontade de bubble tea",
+      "planner": "groq_agent",
+      "fallback_reason": null,
+      "retried": false,
+      "tools": [
+        "search_catalog"
+      ],
+      "search": {
+        "query": "bubble tea",
+        "cuisine": null,
+        "min_price": null,
+        "max_price": null,
+        "price_level": null,
+        "limit": 50,
+        "ranking": "local_demand"
+      },
+      "attempts": 2,
+      "tokens": 1782,
+      "seconds": 0.79,
+      "scores": {
+        "home": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_pt": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_pt_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.4,
+          "empty": false
+        },
+        "search_en": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_en_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.4,
+          "empty": false
+        },
+        "agent": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "agent_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.4,
+          "empty": false
+        }
+      }
+    },
+    {
+      "index": 26704,
+      "message": "Estou com vontade de comida coreana",
+      "planner": "groq_agent",
+      "fallback_reason": null,
+      "retried": false,
+      "tools": [
+        "search_catalog"
+      ],
+      "search": {
+        "query": "Korean",
+        "cuisine": null,
+        "min_price": null,
+        "max_price": null,
+        "price_level": null,
+        "limit": 50,
+        "ranking": "local_demand"
+      },
+      "attempts": 2,
+      "tokens": 1782,
+      "seconds": 1.06,
+      "scores": {
+        "home": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_pt": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_pt_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_en": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "search_en_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "agent": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "agent_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        }
+      }
+    },
+    {
+      "index": 27251,
+      "message": "Estou com vontade de comida japonesa, algo barato",
+      "planner": "groq_agent",
+      "fallback_reason": null,
+      "retried": false,
+      "tools": [
+        "search_catalog"
+      ],
+      "search": {
+        "query": "Japanese",
+        "cuisine": null,
+        "min_price": null,
+        "max_price": null,
+        "price_level": 1,
+        "limit": 50,
+        "ranking": "local_demand"
+      },
+      "attempts": 2,
+      "tokens": 1777,
+      "seconds": 1.57,
+      "scores": {
+        "home": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_pt": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_pt_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_en": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "search_en_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "agent": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "agent_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        }
+      }
+    },
+    {
+      "index": 28430,
+      "message": "Estou com vontade de frango frito",
+      "planner": "groq_agent",
+      "fallback_reason": null,
+      "retried": false,
+      "tools": [
+        "search_catalog"
+      ],
+      "search": {
+        "query": "fried chicken",
+        "cuisine": null,
+        "min_price": null,
+        "max_price": null,
+        "price_level": null,
+        "limit": 50,
+        "ranking": "local_demand"
+      },
+      "attempts": 2,
+      "tokens": 1828,
+      "seconds": 1.09,
+      "scores": {
+        "home": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_pt": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.2,
+          "empty": false
+        },
+        "search_pt_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_en": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.2,
+          "empty": false
+        },
+        "search_en_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "agent": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "agent_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        }
+      }
+    },
+    {
+      "index": 29076,
+      "message": "Estou com vontade de comida tailandesa",
+      "planner": "groq_agent",
+      "fallback_reason": null,
+      "retried": false,
+      "tools": [
+        "recommend_items"
+      ],
+      "search": null,
+      "attempts": 2,
+      "tokens": 1731,
+      "seconds": 0.9,
+      "scores": {
+        "home": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_pt": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_pt_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_en": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.8,
+          "empty": false
+        },
+        "search_en_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "agent": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "agent_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        }
+      }
+    },
+    {
+      "index": 29223,
+      "message": "Estou com vontade de comida chinesa",
+      "planner": "groq_agent",
+      "fallback_reason": null,
+      "retried": false,
+      "tools": [
+        "recommend_items"
+      ],
+      "search": null,
+      "attempts": 2,
+      "tokens": 1750,
+      "seconds": 1.42,
+      "scores": {
+        "home": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.2,
+          "empty": false
+        },
+        "search_pt": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_pt_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_en": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "search_en_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "agent": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.2,
+          "empty": false
+        },
+        "agent_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.2,
+          "empty": false
+        }
+      }
+    },
+    {
+      "index": 29625,
+      "message": "Estou com vontade de frango frito",
+      "planner": "groq_agent",
+      "fallback_reason": null,
+      "retried": false,
+      "tools": [
+        "search_catalog"
+      ],
+      "search": {
+        "query": "fried chicken",
+        "cuisine": null,
+        "min_price": null,
+        "max_price": null,
+        "price_level": null,
+        "limit": 50,
+        "ranking": "local_demand"
+      },
+      "attempts": 2,
+      "tokens": 1827,
+      "seconds": 2.28,
+      "scores": {
+        "home": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_pt": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.2,
+          "empty": false
+        },
+        "search_pt_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.2,
+          "empty": false
+        },
+        "search_en": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.2,
+          "empty": false
+        },
+        "search_en_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.2,
+          "empty": false
+        },
+        "agent": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.2,
+          "empty": false
+        },
+        "agent_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.2,
+          "empty": false
+        }
+      }
+    },
+    {
+      "index": 29670,
+      "message": "Estou com vontade de comida vegetariana",
+      "planner": "policy",
+      "fallback_reason": null,
+      "retried": false,
+      "tools": [],
+      "search": null,
+      "attempts": 0,
+      "tokens": 0,
+      "seconds": 0.01,
+      "scores": {
+        "home": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_pt": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_pt_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_en": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_en_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "agent": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "agent_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        }
+      }
+    },
+    {
+      "index": 29937,
+      "message": "Estou com vontade de sushi",
+      "planner": "groq_agent",
+      "fallback_reason": null,
+      "retried": false,
+      "tools": [
+        "search_catalog"
+      ],
+      "search": {
+        "query": "sushi",
+        "cuisine": null,
+        "min_price": null,
+        "max_price": null,
+        "price_level": null,
+        "limit": 50,
+        "ranking": "local_demand"
+      },
+      "attempts": 2,
+      "tokens": 1833,
+      "seconds": 1.24,
+      "scores": {
+        "home": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_pt": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.4,
+          "empty": false
+        },
+        "search_pt_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.4,
+          "empty": false
+        },
+        "search_en": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.4,
+          "empty": false
+        },
+        "search_en_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.4,
+          "empty": false
+        },
+        "agent": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.4,
+          "empty": false
+        },
+        "agent_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.4,
+          "empty": false
+        }
+      }
+    },
+    {
+      "index": 30008,
+      "message": "Estou com vontade de frutos do mar",
+      "planner": "groq_agent",
+      "fallback_reason": null,
+      "retried": false,
+      "tools": [
+        "search_catalog"
+      ],
+      "search": {
+        "query": "seafood",
+        "cuisine": null,
+        "min_price": null,
+        "max_price": null,
+        "price_level": null,
+        "limit": 50,
+        "ranking": "local_demand"
+      },
+      "attempts": 2,
+      "tokens": 1774,
+      "seconds": 1.92,
+      "scores": {
+        "home": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_pt": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_pt_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_en": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "search_en_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.2,
+          "empty": false
+        },
+        "agent": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.6,
+          "empty": false
+        },
+        "agent_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.2,
+          "empty": false
+        }
+      }
+    },
+    {
+      "index": 30107,
+      "message": "Estou com vontade de comida chinesa",
+      "planner": "groq_agent",
+      "fallback_reason": null,
+      "retried": false,
+      "tools": [
+        "recommend_items"
+      ],
+      "search": null,
+      "attempts": 2,
+      "tokens": 1753,
+      "seconds": 1.43,
+      "scores": {
+        "home": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_pt": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_pt_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_en": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "search_en_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "agent": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "agent_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        }
+      }
+    },
+    {
+      "index": 30223,
+      "message": "Estou com vontade de arroz frito",
+      "planner": "groq_agent",
+      "fallback_reason": null,
+      "retried": false,
+      "tools": [
+        "search_catalog"
+      ],
+      "search": {
+        "query": "fried rice",
+        "cuisine": null,
+        "min_price": null,
+        "max_price": null,
+        "price_level": null,
+        "limit": 50,
+        "ranking": "local_demand"
+      },
+      "attempts": 2,
+      "tokens": 1821,
+      "seconds": 1.05,
+      "scores": {
+        "home": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_pt": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "search_pt_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.2,
+          "empty": false
+        },
+        "search_en": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "search_en_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.2,
+          "empty": false
+        },
+        "agent": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.8,
+          "empty": false
+        },
+        "agent_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.2,
+          "empty": false
+        }
+      }
+    },
+    {
+      "index": 30482,
+      "message": "Estou com vontade de comida chinesa",
+      "planner": "groq_agent",
+      "fallback_reason": null,
+      "retried": false,
+      "tools": [
+        "recommend_items"
+      ],
+      "search": null,
+      "attempts": 2,
+      "tokens": 1744,
+      "seconds": 0.81,
+      "scores": {
+        "home": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_pt": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_pt_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_en": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "search_en_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "agent": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "agent_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        }
+      }
+    },
+    {
+      "index": 30555,
+      "message": "Estou com vontade de bubble tea",
+      "planner": "groq_agent",
+      "fallback_reason": null,
+      "retried": false,
+      "tools": [
+        "search_catalog"
+      ],
+      "search": {
+        "query": "bubble tea",
+        "cuisine": null,
+        "min_price": null,
+        "max_price": null,
+        "price_level": null,
+        "limit": 50,
+        "ranking": "local_demand"
+      },
+      "attempts": 2,
+      "tokens": 1779,
+      "seconds": 1.21,
+      "scores": {
+        "home": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_pt": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_pt_local": {
+          "restaurant_hit": true,
+          "item_hit": false,
+          "cuisine_match": 0.6,
+          "empty": false
+        },
+        "search_en": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_en_local": {
+          "restaurant_hit": true,
+          "item_hit": false,
+          "cuisine_match": 0.6,
+          "empty": false
+        },
+        "agent": {
+          "restaurant_hit": true,
+          "item_hit": false,
+          "cuisine_match": 0.6,
+          "empty": false
+        },
+        "agent_local": {
+          "restaurant_hit": true,
+          "item_hit": false,
+          "cuisine_match": 0.6,
+          "empty": false
+        }
+      }
+    },
+    {
+      "index": 31005,
+      "message": "Estou com vontade de comida japonesa, algo barato",
+      "planner": "groq_agent",
+      "fallback_reason": null,
+      "retried": false,
+      "tools": [
+        "search_catalog"
+      ],
+      "search": {
+        "query": "Japanese",
+        "cuisine": null,
+        "min_price": null,
+        "max_price": null,
+        "price_level": 1,
+        "limit": 50,
+        "ranking": "local_demand"
+      },
+      "attempts": 2,
+      "tokens": 1775,
+      "seconds": 1.21,
+      "scores": {
+        "home": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": false
+        },
+        "search_pt": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_pt_local": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 0.0,
+          "empty": true
+        },
+        "search_en": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "search_en_local": {
+          "restaurant_hit": true,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "agent": {
+          "restaurant_hit": false,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        },
+        "agent_local": {
+          "restaurant_hit": true,
+          "item_hit": false,
+          "cuisine_match": 1.0,
+          "empty": false
+        }
+      }
+    }
+  ]
+}

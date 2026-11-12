@@ -22,6 +22,7 @@ apps/web/dist
 !evaluations/results/discovery-test-v1.json
 !evaluations/results/discovery-validation-v1.json
 !evaluations/results/agent-discovery-v1.json
+!evaluations/results/agent-discovery-v2.json
 !evaluations/results/agent-provider-reserved-v1.json
 !evaluations/results/red-team-v2-gemini.json
 !evaluations/results/red-team-v2-groq.json
