@@ -43,6 +43,16 @@ class CatalogTests(unittest.TestCase):
         self.assertEqual(self.search("Test", limit=1)["total_matches"], 2)
         self.assertEqual(len(self.search("Test", limit=1)["items"]), 1)
 
+    def test_ties_rank_items_with_a_recorded_price_first(self):
+        # 28% of the official catalog records a price of 0; on equal relevance they must not lead.
+        from contextlib import closing
+        import sqlite3
+        with closing(sqlite3.connect(self.index)) as connection, connection:
+            connection.execute("UPDATE items SET unit_price=0 WHERE product_id='p1'")
+        items = self.search("Test")["items"]
+        self.assertEqual(items[0]["lexical_score"], items[1]["lexical_score"])
+        self.assertEqual([item["product_id"] for item in items], ["p2", "p1"])
+
     def test_fts_syntax_and_sql_are_literal_search_terms(self):
         self.assertEqual(self.search('Test OR absent')["items"], [])
         self.assertEqual(self.search('"Test" AND one')["items"], [])

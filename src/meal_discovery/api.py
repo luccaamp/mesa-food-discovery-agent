@@ -289,8 +289,25 @@ def create_app(index: Path | None = None) -> FastAPI:
                 recorded = json.loads(path.read_text(encoding="utf-8"))
                 agent_comparison = {"created_at": recorded["created_at"], "split": split, "summaries": recorded["summaries"]}
                 break
+        red_team = []
+        # Current suite version only; v1 runs stay in the repository with their documented false positive.
+        for provider in ("gemini", "groq"):
+            path = directory / f"red-team-v2-{provider}.json"
+            if not path.is_file():
+                continue
+            recorded = json.loads(path.read_text(encoding="utf-8"))
+            for summary in recorded["summaries"]:
+                by_risk = {}
+                for row in recorded["cases"].get(summary["provider"], []):
+                    risk = by_risk.setdefault(row["owasp"], {"owasp": row["owasp"], "cases": 0, "passed": 0})
+                    risk["cases"] += 1
+                    risk["passed"] += bool(row["passed"])
+                red_team.append({**{k: summary[k] for k in ("provider", "model", "cases", "passed", "model_exercised",
+                                                            "model_fallbacks")},
+                                 "created_at": recorded["created_at"], "report": path.name,
+                                 "by_risk": sorted(by_risk.values(), key=lambda risk: risk["owasp"])})
         return {"schema_version": 1, "reports": reports, "assistant_evaluation": assistant_report,
-                "agent_comparison": agent_comparison,
+                "agent_comparison": agent_comparison, "red_team": red_team,
                 "conversation_evaluation": conversation_report, "ai_evaluation": ai_report,
                 "public_assistant_evaluation": public_report, "relevance_evaluation": relevance_report,
                 "official_test_evaluated": False}

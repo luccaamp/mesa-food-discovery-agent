@@ -80,6 +80,11 @@ e responde. A primeira resposta depois de um período parado leva de 30 a 60 s;
 as seguintes são imediatas. Os resultados aparecem em
 `mesa_gateway_events_total{event="agent_wake_sent"}` e `agent_wake_failed`.
 
+O bot de Telegram em produção usa webhook. O modo local
+(`python -m meal_discovery.channels.telegram`, long polling) chama
+`deleteWebhook` ao iniciar; depois de usá-lo, registre o webhook de novo com
+`set_webhook(client, "https://<gateway>/telegram", TELEGRAM_WEBHOOK_SECRET)`.
+
 ## Conectar o número de teste da Meta
 
 1. Siga o guia de contas para criar o app e obter token, Phone number ID,

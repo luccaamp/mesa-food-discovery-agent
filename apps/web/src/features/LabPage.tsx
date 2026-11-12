@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { ExternalLink, FlaskConical } from "lucide-react";
+import { ExternalLink, FlaskConical, Send } from "lucide-react";
 import { api, count, type Evaluation, type Meta, type PublicAssistantEvaluation, type ConversationEvaluation } from "../api";
 
 const REPO = "https://github.com/luccaamp/mesa-food-discovery-agent/blob/main/";
@@ -18,8 +18,31 @@ export type ComparisonSummary = {
   glossary_fallbacks: number;
 };
 
+export type RedTeamSummary = {
+  provider: string;
+  model: string;
+  cases: number;
+  passed: number;
+  model_exercised: number;
+  model_fallbacks: number;
+  report: string;
+  by_risk: { owasp: string; cases: number; passed: number }[];
+};
+
+const OWASP: Record<string, string> = {
+  LLM01: "Injeção de prompt",
+  LLM02: "Vazamento de dados sensíveis",
+  LLM05: "Saída sem tratamento",
+  LLM06: "Agência excessiva",
+  LLM07: "Vazamento do prompt de sistema",
+  LLM09: "Desinformação",
+};
+
+const BOT = "https://t.me/mesa_food_discovery_bot";
+
 type Evaluations = {
   reports: Evaluation[];
+  red_team?: RedTeamSummary[];
   conversation_evaluation?: ConversationEvaluation | null;
   public_assistant_evaluation?: PublicAssistantEvaluation | null;
   agent_comparison?: { created_at: string; split: "reserved" | "development"; summaries: ComparisonSummary[] } | null;
@@ -63,6 +86,8 @@ export function LabPage({ meta }: { meta: Meta | null }) {
   }, []);
   const comparison = data?.agent_comparison?.summaries ?? [];
   const bestAgent = comparison.filter((row) => row.mode === "agent").sort((a, b) => b.pass_rate - a.pass_rate)[0];
+  const redTeam = data?.red_team ?? [];
+  const risks = Array.from(new Set(redTeam.flatMap((run) => run.by_risk.map((risk) => risk.owasp)))).sort();
   const recommendation = data?.reports.find((report) => report.id === "recommendation");
   const retrieval = data?.reports.find((report) => report.id === "retrieval");
 
@@ -151,6 +176,100 @@ export function LabPage({ meta }: { meta: Meta | null }) {
           </p>
         </section>
       )}
+
+      {redTeam.length > 0 && (
+        <section aria-labelledby="redteam-title" style={{ display: "grid", gap: 12 }}>
+          <div>
+            <h2 id="redteam-title">Red team: OWASP Top 10 para LLMs</h2>
+            <p className="muted">
+              {redTeam[0].cases} ataques contra o agente real: injeção direta e indireta (texto malicioso dentro do
+              catálogo), vazamento do prompt, dados pessoais, ferramentas inexistentes, links e promessas sobre
+              alergênicos. Cada resposta é julgada por código, nunca por outro modelo.
+            </p>
+          </div>
+          <div className="table-wrap" tabIndex={0} role="region" aria-label="Tabela do red team">
+            <table>
+              <thead>
+                <tr>
+                  <th>Risco</th>
+                  {redTeam.map((run) => (
+                    <th className="num" key={run.provider}>
+                      {PROVIDERS[run.provider] ?? run.provider}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {risks.map((owasp) => (
+                  <tr key={owasp}>
+                    <td>
+                      {owasp} · {OWASP[owasp] ?? owasp}
+                    </td>
+                    {redTeam.map((run) => {
+                      const risk = run.by_risk.find((row) => row.owasp === owasp);
+                      return (
+                        <td className="num" key={run.provider}>
+                          {risk ? `${risk.passed}/${risk.cases}` : "—"}
+                        </td>
+                      );
+                    })}
+                  </tr>
+                ))}
+                <tr>
+                  <td>
+                    <strong>Total</strong>
+                  </td>
+                  {redTeam.map((run) => (
+                    <td className="num" key={run.provider}>
+                      <strong>
+                        {run.passed}/{run.cases}
+                      </strong>
+                    </td>
+                  ))}
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p className="muted" style={{ fontSize: 12 }}>
+            {redTeam
+              .map((run) => `${PROVIDERS[run.provider] ?? run.provider}: ${run.model_exercised} respostas do modelo, ${run.model_fallbacks} fallbacks`)
+              .join(" · ")}
+            . Os demais ataques são barrados por políticas determinísticas antes do modelo. A primeira rodada (v1) teve
+            um falso positivo do verificador, corrigido e mantido no repositório.{" "}
+            Relatórios:{" "}
+            {redTeam.map((run, index) => (
+              <span key={run.report}>
+                {index > 0 && " · "}
+                <a href={REPO + "evaluations/results/" + run.report} target="_blank" rel="noreferrer">
+                  {PROVIDERS[run.provider] ?? run.provider} <ExternalLink size={12} />
+                </a>
+              </span>
+            ))}
+          </p>
+        </section>
+      )}
+
+      <section aria-labelledby="channels-title" className="panel" style={{ display: "grid", gap: 10 }}>
+        <h2 id="channels-title" style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          <Send size={18} aria-hidden="true" /> Também no Telegram
+        </h2>
+        <p className="muted">
+          O mesmo agente responde no{" "}
+          <a href={BOT} target="_blank" rel="noreferrer">
+            @mesa_food_discovery_bot <ExternalLink size={12} />
+          </a>
+          , 24 horas por dia. Um gateway em Go valida o segredo do webhook, descarta duplicatas e enfileira a mensagem
+          em um Redis Stream; o worker Python consulta o agente e responde. Como o servidor gratuito hiberna, o
+          gateway acorda o worker ao enfileirar: a primeira resposta após um período parado leva até um minuto.
+        </p>
+        <p className="muted" style={{ fontSize: 12 }}>
+          O WhatsApp usa o mesmo gateway, fila e worker, com assinatura HMAC; o fluxo foi aprovado de ponta a ponta
+          com a API da Meta simulada.{" "}
+          <a href={REPO + "docs/WHATSAPP.md"} target="_blank" rel="noreferrer">
+            Canais <ExternalLink size={12} />
+          </a>
+        </p>
+      </section>
 
       {recommendation && (
         <section aria-labelledby="rec-title" className="panel" style={{ display: "grid", gap: 10 }}>

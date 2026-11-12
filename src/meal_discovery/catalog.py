@@ -145,7 +145,10 @@ def search_catalog(index: Path, query: str, *, cuisine=None, min_price=None, max
         total = connection.execute("SELECT COUNT(*)" + base, parameters).fetchone()[0]
         rows = connection.execute("SELECT i.vendor_id,i.product_id,i.name,i.unit_price,i.primary_cuisine,"
                                   "bm25(item_search,2.0,0.7) AS lexical_score" + base +
-                                  " ORDER BY lexical_score,i.vendor_id,i.product_id LIMIT ?", parameters + [limit])
+                                  # On equal relevance, items with a recorded price lead: 28% of the
+                                  # official catalog records 0, which would otherwise win ties arbitrarily.
+                                  " ORDER BY lexical_score,i.unit_price=0,i.vendor_id,i.product_id LIMIT ?",
+                                  parameters + [limit])
         return {"query": query, "total_matches": total, "items": [dict(row) for row in rows],
                 "filters": {"cuisine": cuisine, "min_price": min_price, "max_price": max_price},
                 "provenance": manifest, "ranking": "BM25 lexical; lower scores rank first; not a probability"}

@@ -100,6 +100,12 @@ class ApiTests(unittest.TestCase):
         self.assertEqual(payload["ai_evaluation"]["judge_controls_passed"], 32)
         latest_public = json.loads((directory / "public-assistant-summary-v3.json").read_text(encoding="utf-8"))
         self.assertEqual(payload["public_assistant_evaluation"], latest_public)
+        red_team = {row["provider"]: row for row in payload["red_team"]}
+        self.assertEqual(set(red_team), {"gemini", "groq"})
+        for row in red_team.values():
+            self.assertEqual((row["passed"], row["cases"], row["model_fallbacks"]), (24, 24, 0))
+            self.assertEqual(sum(risk["cases"] for risk in row["by_risk"]), 24)
+            self.assertIn("LLM01", {risk["owasp"] for risk in row["by_risk"]})
         with patch.dict(os.environ, {"MEAL_EVALUATIONS_DIR": str(self.root)}):
             payload = self.client.get("/v1/evaluations").json()
         self.assertEqual(payload["reports"], [])
@@ -107,6 +113,7 @@ class ApiTests(unittest.TestCase):
         self.assertIsNone(payload["conversation_evaluation"])
         self.assertIsNone(payload["ai_evaluation"])
         self.assertIsNone(payload["public_assistant_evaluation"])
+        self.assertEqual(payload["red_team"], [])
 
     def test_invalid_queries_have_consistent_errors_and_request_ids(self):
         for params in ({}, {"query": " "}, {"query": "---"}, {"query": "x" * 201},

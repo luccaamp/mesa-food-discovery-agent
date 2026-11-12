@@ -67,9 +67,31 @@ correção. [Dados brutos](evaluations/results/agent-provider-reserved-v1.json) 
 **Operação:** 52/52 cenários com o provedor fora do ar seguem respondendo pelo
 glossário; WhatsApp de ponta a ponta aprovado com gateway respondendo em ~5 ms
 ([relatório](evaluations/results/whatsapp-integration-v1.json)); 12/12 testes
-E2E em desktop e celular sem violações sérias de acessibilidade; red team
-OWASP com 24 ataques: 24/24 no agente com Groq
-([relatório](evaluations/results/red-team-v2-groq.json)).
+E2E em desktop e celular sem violações sérias de acessibilidade.
+
+**Segurança:** red team mapeado ao OWASP Top 10 para LLMs, com 24 ataques
+(injeção direta e indireta pelo catálogo, vazamento de prompt, dados pessoais,
+ferramentas inexistentes, links, alergênicos). Cada resposta é julgada por código:
+
+| Provedor | Aprovados | Respondidos pelo modelo | Barrados por política | Fallbacks |
+| --- | ---: | ---: | ---: | ---: |
+| Gemini 3.1 Flash-Lite | 24/24 | 15 | 9 | 0 |
+| Groq · gpt-oss-120b | 24/24 | 15 | 9 | 0 |
+
+[Gemini](evaluations/results/red-team-v2-gemini.json) ·
+[Groq](evaluations/results/red-team-v2-groq.json) · a rodada v1 fica registrada
+com um falso positivo do verificador, corrigido depois.
+
+**Telegram 24/7:** [@mesa_food_discovery_bot](https://t.me/mesa_food_discovery_bot)
+roda no Render (gateway Go + Key Value + worker). Como o plano gratuito hiberna,
+o gateway acorda o worker ao enfileirar; a primeira resposta após um período
+parado leva até um minuto.
+
+## Capturas
+
+| Web | Laboratório | Telegram |
+| --- | --- | --- |
+| ![Assistente na web](docs/screenshots/assistant-desktop.png) | ![Laboratório com o red team](docs/screenshots/lab-desktop.png) | ![Conversa no Telegram](docs/screenshots/telegram.png) |
 
 Resultados negativos ficam registrados: o piloto de embeddings E5 não superou a
 busca lexical com glossário ([Experimento 003](docs/EXPERIMENT_003.md)) e juízes
@@ -81,6 +103,7 @@ LLM de relevância reprovaram na calibração ([decisão](docs/RELEVANCE_REASONI
 flowchart LR
   WEB[React + TypeScript] -->|HTTP + SSE| API[FastAPI]
   WA[WhatsApp] -->|webhook| GW[Gateway Go]
+  TG[Telegram] -->|webhook| GW
   GW -->|XADD| Q[(Redis Stream)]
   Q -->|XREADGROUP| WK[Worker]
   MCPC[Clientes MCP] --> MCP[Servidor MCP]
@@ -120,7 +143,7 @@ Testes:
 ```sh
 python -m unittest discover -s tests                  # aplicação (178)
 npm --prefix apps/web test                            # interface (10)
-(cd services/whatsapp-gateway && go test ./...)       # gateway (11)
+(cd services/whatsapp-gateway && go test ./...)       # gateway (14)
 npm --prefix apps/web run e2e                         # E2E, com o servidor no ar
 ```
 

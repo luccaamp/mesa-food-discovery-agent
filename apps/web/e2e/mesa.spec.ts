@@ -77,6 +77,10 @@ test("lab presents evaluations", async ({ page }) => {
   await page.goto("/#/lab");
   await expect(page.getByRole("heading", { name: "Como sabemos que funciona" })).toBeVisible();
   await expect(page.getByRole("heading", { name: /Recomendação/ })).toBeVisible();
+  const redTeam = page.getByRole("region", { name: "Tabela do red team" });
+  await expect(redTeam).toContainText("LLM01");
+  await expect(redTeam.getByRole("row").last()).toContainText("24/24");
+  await expect(page.getByRole("link", { name: /@mesa_food_discovery_bot/ })).toHaveAttribute("href", /t\.me/);
   await shots(page, "lab");
   await axe(page);
 });
