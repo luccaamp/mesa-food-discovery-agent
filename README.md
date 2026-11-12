@@ -57,26 +57,26 @@ o IC 95% por bootstrap). [Experimento de descoberta](docs/EXPERIMENT_DISCOVERY.m
 
 Para cada cliente novo do teste oficial, um usuário simulado (gerado por
 código, sem LLM) diz a culinária do pedido real: "Estou com vontade de comida
-japonesa". Foram 36.766 clientes nos braços sem LLM e 101 com o agente do
+japonesa". Foram 36.766 clientes nos braços sem LLM e 120 com o agente do
 produto, sem nenhum fallback. [Experimento do agente](docs/EXPERIMENT_AGENT.md).
 
-| 5 sugestões, 101 clientes | Itens da culinária pedida | Sem resultado | Restaurante real |
+| 5 sugestões, 120 clientes | Itens da culinária pedida | Sem resultado | Restaurante real |
 | --- | ---: | ---: | ---: |
-| Busca com o texto em português ("comida japonesa") | 25,9% | 52,5% | 3,0% |
-| **Agente (LLM com ferramentas)** | **53,1%** | **1,0%** | **10,9%** |
-| Busca com a palavra exata do catálogo ("japanese") | 73,9% | 1,0% | 5,0% |
-| Busca com a palavra exata, ordenada pela demanda da região | 70,3% | 1,0% | 13,9% |
+| Busca com o texto em português ("comida japonesa") | 26,5% | 53,3% | 2,5% |
+| **Agente (LLM com ferramentas)** | **53,7%** | **0,8%** | **11,7%** |
+| Busca com a palavra exata do catálogo ("japanese") | 72,5% | 0,8% | 5,0% |
+| Busca com a palavra exata, ordenada pela demanda da região | 70,2% | 0,8% | 15,0% |
 
 - **O LLM traduz o português da pessoa para o vocabulário do catálogo.**
-  Contra a busca que recebe o português, o agente zera as buscas vazias (−51,5
+  Contra a busca que recebe o português, o agente zera as buscas vazias (−52,5
   pontos) e dobra os itens da culinária pedida (+27 pontos), com IC 95% pareado.
 - **Quem já sabe o termo do catálogo não precisa dele.** A busca com a palavra
-  exata vence o agente em itens da culinária pedida: 73,9% contra 53,1%. Em 23
+  exata vence o agente em itens da culinária pedida: 72,5% contra 53,7%. Em 29
   casos o agente recomendou em vez de buscar.
 - **Achar o restaurante real é contexto, não linguagem.** Ordenar pela demanda
   da região leva a busca de 2,3% para 12,1% nos 36.766 clientes. Com essa
-  ordenação no produto, o agente supera a busca em português por 7,9 pontos (IC
-  de 2,9 a 13,9).
+  ordenação no produto, o agente supera a busca em português por 9,2 pontos (IC
+  de 4,1 a 15,0).
 - **Uma primeira rodada (v1) perdeu 32% dos casos por cota do provedor;** a v2
   repetiu com pausas e sem fallbacks. As duas estão no documento.
 

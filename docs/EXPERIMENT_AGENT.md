@@ -84,40 +84,41 @@ por cota e parada (em vez de fallback) se a cota acabar. Ela também mede o
 agente **como está hoje no produto**, que já ordena a busca pela demanda da
 região (decisão 4, abaixo).
 
-**101 dos 120 casos concluídos, 0 fallbacks.** A cota diária acabou no caso 102;
-os 19 restantes são retomados de onde pararam.
+**120 de 120 casos, 0 fallbacks.** A cota diária acabou no caso 102; o
+protocolo parou em vez de cair no fallback e retomou do mesmo ponto no dia
+seguinte.
 
-| 5 sugestões, 101 clientes | Restaurante real | Itens da culinária pedida | Sem resultado |
+| 5 sugestões, 120 clientes | Restaurante real | Itens da culinária pedida | Sem resultado |
 | --- | ---: | ---: | ---: |
-| Home | 4,0% | 2,8% | 0% |
-| Busca em português | 3,0% | 25,9% | 52,5% |
-| Busca com a palavra do catálogo | 5,0% | **73,9%** | 1,0% |
-| Busca com a palavra do catálogo, reordenada | **13,9%** | 70,3% | 1,0% |
-| **Agente (produto atual)** | 10,9% | 53,1% | **1,0%** |
+| Home | 4,2% | 3,7% | 0% |
+| Busca em português | 2,5% | 26,5% | 53,3% |
+| Busca com a palavra do catálogo | 5,0% | **72,5%** | 0,8% |
+| Busca com a palavra do catálogo, reordenada | **15,0%** | 70,2% | 0,8% |
+| **Agente (produto atual)** | 11,7% (6,7–17,5) | 53,7% | **0,8%** |
 
 | Comparação pareada (IC 95%) | Restaurante real | Itens da culinária pedida | Sem resultado |
 | --- | ---: | ---: | ---: |
-| Agente − busca em português | **+7,9 (2,9 a 13,9)** | **+27,1 (18,6 a 36,4)** | **−51,5 (−60,4 a −41,6)** |
-| Agente − busca com a palavra do catálogo | +5,9 (0,0 a 11,9) | −20,8 (−29,9 a −11,7) | 0,0 |
+| Agente − busca em português | **+9,2 (4,1 a 15,0)** | **+27,2 (19,3 a 36,0)** | **−52,5 (−61,7 a −43,3)** |
+| Agente − busca com a palavra do catálogo | +6,7 (1,7 a 12,5) | −18,8 (−27,0 a −10,8) | 0,0 |
 
 
-**Custo:** 202 chamadas, 183 mil tokens e 1,2 s de latência mediana. Em 23
-casos o agente chamou "recomendar" em vez de "buscar".
+**Custo:** 240 chamadas, 216 mil tokens e 1,2 s de latência mediana. Em 29
+dos 120 casos o agente chamou "recomendar" em vez de "buscar".
 
 ## O que isso significa
 
 1. **O LLM entrega o que promete: entender a pessoa.** Comparado com a busca
    que recebe o português, ele reduz as buscas sem resultado (−38 pontos na v1,
-   −52 na v2) e aumenta os itens da culinária pedida (+21 na v1, +27 na v2). É o trabalho de traduzir
+   −53 na v2) e aumenta os itens da culinária pedida (+21 na v1, +27 na v2). É o trabalho de traduzir
    "comida japonesa" para o vocabulário do catálogo.
 2. **Ele não substitui saber a palavra certa.** Contra a busca que já recebe o
-   termo exato do catálogo, o agente perde 21 pontos em itens da culinária
-   pedida, mesmo sem fallbacks (v2). O motivo principal são os 23 casos em que
+   termo exato do catálogo, o agente perde 19 pontos em itens da culinária
+   pedida, mesmo sem fallbacks (v2). O motivo principal são os 29 casos em que
    ele recomendou em vez de buscar. É o teto a perseguir: mais termos do catálogo no
    contexto do agente e menos recomendação quando há intenção clara.
 3. **Achar o restaurante certo é contexto, não linguagem.** Com a ordenação
-   regional no produto, o agente vai a 10,9% e supera a busca em português por
-   7,9 pontos (IC de 2,9 a 13,9). Nenhum braço que
+   regional no produto, o agente vai a 11,7% e supera a busca em português por
+   9,2 pontos (IC de 4,1 a 15,0). Nenhum braço que
    ignora a região passa de 5% no restaurante real. Reordenar pela demanda local
    leva a busca de 2,3% para 12,1% nos 36.766 clientes, e o agente de 4,2% para
    9,2% na amostra.
@@ -133,12 +134,9 @@ casos o agente chamou "recomendar" em vez de "buscar".
   e uma pessoa diria coisas mais vagas ou mais específicas. É um único turno.
 - **Amostra pequena:** com 120 casos, os intervalos do agente são largos (±4 a
   ±8 pontos). Os braços sem LLM têm 36.766 casos.
-- **Fallbacks:** 32% dos casos do agente caíram no fallback por cota. O
-  resultado não separa o agente puro do agente servido sob cota. O protocolo v2
-  ([`agent-discovery-v2.json`](../configs/agent-discovery-v2.json)) repete os
-  mesmos casos com mais pausa, uma nova tentativa quando o provedor recusa por
-  cota e o registro de cada caso. Ele retoma de onde parou entre um dia de cota e
-  outro, e reporta à parte os casos que o próprio modelo respondeu.
+- **Fallbacks na v1:** 32% dos casos da v1 caíram no fallback por cota, o que
+  misturava o agente com o glossário. A v2 resolveu isso: os 120 casos foram
+  respondidos pelo próprio modelo.
 - **Assimetria do produto:** a busca não recebe a região, e a home e o agente
   recebem. É o produto como foi construído, e a reordenação mostra o efeito de
   dar a região a todos.
