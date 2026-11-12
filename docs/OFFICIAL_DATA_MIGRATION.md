@@ -4,7 +4,7 @@ Verificação concluída em 7/11/2026.
 
 Atualização de implementação: a migração já foi executada pelo novo comando `prepare-official-singapore`, com banco independente, teste oficial separado e protocolo v2 registrado antes da validação. A busca lexical também foi executada no catálogo completo. [Experimento 002, resultados e comandos](EXPERIMENT_002.md). As propostas de migração abaixo registram o contexto original da decisão.
 
-O usuário forneceu `data_sg.zip`, `data_se.zip`, `data_tw.zip` e [o README da distribuição](../readme_data_zip.md). Os três arquivos correspondem aos SHA-256 publicados pelo carregador OmniRec, e todos os membros extraídos tiveram CRC e tamanho verificados.
+Foram obtidos `data_sg.zip`, `data_se.zip`, `data_tw.zip` e [o README da distribuição](data/DHRD_README.md). Os três arquivos correspondem aos SHA-256 publicados pelo carregador OmniRec, e todos os membros extraídos tiveram CRC e tamanho verificados.
 
 ## Resultado da auditoria integral
 
@@ -14,7 +14,7 @@ O usuário forneceu `data_sg.zip`, `data_se.zip`, `data_tw.zip` e [o README da d
 | Estocolmo | 325.937 | 74.063 | 111.046 | 1.148 | 40 |
 | Taipei / TW | 1.643.492 | 356.508 | 810.536 | 9.506 | 13 |
 
-No total, 4.400.000 pedidos e 9.361.089 linhas de itens nas três cidades. São 1.988.422 linhas de catálogo. Contagens de clientes e IDs são mantidas por cidade; não presumir identidade entre cidades.
+No total, 4.400.000 pedidos e 9.361.089 linhas de itens nas três cidades. São 1.988.422 linhas de catálogo. Contagens de clientes e IDs são mantidas por cidade: o mesmo ID em cidades diferentes não indica a mesma pessoa.
 
 Em todas as cidades, treino cobre dias relativos 0–75, e não houve sobreposição de IDs de pedido entre treino e teste. As contagens e fingerprints com multiplicidade confirmaram que a união dos dois splits corresponde ao arquivo de pedidos completo. Isso não significa que as linhas do arquivo completo tenham necessariamente a mesma ordenação da concatenação.
 

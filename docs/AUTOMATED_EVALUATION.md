@@ -26,7 +26,7 @@ cenários de desenvolvimento executados; a calibração de juiz continua separad
 
 O [runner HTTP](../evaluations/conversation_suite.py) executa oito perfis
 **roteirizados**, com objetivos e até quatro turnos definidos em JSON. O roteiro
-é a simulação de comportamento; não afirmar que um LLM gerou livremente os usuários.
+é a simulação de comportamento: os usuários não foram gerados livremente por um LLM.
 Cada episódio começa com contexto novo e só recebe o contexto retornado pela API.
 SQLite é consultado diretamente para conferir identidade, nome, preço e culinária,
 além de filtros, exclusão de sementes, evidência do recomendador e ação escolhida.
@@ -143,7 +143,7 @@ glossário incluiu indevidamente as palavras do limite no texto da busca. A falh
 foi preservada em [regressão pública v1](../evaluations/results/gemini-context-regression-v1.json).
 O limite agora é extraído para o contexto e removido dos termos enviados ao modelo
 ou glossário. A simulação de indisponibilidade do provedor é coberta em teste;
-não declarar essa primeira requisição como sucesso real do Gemini.
+essa primeira requisição não conta como sucesso real do Gemini.
 Além do teste unitário, uma integração FastAPI com **catálogo oficial completo**
 e falha de rede injetada retornou seis produtos reais de chá com leite, preservou
 o limite e conferiu os campos diretamente em SQLite.
@@ -221,7 +221,7 @@ portanto não afirmamos painel independente nem ausência de erros correlacionad
 | [Yoon et al., NAACL 2024](https://arxiv.org/abs/2403.09738) | Verificar se o próprio simulador segue objetivos e expressa preferências coerentes | Não tratar personas como amostra de uma população real |
 | [M-Prometheus, 2025](https://arxiv.org/abs/2504.04953) | Considerar avaliadores especializados e adequação multilíngue | Candidato de pesquisa; pesos não foram baixados ou aprovados, e a licença publicada precisa ser esclarecida |
 | [FairJudge, Yang et al., ICML 2026](https://proceedings.mlr.press/v306/yang26n.html) | Auditar aderência à rubrica, vieses não semânticos e consistência | Pesquisa recente, não um padrão universal; seu treinamento não foi reproduzido |
-| [Kohli, Apple Research, junho de 2026](https://machinelearning.apple.com/research/correlated-llm-evaluation-panels) | Não presumir independência ou maior correção por somar juízes | Evidência em tarefas específicas; medir erros compartilhados no nosso conjunto antes de agregar votos |
+| [Kohli, Apple Research, junho de 2026](https://machinelearning.apple.com/research/correlated-llm-evaluation-panels) | Somar juízes não garante independência nem maior correção | Evidência em tarefas específicas; medir erros compartilhados no nosso conjunto antes de agregar votos |
 
 As bases antigas são deliberadas: publicação recente não demonstra, por si só,
 que um método substitui uma prática estabelecida. Os trabalhos de 2026 reforçam
@@ -281,8 +281,8 @@ O teste usa um conjunto pequeno de controles fáceis e não estima preferências
 humanas. Mesmo 16/16 seria somente uma condição necessária para avançar.
 
 O resumo atual agrupa pares pelo identificador e orientação, sem depender da ordem
-do log, e rejeita controles incompletos ou duplicados. Não somar acertos e
-consistência como se fossem medidas independentes.
+do log, e rejeita controles incompletos ou duplicados. Acertos e consistência
+não são somados como se fossem medidas independentes.
 O template do juiz é parte da configuração testada; o resultado não é uma medida
 universal da capacidade do Qwen em qualquer prompt.
 

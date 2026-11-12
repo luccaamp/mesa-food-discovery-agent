@@ -62,7 +62,7 @@ hashes. O snapshot do segundo avaliador preserva os bytes executados.
 experimentos é uma decisão negativa de engenharia, não uma nota de aprovação.
 Um novo juiz exigirá controles novos e admissão antes de pontuar o catálogo.
 
-A [rodada posterior](RELEVANCE_REASONING_2026-11-10.md) corrigiu geração sem
+A [rodada posterior](../RELEVANCE_REASONING_2026-11-10.md) corrigiu geração sem
 resposta final e abstenções, mas a última configuração ainda mudou uma nota
 ao inverter os casos. Foi interrompida em 15/16 acertos, com 32 exigidos.
 Nenhuma nota do catálogo foi produzida. As falhas de cada configuração e seus

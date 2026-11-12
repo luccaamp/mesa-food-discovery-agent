@@ -6,8 +6,8 @@ import tempfile
 import unittest
 from unittest.mock import patch
 
-from scripts import audit_nearbite_sg as auditor
-from scripts import fetch_nearbite_sg as downloader
+from scripts.legacy import audit_nearbite_sg as auditor
+from scripts.legacy import fetch_nearbite_sg as downloader
 
 
 class SourceAcquisitionTests(unittest.TestCase):

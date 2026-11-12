@@ -2,41 +2,49 @@
 
 [![CI](https://github.com/luccaamp/mesa-food-discovery-agent/actions/workflows/ci.yml/badge.svg)](https://github.com/luccaamp/mesa-food-discovery-agent/actions/workflows/ci.yml)
 [![Demo](https://img.shields.io/badge/demo-online-2e7d5b)](https://mesa-meal-discovery.onrender.com)
+[![Telegram](https://img.shields.io/badge/Telegram-@mesa__food__discovery__bot-26A5E4?logo=telegram&logoColor=white)](https://t.me/mesa_food_discovery_bot)
+[![OWASP LLM red team](https://img.shields.io/badge/OWASP%20LLM%20red%20team-24%2F24-2e7d5b)](evaluations/results/red-team-v2-gemini.json)
+[![License: MIT](https://img.shields.io/badge/license-MIT-lightgrey)](LICENSE)
 
 **Mesa ajuda quem não sabe o que pedir a decidir mais rápido.** Um agente de IA
-entende pedidos em português e inglês ("algo picante até 0,005", "agora chá com
-leite"), consulta por ferramentas um catálogo real de **1.066.840 itens** e
-recomenda o que costuma ser pedido junto, mostrando a evidência de cada
-sugestão. Funciona na web, no **Telegram** e no **WhatsApp**. Nenhum item, preço ou explicação
-é inventado pelo modelo.
+entende pedidos em português e inglês ("algo picante até 0,005", "agora uma
+bebida gelada"), consulta por ferramentas um catálogo real de **1.066.840
+itens** e recomenda o que costuma ser pedido junto, mostrando a evidência de
+cada sugestão. Funciona na web, no **Telegram** e no **WhatsApp**. Nenhum item,
+preço ou explicação é inventado pelo modelo, e isso é verificado por código.
+
+![O agente buscando no catálogo e respondendo com itens verificados](docs/screenshots/assistant-demo.gif)
+
+[Abrir a demo](https://mesa-meal-discovery.onrender.com) (a primeira abertura pode
+levar um minuto: o servidor gratuito hiberna) ·
+[Falar com o bot](https://t.me/mesa_food_discovery_bot) ·
+[Arquitetura](docs/ARCHITECTURE.md) · [Avaliação](evaluations/README.md) ·
+[Documentação](docs/README.md)
 
 Dados: [Delivery Hero Recommendation Dataset](https://github.com/deliveryhero/dh-reco-dataset)
 (DHRD, RecSys 2023), pedidos reais de Singapura, com procedência verificada por hash.
 
-[Abrir a demo](https://mesa-meal-discovery.onrender.com) (a primeira abertura pode
-levar um minuto: o servidor gratuito hiberna) · [Arquitetura](docs/ARCHITECTURE.md) ·
-[WhatsApp e Telegram](docs/WHATSAPP.md) · [MCP](docs/MCP.md) · [Avaliação](docs/AUTOMATED_EVALUATION.md)
-
 ## Destaques
 
 - **Agente com tool calling em LangGraph**: o modelo escolhe entre busca e
-  recomendação, pode refazer uma busca vazia e tem orçamento de passos. Etapas
-  transmitidas ao vivo por Server-Sent Events.
+  recomendação, pode refazer uma busca vazia e tem orçamento de passos. As
+  etapas aparecem ao vivo por Server-Sent Events.
 - **Multi-provedor com fallback**: Gemini → Groq → glossário sem LLM, atrás de
-  uma porta `ChatModel` (arquitetura hexagonal). Retry limitado, cota e pausa
-  por provedor.
+  uma porta `ChatModel` (arquitetura hexagonal), com retry limitado, cota e
+  pausa por provedor.
 - **Respostas ancoradas**: políticas determinísticas antes do modelo
   (alergênicos, injeção, moeda) e verificação de grounding depois dele.
-- **Mensageria event-driven**: gateway em **Go** (HMAC, idempotência, 15,7 MB) →
-  Redis Streams → worker Python, com WhatsApp e Telegram
-  ([fale com o bot](https://t.me/mesa_food_discovery_bot)). Privacidade por padrão: telefone só em hash,
-  contexto expira em 24 h, "apagar meus dados".
+- **Mensageria event-driven**: gateway em **Go** (segredo/HMAC, idempotência,
+  imagem de 15,7 MB) → **Redis Streams** → worker Python, no ar 24/7 no
+  Telegram. Privacidade por padrão: telefone só em hash, contexto expira em
+  24 h, "apagar meus dados".
 - **Servidor MCP**: as mesmas ferramentas para Claude Desktop, Claude Code e Cursor.
 - **Avaliação como produto**: contratos verificados por código contra o
-  catálogo, suíte reservada, comparação entre provedores, E2E com axe.
-- **Segurança e operação**: red team mapeado ao OWASP Top 10 para LLMs,
-  dados pessoais mascarados antes do modelo, métricas Prometheus e traces
-  OpenTelemetry com convenções de GenAI. [Detalhes](docs/SECURITY.md).
+  catálogo, suíte reservada, comparação entre provedores, red team OWASP, E2E
+  com axe, tudo versionado em [`evaluations/`](evaluations/README.md).
+- **Segurança e operação**: dados pessoais mascarados antes do modelo,
+  métricas Prometheus e traces OpenTelemetry com convenções de GenAI.
+  [Detalhes](docs/SECURITY.md).
 
 ## Resultados
 
@@ -56,19 +64,6 @@ glossário do próprio catálogo levou a 40/40, e a suíte reservada confirmou a
 correção. [Dados brutos](evaluations/results/agent-provider-reserved-v1.json) ·
 [script](evaluations/agent_comparison.py).
 
-**Recomendação** (validação temporal, 175.358 clientes, próxima cesta):
-
-| Modelo | Recall@10 | NDCG@10 |
-| --- | ---: | ---: |
-| Popularidade global | 0,26% | 0,0012 |
-| Similaridade por cesta | 6,23% | 0,0398 |
-| Repetição pessoal | **14,44%** | **0,1157** |
-
-**Operação:** 52/52 cenários com o provedor fora do ar seguem respondendo pelo
-glossário; WhatsApp de ponta a ponta aprovado com gateway respondendo em ~5 ms
-([relatório](evaluations/results/whatsapp-integration-v1.json)); 12/12 testes
-E2E em desktop e celular sem violações sérias de acessibilidade.
-
 **Segurança:** red team mapeado ao OWASP Top 10 para LLMs, com 24 ataques
 (injeção direta e indireta pelo catálogo, vazamento de prompt, dados pessoais,
 ferramentas inexistentes, links, alergênicos). Cada resposta é julgada por código:
@@ -82,28 +77,45 @@ ferramentas inexistentes, links, alergênicos). Cada resposta é julgada por có
 [Groq](evaluations/results/red-team-v2-groq.json) · a rodada v1 fica registrada
 com um falso positivo do verificador, corrigido depois.
 
-**Telegram 24/7:** [@mesa_food_discovery_bot](https://t.me/mesa_food_discovery_bot)
-roda no Render (gateway Go + Key Value + worker). Como o plano gratuito hiberna,
-o gateway acorda o worker ao enfileirar; a primeira resposta após um período
-parado leva até um minuto.
+**Recomendação** (validação temporal, 175.358 clientes, próxima cesta):
 
-## Capturas
+| Modelo | Recall@10 | NDCG@10 |
+| --- | ---: | ---: |
+| Popularidade global | 0,26% | 0,0012 |
+| Similaridade por cesta | 6,23% | 0,0398 |
+| Repetição pessoal | **14,44%** | **0,1157** |
 
-| Web | Laboratório | Telegram |
-| --- | --- | --- |
-| ![Assistente na web](docs/screenshots/assistant-desktop.png) | ![Laboratório com o red team](docs/screenshots/lab-desktop.png) | ![Conversa no Telegram](docs/screenshots/telegram.png) |
+**Operação:** 52/52 cenários com o provedor fora do ar seguem respondendo pelo
+glossário; WhatsApp de ponta a ponta aprovado com o gateway respondendo em
+~5 ms ([relatório](evaluations/results/whatsapp-integration-v1.json)); 12/12
+testes E2E em desktop e celular sem violações sérias de acessibilidade.
 
 Resultados negativos ficam registrados: o piloto de embeddings E5 não superou a
 busca lexical com glossário ([Experimento 003](docs/EXPERIMENT_003.md)) e juízes
 LLM de relevância reprovaram na calibração ([decisão](docs/RELEVANCE_REASONING_2026-11-10.md)).
+
+## Decisões de engenharia
+
+| Decisão | Alternativa descartada | Por quê |
+| --- | --- | --- |
+| O modelo escolhe ferramentas, mas nunca é fonte de fatos | Deixar o LLM descrever itens e preços | Itens e preços vêm só das ferramentas; a frase final passa por verificação de grounding e é trocada se citar algo que não está nos resultados |
+| Agente e planejador lado a lado, medidos na mesma suíte | Escolher um por intuição | Os dois passam na suíte reservada; o planejador usa metade das chamadas (13 × 25) e é mais rápido, enquanto o agente decide sozinho quando refazer uma busca ou recomendar. Os dois modos ficam disponíveis e o custo de cada um é medido |
+| Busca lexical (FTS5/BM25) com glossário PT→EN | Banco vetorial com embeddings | O E5 multilíngue perdeu para a lexical no mesmo protocolo e não foi promovido |
+| Avaliação por regras determinísticas | Juiz LLM | Os juízes testados reprovaram na calibração com controles; regras são reprodutíveis e auditáveis |
+| Gateway Go separado da API Python | Webhook direto no FastAPI | Webhooks exigem resposta em milissegundos e idempotência, independentes da latência do LLM |
+| Redis Streams com consumer group | Kafka | Mesma semântica de ack e reprocessamento, sem operar um cluster para este volume |
+| Fallback Gemini → Groq → glossário | Um provedor só | Cotas e quedas são normais na camada gratuita; o produto continua respondendo, e o motivo do fallback aparece na resposta |
+
+Mais decisões e o registro cronológico em [ARCHITECTURE.md](docs/ARCHITECTURE.md#decisões)
+e [DECISIONS.md](docs/DECISIONS.md).
 
 ## Arquitetura
 
 ```mermaid
 flowchart LR
   WEB[React + TypeScript] -->|HTTP + SSE| API[FastAPI]
-  WA[WhatsApp] -->|webhook| GW[Gateway Go]
-  TG[Telegram] -->|webhook| GW
+  TG[Telegram] -->|webhook| GW[Gateway Go]
+  WA[WhatsApp] -->|webhook| GW
   GW -->|XADD| Q[(Redis Stream)]
   Q -->|XREADGROUP| WK[Worker]
   MCPC[Clientes MCP] --> MCP[Servidor MCP]
@@ -117,14 +129,20 @@ flowchart LR
   TOOLS --> CAT[(Catálogo FTS5/BM25)] & REC[(Recomendador por cestas)]
 ```
 
-Detalhes e decisões em [ARCHITECTURE.md](docs/ARCHITECTURE.md).
+Detalhes em [ARCHITECTURE.md](docs/ARCHITECTURE.md).
+
+## Capturas
+
+| Laboratório: red team por risco OWASP | Telegram em produção |
+| --- | --- |
+| ![Tabela do red team no laboratório](docs/screenshots/lab-desktop.png) | ![Conversa com o bot no Telegram](docs/screenshots/telegram.png) |
 
 ## Stack
 
 Python 3.11+, FastAPI, Pydantic, LangGraph, MCP SDK, SQLite FTS5 · Go
 (net/http, go-redis) · Redis Streams · React 19, TypeScript, Vite · Gemini,
-Groq, llama.cpp (Qwen 2.5), ONNX Runtime (E5) · Playwright, axe, Inspect AI ·
-Docker, Render, GitHub Actions.
+Groq, llama.cpp (Qwen 2.5), ONNX Runtime (E5) · Prometheus, OpenTelemetry ·
+Playwright, axe, Inspect AI · n8n · Docker, Render, GitHub Actions.
 
 ## Rodar localmente
 
@@ -135,43 +153,48 @@ npm --prefix apps/web ci && npm --prefix apps/web run build
 
 python scripts/run_local.py --cloud    # Gemini -> Groq (chaves do ambiente)
 python scripts/run_local.py --no-llm   # só glossário, sem LLM
-docker compose up --build              # stack completa com WhatsApp e Redis
+docker compose up --build              # stack completa com gateway e Redis
 ```
 
-Testes:
+Preparação dos dados e outros modos em [PRODUCT_GUIDE.md](docs/PRODUCT_GUIDE.md).
 
-```sh
-python -m unittest discover -s tests                  # aplicação (178)
-npm --prefix apps/web test                            # interface (10)
-(cd services/whatsapp-gateway && go test ./...)       # gateway (14)
-npm --prefix apps/web run e2e                         # E2E, com o servidor no ar
-```
+| Suíte | Comando | Testes |
+| --- | --- | ---: |
+| Aplicação (domínio, agente, API, canais, privacidade) | `python -m unittest discover -s tests` | 180 |
+| Avaliação (suítes e calibração, Inspect AI) | `python -m unittest discover -s tests_eval` | 21 |
+| Interface | `npm --prefix apps/web test` | 10 |
+| Gateway | `cd services/whatsapp-gateway && go test -race ./...` | 14 |
+| E2E com acessibilidade (desktop e celular) | `npm --prefix apps/web run e2e` | 12 |
 
 ## Estrutura
 
 ```text
 src/meal_discovery/
-  agent/          grafo LangGraph, verificação de grounding
-  llm/            porta ChatModel, adaptadores Gemini/Groq/local, resiliência, roteamento
-  channels/       worker de mensagens (WhatsApp, Telegram)
-  policies.py     regras antes do modelo (alergênicos, injeção, preço)
-  privacy.py      mascaramento de dados pessoais antes do LLM
+  agent/           grafo LangGraph, verificação de grounding
+  llm/             porta ChatModel, adaptadores Gemini/Groq/local, resiliência
+  channels/        worker de mensagens (WhatsApp, Telegram)
+  policies.py      regras antes do modelo (alergênicos, injeção, preço)
+  privacy.py       mascaramento de dados pessoais antes do LLM
   observability.py métricas Prometheus e traces OpenTelemetry
-  tools.py        ferramentas somente leitura compartilhadas
-  mcp_server.py   servidor MCP
-  api.py          FastAPI: catálogo, recomendação, agente, SSE, operações
-services/whatsapp-gateway/   gateway Go
+  tools.py         ferramentas somente leitura compartilhadas
+  mcp_server.py    servidor MCP
+  api.py           FastAPI: catálogo, recomendação, agente, SSE, operações
+services/whatsapp-gateway/   gateway Go (Telegram e WhatsApp)
 apps/web/                    interface React (design system, features, E2E)
-evaluations/                 suítes, comparação de provedores, calibração
-docs/                        arquitetura, decisões, experimentos, roadmap
+evaluations/                 suítes, red team, comparação de provedores, resultados
+docs/                        arquitetura, segurança, experimentos, decisões
 ```
 
 ## Limitações
 
 O catálogo é histórico: não há estoque, entrega ou compra, e a sacola é uma
-simulação. Preços são normalizados pelo dataset, sem moeda. Nomes de produtos
-não comprovam ingredientes ou alergênicos. As avaliações são automatizadas;
-satisfação de pessoas reais não foi medida.
+simulação. Preços são normalizados pelo dataset, sem moeda; preço 0 significa
+preço não registrado. Nomes de produtos não comprovam ingredientes ou
+alergênicos. As avaliações são automatizadas; satisfação de pessoas reais não
+foi medida.
+
+Desenvolvido com Claude Code como par de programação; arquitetura, decisões de
+produto e desenho da avaliação são meus.
 
 Projeto independente, sem vínculo com a Delivery Hero. Código sob licença MIT;
 dados e modelos de terceiros mantêm seus próprios termos.

@@ -15,7 +15,7 @@ def execute(workflow_id="mealEvaluationV1"):
     node = ROOT / ".tools/node-v24.22.2-win-x64/node.exe"
     cli = ROOT / ".tools/n8n/node_modules/n8n/bin/n8n"
     if not node.is_file() or not cli.is_file():
-        raise ValueError("Install the pinned local Node 24/n8n runtime; see workflows/n8n/README.md")
+        raise ValueError("Install the pinned local Node 24/n8n runtime; see evaluations/n8n/README.md")
     env = {**os.environ, "N8N_DIAGNOSTICS_ENABLED": "false", "N8N_VERSION_NOTIFICATIONS_ENABLED": "false",
            "N8N_PERSONALIZATION_ENABLED": "false", "N8N_USER_FOLDER": str(ROOT / ".tools/n8n-state"),
            "PATH": str(node.parent) + os.pathsep + os.environ.get("PATH", "")}

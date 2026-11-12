@@ -17,9 +17,7 @@ coverage/
 data/*
 !data/README.md
 models/*
-!models/README.md
 reports/*
-!reports/README.md
 *.csv
 *.parquet
 *.zip

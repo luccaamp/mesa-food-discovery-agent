@@ -9,8 +9,8 @@ Os três pacotes originais estão extraídos e verificados em `data/raw/dhrd-off
 1. `audit`: inventário de CSVs.
 2. `prepare`: valida arquivos com mapeamento explícito e cria um banco SQLite local.
 3. `benchmark`: compara popularidade, repetição histórica e similaridade colaborativa de itens.
-4. `scripts/fetch_hyperhawkes.py`: baixa a cópia pública real pré-processada do DHRD e verifica o hash.
-5. `scripts/fetch_nearbite_sg.py` e `scripts/audit_nearbite_sg.py`: obtêm e auditam as três tabelas reais do espelho público de Singapura.
+4. `scripts/legacy/fetch_hyperhawkes.py`: baixa a cópia pública real pré-processada do DHRD e verifica o hash.
+5. `scripts/legacy/fetch_nearbite_sg.py` e `scripts/legacy/audit_nearbite_sg.py`: obtêm e auditam as três tabelas reais do espelho público de Singapura.
 6. `prepare-singapore`: adapta a versão real fixada por SHA-256, exclui pedidos inteiros com produtos ausentes e preserva contexto.
 7. `validate-singapore`: executa a configuração temporal registrada, sem avaliar os dias de teste reservado.
 
@@ -28,7 +28,7 @@ Saídas existentes não são substituídas. O protocolo em `configs/singapore-ex
 Após a instalação descrita no README:
 
 ```sh
-python scripts/fetch_hyperhawkes.py
+python scripts/legacy/fetch_hyperhawkes.py
 ```
 
 Esse comando baixa o arquivo real para `data/raw/hyperhawkes-dhrd/` e registra procedência e auditoria. Ver [campos e limites](DATA_ACCESS.md). O comando de demonstração sintética foi removido; CLI de preparação e benchmark exigem dados reais. As fixtures artificiais existem apenas nos testes automatizados.

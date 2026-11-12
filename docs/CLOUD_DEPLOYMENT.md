@@ -1,19 +1,23 @@
-# Mesa no Render Free com Gemini
+# Mesa no Render (plano gratuito)
 
-A publicação usa um único serviço Docker com interface React, FastAPI, catálogo
-lexical e vizinhos de cestas já calculados. Qwen, embeddings, preparação dos dados
-e n8n continuam locais. Nenhum treinamento ou download é feito ao acordar o serviço.
+Tudo roda no plano gratuito do Render, declarado em [`render.yaml`](../render.yaml):
 
-Publicado em [mesa-meal-discovery.onrender.com](https://mesa-meal-discovery.onrender.com).
-Seis verificações HTTP passaram no serviço real em 7 de novembro de 2026.
-O Gemini 3.1 Flash-Lite foi configurado e testado em chamadas reais em 9 de
-novembro. O modelo 2.5 anterior retornou HTTP 404 para a conta nova.
-[Evidência do provedor](../evaluations/results/gemini-live-v1.json).
-[Evidência da implantação](../evaluations/results/cloud-deployment-v1.json).
+| Serviço | Tipo | Função |
+| --- | --- | --- |
+| `mesa-meal-discovery` | Web, Docker | Interface React, FastAPI, agente, catálogo e recomendação; worker de mensagens em thread (`WHATSAPP_WORKER=1`) |
+| `mesa-whatsapp-gateway` | Web, Docker (Go) | Webhooks do Telegram e do WhatsApp → Redis Stream; acorda o app ao enfileirar |
+| `mesa-queue` | Key Value (Redis) | Fila e contexto das conversas; só rede interna, sem persistência em disco |
 
-Em 9 de novembro, a revisão de uso foi publicada e passou em oito verificações
-HTTP, incluindo precisão do preço, filtros decimais e evidência da recomendação
-pela conversa. [Evidência atual](../evaluations/results/product-ux-v1.json).
+Publicado em [mesa-meal-discovery.onrender.com](https://mesa-meal-discovery.onrender.com)
+e no [@mesa_food_discovery_bot](https://t.me/mesa_food_discovery_bot).
+Gemini 3.1 Flash-Lite é o provedor principal e Groq (`openai/gpt-oss-120b`) o
+fallback; sem nenhum dos dois, o assistente responde pelo glossário.
+Qwen local, embeddings, preparação dos dados e n8n ficam fora da nuvem. Nenhum
+treinamento ou download de modelo acontece ao acordar o serviço.
+
+Evidências: [primeiro deploy](../evaluations/results/cloud-deployment-v1.json) ·
+[Gemini real](../evaluations/results/gemini-live-v1.json) ·
+[revisão de uso](../evaluations/results/product-ux-v1.json).
 
 ## Dados reais e reprodução
 
@@ -41,28 +45,24 @@ qualidade do modelo externo.
 
 ## Configuração do serviço
 
-O `render.yaml` declara explicitamente `plan: free`, sem banco pago ou disco
-persistente. A mesma configuração pode ser criada pela API do Render. Escolher
-o repositório público e a branch `main`, runtime Docker e health check `/ready`.
+O `render.yaml` cria os três recursos com `plan: free`, sem banco pago ou disco
+persistente; a mesma configuração pode ser aplicada pela API do Render. Health
+checks: `/ready` no app e `/health` no gateway. O deploy automático por push
+exige que o app do Render no GitHub tenha acesso ao repositório; sem isso, use
+**Manual Deploy → Deploy latest commit** ou a API.
 
-O serviço atual foi criado pela URL pública do repositório. Esse modo exige
-deploy manual depois de enviar os commits: conferir o histórico de Deploys e
-usar **Manual Deploy → Deploy latest commit** quando não houver implantação
-pendente. A flag `autoDeploy` isoladamente não comprova integração com o GitHub.
-Para automação por push, conectar o provedor Git na conta do Render.
-
-No painel Environment do serviço, cadastrar **GEMINI_API_KEY** como segredo.
-Não colocar a chave no Git, no Dockerfile, em captura de tela ou no chat.
-Usar um projeto Google elegível para o nível gratuito; não habilitar faturamento
-para esta demonstração. A disponibilidade e a cota reais dependem da conta.
+Segredos ficam só no painel Environment (ou na API), nunca no Git, no
+Dockerfile ou em capturas: `GEMINI_API_KEY`, `GROQ_API_KEY`,
+`TELEGRAM_BOT_TOKEN` (app) e `TELEGRAM_WEBHOOK_SECRET` (gateway, o mesmo
+registrado no `setWebhook`). O projeto Google fica sem faturamento.
 
 Defaults: `LLM_PROVIDER=gemini`, `LLM_MODEL=gemini-3.1-flash-lite`,
-`GEMINI_CALLS_PER_MINUTE=4`, `GEMINI_CALLS_PER_DAY=20`, `MEAL_PUBLIC_MODE=1`.
-O modelo só interpreta a intenção em JSON; consultas controladas retornam os
-produtos e o domínio monta os fatos. A chave vai no header do provedor.
+`LLM_FALLBACK_PROVIDERS=groq`, `GEMINI_CALLS_PER_MINUTE=4`,
+`GEMINI_CALLS_PER_DAY=20`, `GROQ_CALLS_PER_MINUTE=10`, `GROQ_CALLS_PER_DAY=300`,
+`MEAL_PUBLIC_MODE=1`. As chaves vão no header do provedor.
 
-Sem chave, com erro, resposta inválida ou cota esgotada, o assistente usa somente
-o glossário explícito e informa a limitação. Busca, filtros e recomendação
+Sem chave, com erro, resposta inválida ou cota esgotada em todos os provedores,
+o assistente usa somente o glossário explícito e informa a limitação. Busca, filtros e recomendação
 continuam disponíveis. `/v1/system` distingue configuração de disponibilidade
 verificada: não faz chamadas externas de health check que gastariam a cota.
 
@@ -88,7 +88,7 @@ Não são uma garantia financeira: mantenha o projeto Google sem faturamento.
 `usage.provider_attempts` informa tentativas de transporte, incluindo falhas.
 Os tokens informados vêm apenas da resposta concluída; o consumo de tentativas
 anteriores com erro é desconhecido e aparece em `failed_attempts_usage_unknown`.
-Não interpretar esses tokens como faturamento total. `/v1/system` também expõe o
+Esses tokens não representam o faturamento total. `/v1/system` também expõe o
 SHA público do deploy por `RENDER_GIT_COMMIT`, quando válido, sem ler segredos.
 
 ## Aceitação pública com orçamento
@@ -100,7 +100,7 @@ Confronta os itens com o SQLite oficial local. O protocolo é de aceitação de 
 não um benchmark externo de qualidade. Não lê chave e não confunde glossário com
 inferência Gemini. Há no máximo oito tentativas de modelo, ritmo conservador,
 interrupção após duas inferências consecutivas falharem e preservação de evidência
-parcial. Não reiniciar/republicar para contornar cota.
+parcial. Cota esgotada não é contornada reiniciando ou republicando o serviço.
 
 O diagnóstico de 10/11 distinguiu dois registros anteriores: `network_error` em
 06:00 UTC e **HTTP 503 do provedor** em 06:34 UTC. O segundo não era um timeout;

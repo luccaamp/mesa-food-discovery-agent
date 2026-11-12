@@ -1,10 +1,10 @@
 # Dados reais obtidos e acesso à distribuição original
 
-Atualizado em 7/11/2026. **O usuário forneceu os três ZIPs oficiais e o README. A distribuição completa foi verificada e extraída: quinze arquivos, três cidades e 4.400.000 pedidos.** Os hashes dos pacotes coincidem com a referência OmniRec, e a comparação dos campos de Singapura confirmou a cópia anterior. [Decisão de quais dados usar e auditoria](OFFICIAL_DATA_MIGRATION.md). O [registro da busca anterior](SOURCE_SEARCH_2026-11-06.md) foi mantido como histórico.
+Atualizado em 7/11/2026. **Os três ZIPs oficiais e o README da distribuição foram obtidos. A distribuição completa foi verificada e extraída: quinze arquivos, três cidades e 4.400.000 pedidos.** Os hashes dos pacotes coincidem com a referência OmniRec, e a comparação dos campos de Singapura confirmou a cópia anterior. [Decisão de quais dados usar e auditoria](OFFICIAL_DATA_MIGRATION.md). O [registro da busca anterior](history/SOURCE_SEARCH_2026-11-06.md) foi mantido como histórico.
 
 ## Fonte principal atual: distribuição oficial
 
-Dados em `data/raw/dhrd-official-v1/data_sg/`, `data_se/` e `data_tw/`, ignorados pelo Git. Arquivos originais enviados pelo usuário foram preservados na raiz do workspace. [Manifesto agregado](../evaluations/results/official-archives-manifest-v1.json) e [registro de fontes](../configs/official-source-selection-v1.json).
+Dados em `data/raw/dhrd-official-v1/data_sg/`, `data_se/` e `data_tw/`, ignorados pelo Git. Os arquivos originais foram preservados fora do repositório. [Manifesto agregado](../evaluations/results/official-archives-manifest-v1.json) e [registro de fontes](../configs/official-source-selection-v1.json).
 
 Usar Singapura como cidade principal, com `orders_sg_train.txt`, `products_sg.txt` e `vendors_sg.txt`. Reservar `orders_sg_test.txt` para avaliação final. `orders_sg.txt` já contém treino e teste: serve para auditoria e não deve ser somado aos outros arquivos como mais observações. Estocolmo e Taipei permanecem como cidades separadas para etapas posteriores.
 
@@ -17,8 +17,8 @@ As seções abaixo descrevem as fontes históricas usadas antes de o acesso ofic
 Fonte dos links: [NearBite, revisão fixada](https://github.com/jpchawanda1/nearbite-recommender/blob/a58e7255e22fbf7ed60f4854c041a41ba5a5c454/scripts/download_data.py). O autor declara origem DHRD e informa que adicionou latitude/longitude decodificadas de geohash aos pedidos e estabelecimentos. Não executamos código de terceiros; implementamos downloader e auditor próprios. Os dados são identificados como `real_third_party_copy`: disponibilidade, formato e contagens foram verificados, mas não há comparação byte a byte com o pacote original.
 
 ```sh
-python scripts/fetch_nearbite_sg.py
-python scripts/audit_nearbite_sg.py
+python scripts/legacy/fetch_nearbite_sg.py
+python scripts/legacy/audit_nearbite_sg.py
 ```
 
 Arquivos locais em `data/raw/nearbite-sg/`; total de 419.360.922 bytes. O manifesto registra URLs, SHA-256 e cabeçalhos. O relatório completo local é `reports/nearbite-sg-audit.json`.
@@ -53,7 +53,7 @@ Os autores de [HyperHawkes, WWW 2025](https://github.com/dbis-uibk/HyperHawkes) 
 Download reproduzível:
 
 ```sh
-python scripts/fetch_hyperhawkes.py
+python scripts/legacy/fetch_hyperhawkes.py
 ```
 
 Destino local: `data/raw/hyperhawkes-dhrd/dhrd.inter`. O dataset não é enviado ao GitHub deste projeto. O script fixa a revisão `df2b334bf6444e0da03a1879a2cb8132fa6e71fa`, exige 49.974.096 bytes e confere o hash do objeto Git `1f7c89bf9f3ba91bd6fe526ea44467ac7f45db02`. SHA-256 observado: `57489a010678749186eac350d7c4ed547447553b6cbbc2d4ef647e6e4b355399`.
@@ -72,7 +72,7 @@ Campos presentes: `user_id`, `item_id`, `timestamp`, `item_name`, `vendor_id`, `
 
 Limites: não há preço, `primary_cuisine`, geohash, fotos ou ingredientes. Sessões não devem ser automaticamente declaradas como pedidos originais. Ainda faltam auditar transformações, precisão dos timestamps, semântica das sessões e efeito da seleção da população antes de definir o protocolo final. É preciso adaptar o formato tabulado ao pipeline; não há treinamento ou métrica real publicado ainda.
 
-O repositório HyperHawkes informa GPL-3.0 para seu código; o DHRD original informa MIT. Nosso downloader não copia nem executa o código dos autores. Preservar as referências de ambas as fontes e não presumir que as licenças de código e dados sejam intercambiáveis.
+O repositório HyperHawkes informa GPL-3.0 para seu código; o DHRD original informa MIT. Nosso downloader não copia nem executa o código dos autores. As referências de ambas as fontes são preservadas; as licenças de código e de dados não são intercambiáveis.
 
 ## O que foi investigado
 

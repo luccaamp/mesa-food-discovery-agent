@@ -1,6 +1,6 @@
 # Busca pela distribuição completa DHRD
 
-**Atualização de 7/11/2026:** o usuário forneceu os três ZIPs oficiais e o README. Todos foram verificados por hash/CRC, extraídos e auditados; a distribuição completa está disponível localmente. [Fonte principal atual e comparação](OFFICIAL_DATA_MIGRATION.md). As seções abaixo preservam a situação e a pesquisa anteriores ao recebimento dos arquivos.
+**Atualização de 7/11/2026:** os três ZIPs oficiais e o README da distribuição foram obtidos. Todos foram verificados por hash/CRC, extraídos e auditados; a distribuição completa está disponível localmente. [Fonte principal atual e comparação](../OFFICIAL_DATA_MIGRATION.md). As seções abaixo preservam a situação e a pesquisa anteriores ao recebimento dos arquivos.
 
 Pesquisa em 6/11/2026. Objetivo: localizar pedidos, catálogo e estabelecimentos de Singapura, Estocolmo e Taipei, incluindo teste original quando fornecido. As conclusões descrevem esta pesquisa; não provam inexistência de outra cópia na internet.
 
@@ -32,7 +32,7 @@ Os três downloads diretos foram testados e redirecionaram para login, em vez de
 
 | Fonte | Resultado |
 | --- | --- |
-| [NearBite](https://github.com/jpchawanda1/nearbite-recommender) | Três links públicos de Singapura acessíveis. 419.360.922 bytes baixados; tabelas e relações auditadas. [Detalhes](DATA_ACCESS.md). |
+| [NearBite](https://github.com/jpchawanda1/nearbite-recommender) | Três links públicos de Singapura acessíveis. 419.360.922 bytes baixados; tabelas e relações auditadas. [Detalhes](../DATA_ACCESS.md). |
 | [HyperHawkes](https://github.com/dbis-uibk/HyperHawkes) | Derivado de Estocolmo com seis campos. 49.974.096 bytes baixados e verificados pelo objeto Git fixado. |
 | [RHYTHM](https://github.com/RongZhu735/RHYTHM) | Arquivo DHRD processado de 13.446.207 bytes disponível; não fornece o pacote original completo nem os metadados que faltam. Não adotado como substituto do original. |
 | [hassaku](https://github.com/karapostK/hassaku) | Aponta para o mesmo ZIP original restrito de Singapura. |

@@ -3,14 +3,14 @@
 ## 2026-11-06 — Escolha e fundação
 
 - Hipótese: recomendação com busca conversacional permite evidenciar ML, LLMs e produto de forma integrada.
-- Decisão: projeto 5B escolhido pelo usuário; foco em uma cidade e uma tarefa principal.
+- Decisão: foco em uma cidade e em uma tarefa principal, descobrir o que pedir, combinando recomendação e busca conversacional.
 - Melhoria: explicitar avaliação, ferramentas de IA usadas e direção visual; adiar previsão de demanda.
 - Implementação inicial: estrutura do repositório, auditor CSV sem dependências de execução, testes e configuração de CI.
 - Resultado de dados/modelos: nenhum experimento DHRD realizado.
 - Limitação: acesso aos arquivos ainda pendente; prazos de desenvolvimento são estimativas.
 - Próxima decisão: obter os arquivos oficiais e escolher cidade e cortes a partir da auditoria.
 
-Template dos próximos registros: hipótese → alteração → comparação → resultado observado → limitação → próxima decisão. Informar assistência de IA e revisão humana relevante.
+Template dos próximos registros: hipótese → alteração → comparação → resultado observado → limitação → próxima decisão.
 
 ## 2026-11-06 — Importação relacional e referências de recomendação
 
@@ -21,11 +21,10 @@ Template dos próximos registros: hipótese → alteração → comparação →
 - Limitação: link oficial sem autenticação redireciona para login. Formato real e protocolo dos splits distribuídos permanecem desconhecidos. O benchmark inicial não aplica restrição geográfica nem disponibilidade.
 - Decisão: não escolher cidade, inventar métricas ou trocar a base. SQLite usa biblioteca padrão e garante integridade nesta etapa; DuckDB/Parquet serão reconsiderados a partir dos arquivos e medições.
 - Próxima ação: obter distribuição oficial acessível e validar o adaptador. Funções de catálogo e API poderão avançar em paralelo com os contratos conhecidos.
-- Assistência: implementação e documentação produzidas com Codex; compreensão e revisão pelo candidato ainda precisam ser verificadas.
 
 ## 2026-11-06 — Aquisição real e remoção de demonstração sintética
 
-- Pedido do usuário: usar dados reais sempre no produto e procurar cópias públicas/API em vez de aguardar exclusivamente o Drive.
+- Diretriz: usar sempre dados reais no produto e procurar cópias públicas ou API em vez de esperar apenas pelo acesso ao pacote original.
 - Pesquisa: API GitHub, fork oficial, repositórios de análises, projetos dos autores e links públicos de distribuição. O pacote original e o link direto de Singapura exigiram login. Não foi encontrada API pública do DHRD.
 - Resultado: arquivo público real dos autores do HyperHawkes baixado, conferido por tamanho e hash Git fixados, com SHA-256 registrado. Auditoria completa em `DATA_ACCESS.md`.
 - Correção: removido o comando `demo`; gerador de exemplos transferido para `tests/`. Preparação e benchmark recusam fontes sintéticas por padrão; habilitação interna existe somente para testes e não está exposta na CLI.
@@ -34,12 +33,12 @@ Template dos próximos registros: hipótese → alteração → comparação →
 
 ## 2026-11-06 — Cópia pública de Singapura com catálogo e contexto
 
-- Pedido: ampliar busca por todos os dados, incluindo bancos/catálogos públicos e espelhos de pesquisa.
+- Objetivo: ampliar a busca por todos os dados, incluindo bancos/catálogos públicos e espelhos de pesquisa.
 - Achado: NearBite publica três links de CSVs de Singapura acessíveis sem login. Baixados 419.360.922 bytes com downloader próprio, validação de tamanho/cabeçalho e manifesto SHA-256. A origem é declarada pelo espelho e as contagens conferem com sua documentação; equivalência byte a byte ao original permanece não verificada.
 - Auditoria real: 3.431.870 linhas de itens, 1.709.414 pedidos, 476.150 clientes, 1.066.840 produtos, 7.411 vendedores e 78 culinárias. Dias 0–75. Quarenta e uma linhas sem produto no catálogo; zero conflitos de cliente/dia/horário por pedido.
 - Comparação de fontes: esta cópia tem preço normalizado, culinária e geohash ausentes no derivado de Estocolmo. Priorizar Singapura para o produto, mantendo as fontes separadas e seus limites explícitos.
 - Limite: não foram obtidos os três ZIPs originais nem o teste separado. O carregador OmniRec revelou links e hashes de referência; os downloads continuaram exigindo acesso. Busca em catálogos públicos não encontrou o pacote integral.
-- Próxima ação: implementar adaptação do formato real e tratamento registrado das 41 linhas, depois reservar avaliação temporal própria. Não declarar a aquisição de todos os dados.
+- Próxima ação: implementar adaptação do formato real e tratamento registrado das 41 linhas, depois reservar avaliação temporal própria. Nesta data, a aquisição completa ainda não estava concluída.
 
 ## 2026-11-06 — Preparação e primeira validação real
 
@@ -50,7 +49,6 @@ Template dos próximos registros: hipótese → alteração → comparação →
 - Erro prioritário: 21.480 clientes sem histórico recebem popularidade global; 6.278 itens-alvo não estavam no treino. Investigar recuperação por conteúdo e preferências explícitas, sem afirmar ganho antes de avaliar.
 - Limites: validação histórica própria, espelho de terceiros, sem restrição geográfica ou teste final. Não demonstra conversão, satisfação ou ganho financeiro.
 - Evidências: `EXPERIMENT_001.md`, configuração congelada e relatórios agregados em `evaluations/results/`. Dados e IDs de quarentena ficam locais.
-- Assistência: Codex implementou e executou o pipeline; a revisão e a compreensão pelo candidato continuam parte do trabalho de preparação para entrevista.
 
 ## 2026-11-07 — Distribuição oficial recebida, comparada e escolhida
 

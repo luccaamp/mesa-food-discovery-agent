@@ -79,7 +79,7 @@ Hipóteses futuras: recuperação por texto/categoria e preferências declaradas
 ## Reprodução e evidências
 
 ```sh
-python scripts/fetch_nearbite_sg.py
+python scripts/legacy/fetch_nearbite_sg.py
 python -m meal_discovery prepare-singapore --output data/processed/singapore-v1.sqlite
 python -m meal_discovery validate-singapore --database data/processed/singapore-v1.sqlite --output reports/singapore-validation-v1.json
 ```

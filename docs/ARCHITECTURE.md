@@ -2,24 +2,32 @@
 
 ## Visão geral
 
-O Mesa é um monólito modular em Python servido por FastAPI, com uma interface
-React/TypeScript empacotada no mesmo container. O núcleo de IA segue
-portas e adaptadores: o assistente depende de contratos, não de provedores.
+Dois processos e uma fila. A **API em Python** (FastAPI) concentra o domínio, o
+agente e a interface React empacotada no mesmo container; um **gateway em Go**
+recebe os webhooks de mensageria e os entrega por **Redis Streams** a um worker
+que roda o mesmo agente. O núcleo de IA segue portas e adaptadores: o agente
+depende do contrato `ChatModel`, não de um provedor.
 
 ```text
-Interface (React)        apps/web
-      │ HTTP/JSON
-Entrada (FastAPI)        api.py, api_models.py, cloud_limits.py
-      │
-Aplicação                assistant.py   políticas → planejamento → ferramentas
-                         planner.py     intenção com saída estruturada
-      │ porta ChatModel           │ ferramentas somente leitura
-Adaptadores LLM          llm/      Catálogo e recomendação
-  gemini.py                          catalog.py   SQLite FTS5/BM25
-  openai_compatible.py               serving.py   coocorrência + popularidade
-    (Groq, Qwen local, OpenAI)       discovery.py glossário PT/EN e políticas
+Interface (React)        apps/web                    Telegram / WhatsApp
+      │ HTTP + SSE                                         │ webhook
+Entrada (FastAPI)        api.py, api_models.py       Gateway Go (services/whatsapp-gateway)
+      │                  cloud_limits.py               segredo/HMAC, deduplicação, XADD
+      │                                                    │
+      │                                              Redis Stream ──► channels/ (worker)
+      ▼                                                    │
+Aplicação                agent/       grafo LangGraph + grounding  ◄─┘
+                         policies.py  regras antes do modelo
+                         privacy.py   mascaramento antes do LLM
+                         planner.py   modo planejador (saída estruturada)
+      │ porta ChatModel              │ ferramentas somente leitura (tools.py, mcp_server.py)
+Adaptadores LLM          llm/        Catálogo e recomendação
+  gemini.py                            catalog.py   SQLite FTS5/BM25
+  openai_compatible.py                 serving.py   coocorrência + popularidade
+    (Groq, Qwen local, OpenAI)         discovery.py glossário PT/EN
   resilience.py, registry.py
       │
+Transversal              observability.py  métricas Prometheus, traces OpenTelemetry
 Dados offline            dataset.py, singapore.py, benchmark.py, deployment.py
 ```
 
@@ -100,14 +108,45 @@ serviço. O teste oficial (dias 76–90) fica fisicamente separado e não foi us
 para ajustar modelos. Os artefatos públicos contêm só catálogo, popularidade e
 vizinhança entre itens: nenhuma tabela individual de pedido ou cliente.
 
+## Canais: Telegram e WhatsApp
+
+```text
+Telegram/Meta ──► Gateway Go ──XADD──► Redis Stream ──XREADGROUP──► worker ──► agente ──► API do canal
+                     │ 200 em ms                                       │
+                     └── GET /ready (acorda o app no plano gratuito) ──┘
+```
+
+- O **gateway** (Go, ~15 MB) valida o segredo do Telegram ou a assinatura HMAC
+  da Meta, descarta duplicatas com `SET NX` por 24 h e responde em milissegundos;
+  nunca chama o modelo.
+- O **worker** consome o stream com consumer group, mantém o contexto da conversa
+  no Redis por 24 h (chave com hash e sal, nunca o telefone) e responde no canal
+  de origem. Falhas vão para uma fila de erros sem dado pessoal.
+- No plano gratuito os serviços hibernam: depois de enfileirar, o gateway faz
+  um `GET` no app para acordar o worker (`wake.go`).
+
+Detalhes em [WHATSAPP.md](WHATSAPP.md).
+
+## Privacidade e observabilidade
+
+- `privacy.py` mascara telefone, e-mail, CPF e cartões antes de qualquer
+  chamada ao LLM; o red team verifica isso no texto efetivamente enviado.
+- `/metrics` expõe turnos por canal, planejador, status, latência, tokens e
+  fallbacks em formato Prometheus; o gateway tem as próprias métricas.
+- Traces OpenTelemetry seguem as convenções de GenAI (`gen_ai.*`) para cada
+  chamada de modelo e ferramenta.
+
+Modelo de ameaças e controles em [SECURITY.md](SECURITY.md).
+
 ## Decisões
 
 | Decisão | Motivo |
 | --- | --- |
+| O modelo escolhe ferramentas, mas não é fonte de fatos | Itens e preços vêm só das ferramentas; a frase final passa por verificação de grounding |
+| Agente e planejador lado a lado | O planejador (uma chamada estruturada) é mais barato e rápido; o agente é mais flexível. Os dois passam na suíte reservada, e a tabela mostra o custo de cada um |
 | SQLite FTS5 em vez de banco vetorial | A busca lexical com glossário venceu o piloto E5 no mesmo protocolo |
-| Monólito modular | Um container cabe na camada gratuita; as portas permitem extrair serviços depois |
-| LLM só planeja, não responde fatos | Elimina itens e preços inventados; a resposta é verificável |
-| Fallback entre provedores gratuitos | A camada gratuita tem cotas e quedas; um segundo provedor mantém a inferência |
-
-A evolução planejada (agente com várias etapas, canal WhatsApp, observabilidade)
-está no [roadmap](ROADMAP.md).
+| Gateway em Go separado da API | Webhooks precisam de resposta rápida e idempotente, independente da latência do LLM |
+| Redis Streams em vez de Kafka | Mesma semântica de consumer group e ack, sem operar um cluster para este volume |
+| Fallback entre provedores gratuitos | Cotas e quedas são normais na camada gratuita; Gemini → Groq → glossário mantém o serviço |
+| Avaliação por código, não por juiz LLM | Os juízes testados reprovaram na calibração; regras determinísticas são reprodutíveis |
+| Monólito modular na API | Um container cabe na camada gratuita; as portas permitem extrair serviços depois |

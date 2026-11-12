@@ -9,7 +9,7 @@ from meal_discovery.dataset import open_dataset
 from meal_discovery.benchmark import validate_singapore
 from meal_discovery.recommendation import Recommender
 from meal_discovery.singapore import parse_day, prepare_official_singapore, prepare_singapore
-from scripts.fetch_nearbite_sg import FILES
+from scripts.legacy.fetch_nearbite_sg import FILES
 
 
 def source_fixture(root):

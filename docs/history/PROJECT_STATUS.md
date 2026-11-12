@@ -2,14 +2,14 @@
 
 [Mesa publicado](https://mesa-meal-discovery.onrender.com) ·
 [Critérios e evidências da entrega](RELEASE_1.md) ·
-[Executar localmente](PRODUCT_GUIDE.md) ·
-[Roadmap](ROADMAP.md)
+[Executar localmente](../PRODUCT_GUIDE.md) ·
+[Roadmap](../ROADMAP.md)
 
 O produto público se chama **Mesa**.
 
 **Publicação conferida:** `05da18acc3c5f76e7ac84e134ad27391924aaf51`,
 saúde e prontidão aprovadas; laboratório exibindo 10/10 e a reprovação do juiz.
-[Registro atual](../evaluations/results/release-guarded-v1.json).
+[Registro atual](../../evaluations/results/release-guarded-v1.json).
 Esta conferência não consumiu chamadas ao modelo. A CI da consolidação
 passou em 126 testes da aplicação, além dos 21 de avaliação e seis da interface.
 
@@ -17,7 +17,7 @@ A interface agora distingue timeout, pausa do provedor, cota e resposta inválid
 O contrato OpenAPI acompanha os novos campos; nenhuma mensagem privada do
 provedor é exposta. A verificação pública posterior à publicação conferiu três
 restrições em inglês, uma busca comum e a decisão de relevância, sem inferência.
-O [teste no navegador](../evaluations/results/release-guarded-browser-v1.json)
+O [teste no navegador](../../evaluations/results/release-guarded-browser-v1.json)
 também confirmou a resposta por política e a reprovação visível do juiz.
 
 ## Resultado atual
@@ -81,4 +81,4 @@ allergy, coeliac e gluten-free, sem chamar o modelo para certificar segurança.
 Nomes comuns como egg sandwich continuam pesquisáveis. A CI desta revisão
 passou em 126 testes da aplicação, 21 de avaliação e seis da interface.
 
-[Pesquisa e resultados da rodada](RELEVANCE_REASONING_2026-11-10.md).
+[Pesquisa e resultados da rodada](../RELEVANCE_REASONING_2026-11-10.md).

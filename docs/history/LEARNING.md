@@ -28,6 +28,6 @@ No teste automatizado, um perfil novo compra um item que não aparece no treino.
 
 ## Entender o primeiro resultado real
 
-Na [primeira validação](EXPERIMENT_001.md), repetição recuperou em média 16,04% dos itens da próxima cesta entre dez sugestões. Isso não significa que 16,04% das pessoas gostaram das recomendações. A métrica de clientes com pelo menos um item recuperado foi outra: Hit Rate@10, de 19,89%.
+Na [primeira validação](../EXPERIMENT_001.md), repetição recuperou em média 16,04% dos itens da próxima cesta entre dez sugestões. Isso não significa que 16,04% das pessoas gostaram das recomendações. A métrica de clientes com pelo menos um item recuperado foi outra: Hit Rate@10, de 19,89%.
 
 Para estudar antes de apresentar: explique por que 41 linhas problemáticas levaram à exclusão de 35 pedidos inteiros; por que repetições de item dentro de um pedido foram consolidadas; e por que os 21.480 clientes sem histórico recebem as mesmas sugestões nas três referências. Reproduza um teste pequeno e encontre a consulta SQL que limita o treino ao dia 61.

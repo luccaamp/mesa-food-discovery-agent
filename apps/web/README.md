@@ -1,21 +1,38 @@
-# Mesa — interface do produto
+# Mesa — interface web
 
-React + TypeScript + Vite, conectado ao backend real. Três áreas: exploração do catálogo, assistente e laboratório de experimentos. Não há dados de exemplo como fallback. Os gráficos de pratos são elementos visuais, sem fotos ou nomes de estabelecimentos inventados.
+React 19 + TypeScript estrito + Vite, servida pela própria API em produção
+([demo](https://mesa-meal-discovery.onrender.com)). Sem chaves no navegador e
+sem dados de exemplo: tudo vem do catálogo real.
 
-Na raiz do projeto:
+## Áreas
 
-```powershell
+| Área | Arquivo | O que mostra |
+| --- | --- | --- |
+| Início | `features/HomePage.tsx` | Culinárias e itens mais pedidos em Singapura |
+| Busca | `features/SearchPage.tsx` | Busca em PT/EN com filtros de preço e culinária |
+| Item | `features/ItemSheet.tsx` | Evidência do item e o que costuma ser pedido junto |
+| Sacola | `features/CartPage.tsx` | Complementos sugeridos; checkout simulado |
+| Assistente | `features/AssistantPanel.tsx` | Etapas do agente ao vivo (SSE), itens verificados, provedor, latência e tokens |
+| Laboratório | `features/LabPage.tsx` | Comparação de provedores, red team OWASP, recomendação e busca |
+
+Componentes e tokens do design system ficam em `components/` e `styles.css`.
+
+## Rodar
+
+```sh
 npm --prefix apps/web ci
-npm --prefix apps/web run build
-.venv\Scripts\python scripts/run_local.py
+npm --prefix apps/web run build          # a API serve dist/
+python scripts/run_local.py --cloud      # Gemini -> Groq; ou --no-llm
+npm --prefix apps/web run dev            # desenvolvimento; /v1 vai para a API em 8000
 ```
 
-Abrir [Mesa local](http://127.0.0.1:8000). O comando inicia o modelo Qwen local e a API; Ctrl+C encerra ambos. Requer dados/índices e pesos já preparados, conforme o [guia completo](../../docs/PRODUCT_GUIDE.md). Para usar somente catálogo e glossário explícito, adicionar `--no-llm`.
+## Testes
 
-Desenvolvimento com atualização automática: executar a API em 8000 e `npm --prefix apps/web run dev`. O Vite encaminha `/v1` à API local. Na versão construída, a própria API serve os assets, sem necessidade de CORS amplo ou chaves no navegador.
+```sh
+npm --prefix apps/web test               # componentes e utilitários
+npm --prefix apps/web run e2e            # Playwright + axe, com a API em 127.0.0.1:8765
+```
 
-Verificado: TypeScript estrito, build de produção, navegação/consulta real, diálogo por teclado, estado vazio sem itens fabricados, recomendações e laboratório. Layouts de 360, 768 e 1440 pixels CSS sem overflow horizontal. Seis combinações principais de texto foram medidas após correção de contraste, com razões entre 6,22 e 6,49. Não é certificação completa de acessibilidade; testes com usuários ainda estão pendentes.
-
-Seleção e conversa vivem apenas no estado desta aba; recarregar reinicia a sessão. É possível selecionar até cinco itens como referências. Recomendações indicam se vieram de associação entre cestas ou de popularidade histórica. O assistente identifica quando usa o glossário em vez do LLM.
-
-Ainda não há implantação pública do backend/modelo. O frontend foi executado localmente; não apresentar a URL do GitHub como URL da aplicação hospedada.
+Os 12 testes E2E rodam em desktop e celular (Pixel 7) contra o catálogo real e
+falham em qualquer violação séria ou crítica de acessibilidade (WCAG 2 A/AA).
+Capturas ficam em `e2e/screenshots/` (fora do Git).
