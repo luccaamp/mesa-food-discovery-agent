@@ -60,26 +60,33 @@ código, sem LLM) diz a culinária do pedido real: "Estou com vontade de comida
 japonesa". Foram 36.766 clientes nos braços sem LLM e uma amostra de 120 com o
 agente. [Experimento do agente](docs/EXPERIMENT_AGENT.md).
 
-| 5 sugestões, amostra com o agente | Restaurante real | Itens da culinária pedida | Sem resultado |
+| 5 sugestões, amostra de 120 clientes | Itens da culinária pedida | Sem resultado | Restaurante real |
 | --- | ---: | ---: | ---: |
-| Busca com o texto em português | 2,5% | 26,5% | 53% |
-| **Agente (LLM com ferramentas)** | 4,2% | **47,7%** | **15%** |
-| Agente, ordenado pela demanda da região | **9,2%** | 45,3% | 15% |
+| Busca com o texto em português ("comida japonesa") | 26,5% | 53% | 2,5% |
+| **Agente (LLM com ferramentas)** | **47,7%** | **15%** | 4,2% |
+| Busca com a palavra exata do catálogo ("japanese") | 72,5% | 1% | 5,0% |
+| Busca com a palavra exata, ordenada pela demanda da região | 70,2% | 1% | **15,0%** |
 
-- **O LLM entende a pessoa:** reduz em 38 pontos as buscas sem resultado.
-- **O LLM não acha o restaurante sozinho:** quem acha é o contexto. Ordenar pela
-  demanda local leva a busca de 2,3% para 12,1% nos 36.766 clientes.
-- **Isso foi aplicado:** a busca do agente agora ordena pela região quando ela é
-  conhecida.
-- **Custo honesto:** 32% dos casos caíram no fallback por cota do provedor
-  gratuito, e o resultado inclui esses casos.
+- **O LLM traduz o português da pessoa para o vocabulário do catálogo.** Contra
+  a busca que recebe o texto em português, ele tem 38 pontos a menos de buscas
+  vazias e 21 pontos a mais de itens da culinária pedida. Essas são as
+  diferenças que se sustentam (IC 95% pareado).
+- **Quem já sabe o termo do catálogo não precisa dele.** A busca com a palavra
+  exata vence o agente: 72,5% contra 47,7% nos itens da culinária pedida.
+- **Para o restaurante real, 120 casos não distinguem os braços** (4,2% contra
+  2,5% são 5 casos contra 3). Nos 36.766 clientes, o que move esse número é o
+  contexto: ordenar pela demanda da região leva a busca de 2,3% para 12,1%. A
+  busca do agente passou a ordenar assim quando a região é conhecida.
+- **Ressalva:** 32% dos casos caíram no fallback por cota do provedor gratuito,
+  então o valor do agente sem cota ainda está em aberto.
 
 ## 4. O produto
 
 ![Home com "em alta perto de você" e preço em faixas](docs/screenshots/home-desktop.png)
 
 - **Em alta perto de você, agora:** a vitrine e o "me recomende algo" usam
-  região × horário, o modelo que venceu para quem não tem histórico.
+  região × horário, o modelo que venceu para quem não tem histórico. No site, a
+  pessoa escolhe a região; no chat e no Telegram, basta dizer "estou em Tampines".
 - **Agente que conversa (LangGraph):** escolhe entre buscar e recomendar, ordena
   pela demanda local, e nenhum item, preço ou frase sai sem verificação contra o
   catálogo. Gemini → Groq → glossário sem LLM.

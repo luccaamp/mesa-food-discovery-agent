@@ -93,3 +93,24 @@ class LocalDemandRankingTests(unittest.TestCase):
         self.assertEqual(local.trace["arguments"]["ranking"], "local_demand")
         self.assertEqual(plain.trace["arguments"]["ranking"], "bm25")
         self.assertIn("sua região", local.answer)
+
+
+class RegionMentionTests(unittest.TestCase):
+    def test_a_named_place_sets_the_region_and_alone_asks_for_what_is_popular_there(self):
+        from meal_discovery.policies import apply
+        for message, region in (("estou em Tampines", "w21zt"), ("perto de Jurong West", "w21xx"),
+                                ("o que tem em alta em Punggol?", "w23bh"), ("in Woodlands please", "w23b1")):
+            with self.subTest(message=message):
+                result = apply(message, AssistantContext())
+                self.assertEqual(result.context.region, region)
+                self.assertEqual(result.plan.action, "recommend_items")
+
+    def test_a_dish_with_a_place_keeps_the_dish_for_the_model(self):
+        from meal_discovery.policies import apply
+        result = apply("laksa barata perto de Orchard", AssistantContext())
+        self.assertEqual((result.context.region, result.context.price_level), ("w21z6", 1))
+        self.assertEqual(result.planning_message, "laksa")
+        self.assertIsNone(apply("quero pizza", AssistantContext()).context.region)
+        # The region persists across turns until another place is named.
+        follow = apply("agora sushi", AssistantContext(region="w21zt"))
+        self.assertEqual(follow.context.region, "w21zt")

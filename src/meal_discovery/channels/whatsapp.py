@@ -134,8 +134,9 @@ class Handled:
     erased: bool = False
 
 
-WELCOME = ("Olá! Sou o assistente do Mesa: busco pratos e bebidas num catálogo real de delivery de Singapura "
-           "e sugiro o que costuma ser pedido junto. Experimente: \"quero arroz com frango\" ou \"me recomende algo\".")
+WELCOME = ("Olá! Sou o assistente do Mesa, com 1,7 milhão de pedidos reais de delivery de Singapura. "
+           "Diga onde você está e eu mostro o que mais se pede ali agora, por exemplo \"estou em Tampines\". "
+           "Depois peça o que tiver vontade: \"comida japonesa barata\".")
 
 
 def identity(message):

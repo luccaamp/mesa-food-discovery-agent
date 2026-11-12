@@ -85,7 +85,7 @@ export function AssistantPanel({ open, onClose, pending, onPendingHandled, cart,
     try {
       const response = await streamAgent(
         message,
-        { ...context, region: region || null, selected_items: seedsOf(cart.lines.map((line) => line.item)) },
+        { ...context, region: region || context.region || null, selected_items: seedsOf(cart.lines.map((line) => line.item)) },
         (event) => {
           if (event.type !== "result") updateLast((turn) => ({ steps: [...turn.steps, event] }));
         },

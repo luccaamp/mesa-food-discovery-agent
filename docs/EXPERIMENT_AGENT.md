@@ -101,8 +101,11 @@ comporta sob cota.
 - **Amostra pequena:** com 120 casos, os intervalos do agente são largos (±4 a
   ±8 pontos). Os braços sem LLM têm 36.766 casos.
 - **Fallbacks:** 32% dos casos do agente caíram no fallback por cota. O
-  resultado não separa o agente puro do agente servido sob cota; uma próxima
-  rodada, com pausa maior e o registro por caso, separa os dois.
+  resultado não separa o agente puro do agente servido sob cota. O protocolo v2
+  ([`agent-discovery-v2.json`](../configs/agent-discovery-v2.json)) repete os
+  mesmos casos com mais pausa, uma nova tentativa quando o provedor recusa por
+  cota e o registro de cada caso. Ele retoma de onde parou entre um dia de cota e
+  outro, e reporta à parte os casos que o próprio modelo respondeu.
 - **Assimetria do produto:** a busca não recebe a região, e a home e o agente
   recebem. É o produto como foi construído, e a reordenação mostra o efeito de
   dar a região a todos.

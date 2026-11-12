@@ -158,7 +158,9 @@ novo". O produto usa o modelo que venceu nesse segmento: **região × horário**
 - **Home:** escolhendo a região em "Você está perto de", a vitrine mostra o que
   mais se pede ali na faixa horária atual de Singapura.
 - **Assistente:** "me recomende algo" usa o mesmo sinal.
-- **Telegram:** sem região, o bot usa a lista da cidade para o horário.
+- **Telegram:** a pessoa diz onde está ("estou em Tampines", "perto de
+  Bedok"), e o bot passa a usar a região na vitrine e na ordem da busca, até ela
+  citar outro lugar. Sem região, usa a lista da cidade para o horário.
 
 Com uma pessoa identificada, o passo seguinte seria servir o ranker para quem
 tem histórico.

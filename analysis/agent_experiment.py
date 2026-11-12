@@ -28,7 +28,8 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "analysis"))
 from discovery_experiment import SLOT_EDGES, SLOT_NAMES, TEST_FILE, bootstrap  # noqa: E402
 
-CONFIG = ROOT / "configs/agent-discovery-v1.json"
+CONFIG = ROOT / "configs/agent-discovery-v2.json"
+PROGRESS = ROOT / "reports/agent-discovery-v2-progress.jsonl"  # local checkpoint, outside Git
 CATALOG = ROOT / "data/processed/singapore-catalog-v1.sqlite"
 DATABASE = ROOT / "data/processed/singapore-official-v1.sqlite"
 SHOWN = 5
@@ -173,7 +174,9 @@ def paired(first, second, metric, rng):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--no-llm", action="store_true")
-    parser.add_argument("--pause", type=float, default=4.0, help="Seconds between agent calls (provider rate limit)")
+    parser.add_argument("--pause", type=float, default=12.0, help="Seconds between agent calls (provider rate limit)")
+    parser.add_argument("--quota-wait", type=float, default=65.0,
+                        help="When the provider refuses for quota, wait this long and retry the same case once")
     args = parser.parse_args()
     config = json.loads(CONFIG.read_text(encoding="utf-8"))
     cases, popularity = load_cases()
@@ -194,35 +197,66 @@ def main():
     print(json.dumps({arm: summarize(rows, rng)["restaurant_hit"] for arm, rows in full.items()}), flush=True)
     sample_index = sorted(np.random.default_rng(config["llm_sample"]["seed"]).choice(len(cases), config["llm_sample"]["size"],
                                                                                       replace=False))
-    sample = defaultdict(list)
-    llm = {"calls": 0, "tokens": 0, "seconds": [], "fallbacks": 0, "tools": Counter()}
+    done = {}
+    if PROGRESS.is_file():  # resume: a quota stop keeps every finished case
+        for line in PROGRESS.read_text(encoding="utf-8").splitlines():
+            row = json.loads(line)
+            done[row["index"]] = row
     if not args.no_llm:
         from fastapi.testclient import TestClient
         from meal_discovery.api import create_app
         client = TestClient(create_app(CATALOG))
+        PROGRESS.parent.mkdir(parents=True, exist_ok=True)
         for number, index in enumerate(sample_index, start=1):
+            if int(index) in done:
+                continue
             case = cases[index]
             body, search, elapsed = run_agent_arm(case, client)
+            retried = False
+            if body.get("fallback_reason") in {"quota", "provider_cooldown"}:
+                sleep(args.quota_wait)  # free tiers limit tokens per minute; measure the agent, not the limiter
+                body, search, elapsed = run_agent_arm(case, client)
+                retried = True
+                if body.get("fallback_reason") in {"quota", "provider_cooldown"}:
+                    print(f"Provider quota still exhausted at case {number}; stopping. Rerun later to resume.",
+                          flush=True)
+                    break
             items = body.get("items", [])
             local = arms.local(arms.candidates(search["query"], search.get("price_level")), case) if search else items
-            for arm, rows in (("home", arms.home(case)), *searches(case).items(), ("agent", items), ("agent_local", local)):
-                sample[arm].append(score(rows, case))
-            llm["calls"] += body.get("usage", {}).get("provider_attempts", 0) or 0
-            llm["tokens"] += body.get("usage", {}).get("total_tokens", 0) or 0
-            llm["seconds"].append(elapsed)
-            llm["fallbacks"] += bool(body.get("fallback_reason"))
-            llm["tools"].update(tool["name"] for tool in body.get("tools", []))
-            print(f"{number}/{len(sample_index)} {body.get('planner')} tools={[t['name'] for t in body.get('tools', [])]}",
-                  flush=True)
+            scores = {arm: score(rows, case) for arm, rows in
+                      (("home", arms.home(case)), *searches(case).items(), ("agent", items), ("agent_local", local))}
+            row = {"index": int(index), "message": case["message"], "planner": body.get("planner"),
+                   "fallback_reason": body.get("fallback_reason"), "retried": retried,
+                   "tools": [tool["name"] for tool in body.get("tools", [])], "search": search,
+                   "attempts": body.get("usage", {}).get("provider_attempts", 0) or 0,
+                   "tokens": body.get("usage", {}).get("total_tokens", 0) or 0, "seconds": round(elapsed, 2),
+                   "scores": scores}
+            done[int(index)] = row
+            with PROGRESS.open("a", encoding="utf-8") as stream:
+                stream.write(json.dumps(row, ensure_ascii=False) + "\n")
+            print(f"{number}/{len(sample_index)} {row['planner']} tools={row['tools']} retried={retried}", flush=True)
             sleep(args.pause)
+    rows = [done[int(index)] for index in sample_index if int(index) in done]
+    sample = defaultdict(list)
+    answered = defaultdict(list)  # cases the model itself answered (no provider fallback)
+    for row in rows:
+        for arm, value in row["scores"].items():
+            sample[arm].append(value)
+            if not row["fallback_reason"]:
+                answered[arm].append(value)
+    llm = {"calls": sum(row["attempts"] for row in rows), "tokens": sum(row["tokens"] for row in rows),
+           "seconds": [row["seconds"] for row in rows], "fallbacks": sum(bool(row["fallback_reason"]) for row in rows),
+           "tools": Counter(tool for row in rows for tool in row["tools"])}
     result = {"schema_version": 1, "protocol_version": config["protocol_version"],
               "protocol_sha256": hashlib.sha256(CONFIG.read_bytes()).hexdigest(),
               "implementation_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
               "created_at_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
               "provider": os.environ.get("LLM_PROVIDER"), "model": os.environ.get("GROQ_MODEL") or os.environ.get("LLM_MODEL"),
-              "cases": {"new_customers": len(cases), "llm_sample": len(sample_index) if sample else 0},
+              "cases": {"new_customers": len(cases), "llm_sample": len(rows), "llm_sample_planned": len(sample_index),
+                        "model_answered": len(answered.get("agent", []))},
               "arms": {"all_new_customers": {arm: summarize(rows, rng) for arm, rows in full.items()},
-                       "llm_sample": {arm: summarize(rows, rng) for arm, rows in sample.items()}},
+                       "llm_sample": {arm: summarize(values, rng) for arm, values in sample.items()},
+                       "model_answered": {arm: summarize(values, rng) for arm, values in answered.items()}},
               "paired_on_llm_sample": {f"{a}_vs_{b}": {m: paired(sample[a], sample[b], m, rng)
                                                        for m in ("restaurant_hit", "cuisine_match", "empty")}
                                        for a, b in (("agent", "search_pt"), ("agent", "search_en"), ("agent_local", "home"),
@@ -233,7 +267,8 @@ def main():
                             "latency_seconds_p50": round(float(np.median(llm["seconds"])), 2) if llm["seconds"] else None},
               "messages_example": sorted({case["message"] for case in cases})[:8],
               "limitations": config["limitations"]}
-    output = ROOT / "evaluations/results/agent-discovery-v1.json"
+    result["per_case"] = rows
+    output = ROOT / "evaluations/results/agent-discovery-v2.json"
     output.write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(json.dumps({k: result[k] for k in ("cases", "arms", "paired_on_llm_sample", "llm_usage")}, ensure_ascii=False, indent=1))
 

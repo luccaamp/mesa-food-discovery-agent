@@ -24,7 +24,8 @@ LOW_BAND = re.compile(r"\b(?:(?:mais\s+)?barat(?:o|a|os|as|inho|inha|issimo|issi
                       r"preco\s+baixo|menos\s+car[oa]s?|cheap(?:er|est)?|budget|affordable)\b")
 ANY_BAND = re.compile(r"\b(?:qualquer\s+preco|pode\s+ser\s+car[oa]|sem\s+limite\s+de\s+preco|any\s+price)\b")
 FILLER = {"algo", "alguma", "algum", "coisa", "opcao", "opcoes", "quero", "agora", "mais", "e", "um", "uma", "so", "mostre",
-          "me", "tem", "outra", "outras", "something", "show", "options", "please", "por", "favor", "isso", "entao"}
+          "me", "tem", "outra", "outras", "something", "show", "options", "please", "por", "favor", "isso", "entao",
+          "o", "que", "em", "alta", "aqui", "popular", "pedido", "pedem", "se", "pede", "what", "s", "here", "now"}
 EXPLICIT_RECOMMENDATION = re.compile(
     r"(?:me )?(?:recomende|sugira|mostre)(?: me)? (?:algo|sugestoes|recomendacoes|opcoes)"
     r"(?: (?:para mim|da minha selecao|com os itens selecionados))?[.!?]*")
@@ -59,8 +60,36 @@ def price_band(text):
     return None, text
 
 
+def _region_aliases():
+    from .context_popularity import REGION_NAMES
+    aliases = {}
+    for region, name in REGION_NAMES.items():
+        for alias in name.split("/"):
+            aliases[fold(alias.strip())] = region
+    # Longest first, so "jurong west" wins over a shorter alias it contains.
+    return sorted(aliases.items(), key=lambda pair: -len(pair[0]))
+
+
+REGION_ALIASES = _region_aliases()
+
+
+def region_mention(text):
+    """(region, text without the phrase) for "estou em Tampines", "perto de Bedok", "in Woodlands"."""
+    for alias, region in REGION_ALIASES:
+        match = re.search(r"(?:\b(?:estou|to|i am|i'm)\s+)?(?:\b(?:em|no|na|perto\s+d[eoa]|near|in|at)\s+)?\b"
+                          + re.escape(alias) + r"\b", text)
+        if match:
+            return region, re.sub(r"\s+", " ", text[:match.start()] + " " + text[match.end():]).strip(" ,.!?")
+    return None, text
+
+
 def _apply(message, context: AssistantContext) -> PolicyResult:
     context = context.model_copy(deep=True)
+    region, without_region = region_mention(fold(message))
+    if region:
+        # The region the person names drives "em alta" and the local ranking of search results.
+        message = without_region
+        context.region = region
     level, without_band = price_band(fold(message))
     if level is not None:
         # "menos caro" and "não muito caro" are price requests, not exclusions of an ingredient.
@@ -95,7 +124,7 @@ def _apply(message, context: AssistantContext) -> PolicyResult:
     if only_price and context.last_query:
         return PolicyResult(context, planning_message=planning_message, planner="explicit_filter_refinement",
                             plan=IntentPlan(action="search_catalog", query=context.last_query))
-    if only_price:
+    if only_price or (region and not set(re.findall(r"[^\W_]+", text)) - FILLER):
         return PolicyResult(context, planning_message=planning_message, planner="explicit_recommendation",
                             plan=IntentPlan(action="recommend_items", query=None))
     if EXPLICIT_RECOMMENDATION.fullmatch(text.strip()):
