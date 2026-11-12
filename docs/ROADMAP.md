@@ -30,8 +30,8 @@ combinando histórico, catálogo e conversa com restrições compostas
 | 1. Fundação | Concluída: porta `ChatModel`, adaptadores Gemini/Groq/local, fallback entre provedores |
 | 2. Agente | Concluída: LangGraph com tool calling, SSE, MCP; 20/20 na suíte reservada nos dois provedores |
 | 3. Produto | Concluída: design system, home, busca, sacola, assistente flutuante; 12/12 E2E com axe |
-| 4. Mensageria | Concluída em ambiente local e integração; conexão ao número de teste da Meta pendente da conta |
-| 5. Operação | Em andamento |
+| 4. Mensageria | Concluída: Telegram 24/7 em produção (gateway Go + Key Value + worker no Render, webhook com segredo); WhatsApp aprovado em integração, conta da Meta bloqueada pelo antifraude (erro 131031) |
+| 5. Operação | Concluída: privacidade antes do LLM, Prometheus, OpenTelemetry, red team OWASP 24/24 com Gemini e Groq, deploy verificado no Render |
 
 ## Fases
 
