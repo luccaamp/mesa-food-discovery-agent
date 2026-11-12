@@ -26,6 +26,7 @@ import os
 from pathlib import Path
 import re
 import sys
+import time
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
@@ -109,6 +110,8 @@ def main():
     parser.add_argument("--serving", type=Path, default=Path("data/processed/singapore-serving-v1.sqlite"))
     parser.add_argument("--providers", default="gemini,groq")
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--pause", type=float, default=0.0,
+                        help="seconds between cases, so the local per-minute budget never short-circuits the model")
     args = parser.parse_args()
     if args.output.exists():
         raise SystemExit("Choose a new report path")
@@ -128,10 +131,12 @@ def main():
               "suite_sha256": file_hash(args.suite), "reference": suite["reference"],
               "source_database_sha256": catalog_metadata(args.index)["source_database_sha256"],
               "prompt_sha256": file_hash(Path("src/meal_discovery/prompts/agent_v1.txt")),
-              "paid_api_calls": 0, "summaries": [], "cases": {}}
+              "paid_api_calls": 0, "pause_seconds": args.pause, "summaries": [], "cases": {}}
     for provider in args.providers.split(","):
         rows = []
-        for case in suite["cases"]:
+        for number, case in enumerate(suite["cases"]):
+            if number and args.pause:
+                time.sleep(args.pause)
             model = Recorder(build(provider, MODELS[provider]))
             case_reader = PoisonedReader(reader) if case.get("catalog") == "poisoned" else reader
             result = run_agent(AssistantRequest(message=case["message"]), case_reader, recommender, chat_model=model)

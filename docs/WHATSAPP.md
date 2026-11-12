@@ -49,6 +49,8 @@ Go entrou onde latência e footprint importam; a IA continua em Python.
 - `services/whatsapp-gateway/webhook_test.go`: handshake, assinatura (inclusive
   corpo adulterado), duplicatas, status de entrega, botões interativos, limite
   de tamanho, fila indisponível e métricas Prometheus.
+- `services/whatsapp-gateway/wake_test.go`: o gateway acorda o worker uma vez
+  por intervalo, não acorda quando a fila falha e conta pings com erro.
 - `tests/test_whatsapp_worker.py`: contexto entre mensagens, TTL, chaves sem
   telefone, apagamento, fila de erros sem dado pessoal e cliente da Graph API.
 - `scripts/check_whatsapp_flow.py`: integração real (binário Go + Redis + worker
@@ -64,6 +66,19 @@ docker compose up --build        # redis, gateway (:8090) e app com worker (:100
 Para receber mensagens reais, exponha o gateway com um túnel HTTPS
 (por exemplo `cloudflared tunnel --url http://localhost:8090`) ou use o
 serviço publicado no Render.
+
+## Hospedagem gratuita e serviços que hibernam
+
+No plano gratuito do Render, os dois serviços web dormem após 15 minutos sem
+tráfego, e o limite de 750 horas por mês não permite mantê-los acordados com
+pings. A mensagem do usuário acorda o gateway, mas o worker roda dentro do
+serviço do app, que continuaria dormindo com a mensagem parada na fila. Por isso,
+com `AGENT_WAKE_URL` definido, o gateway faz um `GET` nesse endereço logo depois
+de enfileirar (`wake.go`): assíncrono, no máximo uma vez a cada 30 s e sem
+atrasar a resposta ao webhook. O worker acorda, lê as mensagens novas do stream
+e responde. A primeira resposta depois de um período parado leva de 30 a 60 s;
+as seguintes são imediatas. Os resultados aparecem em
+`mesa_gateway_events_total{event="agent_wake_sent"}` e `agent_wake_failed`.
 
 ## Conectar o número de teste da Meta
 

@@ -35,6 +35,10 @@ func main() {
 		log.Warn("redis_not_configured_using_memory_bus")
 		bus = NewMemoryBus()
 	}
+	if url := os.Getenv("AGENT_WAKE_URL"); url != "" {
+		bus = NewWakingBus(bus, url, metrics)
+		log.Info("agent_wake_enabled")
+	}
 
 	gateway := &Gateway{
 		VerifyToken: os.Getenv("WHATSAPP_VERIFY_TOKEN"),
