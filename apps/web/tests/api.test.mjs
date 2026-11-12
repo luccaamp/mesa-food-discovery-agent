@@ -1,19 +1,25 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { api, amount, priceLabel } from "../src/api.ts";
+import { api, amount, priceComparison, priceLabel } from "../src/api.ts";
 
-test("normalized positive prices never become display zeros", () => {
-  assert.equal(priceLabel(0.002), "0,002 u.n.");
-  assert.equal(priceLabel(0.0016), "0,0016 u.n.");
-  assert.equal(priceLabel(0.0004), "0,0004 u.n.");
+test("raw dataset values never become display zeros and always say they are not currency", () => {
+  assert.equal(priceLabel(0.002), "0,002 (unidade do dataset, sem moeda)");
+  assert.equal(priceLabel(0.0004), "0,0004 (unidade do dataset, sem moeda)");
   assert.equal(amount(0.0028000000000000004), "0,0028");
   assert.notEqual(amount(0.000000001), "0");
 });
 
-test("missing and original zero prices have distinct meaning", () => {
-  assert.equal(priceLabel(null), "Não informado");
-  assert.equal(priceLabel(0), "Zero na fonte");
-  assert.equal(priceLabel(1), "1 u.n.");
+test("a recorded zero is an unknown price, never a free item", () => {
+  assert.equal(priceLabel(null), "Não registrado na fonte");
+  assert.equal(priceLabel(0), "Não registrado na fonte");
+});
+
+test("price bands read as a comparison within the cuisine", () => {
+  const band = (level, share) => ({ level, symbol: "$".repeat(level), label: "x", pricier_share: share, reference: "pizza" });
+  assert.equal(priceComparison(band(1, 0.72)), "Mais barato que 72% dos itens de pizza");
+  assert.equal(priceComparison(band(3, 0.1)), "Mais caro que 90% dos itens de pizza");
+  assert.equal(priceComparison({ level: null, symbol: null, label: "x", pricier_share: null, reference: "pizza" }), null);
+  assert.equal(priceComparison(undefined), null);
 });
 
 test("HTML cold-start pages produce a useful retry message", async (t) => {

@@ -11,6 +11,7 @@ import tempfile
 from .benchmark import baskets
 from .catalog import CatalogUnavailable
 from .dataset import file_hash, open_dataset
+from .pricing import annotate, level_clause
 from .recommendation import Recommender
 
 
@@ -74,7 +75,8 @@ def build_serving(database, output, *, allow_test_data=False, progress=None):
             temporary.unlink(missing_ok=True)
 
 
-def recommend(index: Path, seeds, *, cuisine=None, min_price=None, max_price=None, limit=10, allow_test_data=False):
+def recommend(index: Path, seeds, *, cuisine=None, min_price=None, max_price=None, price_level=None, limit=10,
+              allow_test_data=False):
     if not index.is_file():
         raise CatalogUnavailable("Recommendation artifact is unavailable")
     if type(limit) is not int or not 1 <= limit <= 20 or len(seeds) > 5 or len(seeds) != len(set(seeds)):
@@ -84,6 +86,7 @@ def recommend(index: Path, seeds, *, cuisine=None, min_price=None, max_price=Non
             raise ValueError("Price bounds must be finite nonnegative normalized values")
     if min_price is not None and max_price is not None and min_price > max_price:
         raise ValueError("Minimum price exceeds maximum price")
+    band = level_clause(price_level) if price_level is not None else None
     connection = sqlite3.connect(index.resolve().as_uri() + "?mode=ro", uri=True)
     connection.row_factory = sqlite3.Row
     try:
@@ -102,6 +105,9 @@ def recommend(index: Path, seeds, *, cuisine=None, min_price=None, max_price=Non
             if value is not None:
                 conditions.append(clause)
                 params.append(value)
+        if band:
+            conditions.append(band[0])
+            params += band[1]
         filters = " AND " + " AND ".join(conditions) if conditions else ""
         items = []
         if seeds:
@@ -127,7 +133,8 @@ def recommend(index: Path, seeds, *, cuisine=None, min_price=None, max_price=Non
             if key not in selected:
                 items.append({**dict(row), "score": None, "supporting_co_baskets": 0, "reason": "historical_popularity"})
                 selected.add(key)
-        return {"items": items, "seeds": [{"vendor_id": seed[0], "product_id": seed[1]} for seed in seeds],
-                "filters": {"cuisine": cuisine, "min_price": min_price, "max_price": max_price}, "provenance": manifest}
+        return {"items": annotate(items), "seeds": [{"vendor_id": seed[0], "product_id": seed[1]} for seed in seeds],
+                "filters": {"cuisine": cuisine, "min_price": min_price, "max_price": max_price, "price_level": price_level},
+                "provenance": manifest}
     finally:
         connection.close()

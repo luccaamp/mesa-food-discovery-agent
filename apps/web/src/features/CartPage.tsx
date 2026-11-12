@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Info, Minus, Plus, ShoppingBag, Trash2 } from "lucide-react";
-import { amount, api, keyOf, type Item } from "../api";
+import { api, keyOf, type Item } from "../api";
 import { ItemArt, ItemCard, Price, Sheet, SkeletonCards } from "../components/ui";
 import { href } from "../lib/route";
 import { seedsOf, type Cart } from "../lib/store";
@@ -26,8 +26,10 @@ export function CartPage({ cart, onOpen }: { cart: Cart; onOpen: (item: Item) =>
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [seedKey]);
 
-  const priced = cart.lines.filter((line) => line.item.unit_price !== null);
-  const subtotal = priced.reduce((sum, line) => sum + (line.item.unit_price ?? 0) * line.quantity, 0);
+  // No currency exists in the source, so the summary counts items per price band instead of a fake total.
+  const bands = [1, 2, 3].map((level) =>
+    cart.lines.filter((line) => line.item.price_band?.level === level).reduce((sum, line) => sum + line.quantity, 0));
+  const unknown = cart.count - bands.reduce((sum, value) => sum + value, 0);
 
   if (!cart.lines.length)
     return (
@@ -58,7 +60,7 @@ export function CartPage({ cart, onOpen }: { cart: Cart; onOpen: (item: Item) =>
                       {line.item.name}
                     </strong>
                   </button>
-                  <Price value={line.item.unit_price} />
+                  <Price band={line.item.price_band} />
                 </div>
                 <div className="stepper" role="group" aria-label={`Quantidade de ${line.item.name}`}>
                   <button onClick={() => cart.change(line.item, -1)} aria-label="Diminuir">
@@ -98,13 +100,23 @@ export function CartPage({ cart, onOpen }: { cart: Cart; onOpen: (item: Item) =>
             <span>Itens</span>
             <span>{cart.count}</span>
           </div>
-          <div className="summary-row total">
-            <span>Subtotal</span>
-            <span>{amount(Number(subtotal.toPrecision(6)))} u.n.</span>
-          </div>
-          {priced.length < cart.lines.length && <p className="muted" style={{ fontSize: 12 }}>Itens sem preço não entram no subtotal.</p>}
+          {["$ · barato", "$$ · preço médio", "$$$ · mais caro"].map((label, index) =>
+            bands[index] ? (
+              <div className="summary-row" key={label}>
+                <span>{label}</span>
+                <span>{bands[index]}</span>
+              </div>
+            ) : null,
+          )}
+          {unknown > 0 && (
+            <div className="summary-row">
+              <span>Preço não informado</span>
+              <span>{unknown}</span>
+            </div>
+          )}
           <p className="notice" style={{ margin: "12px 0" }}>
-            <Info size={15} /> Preços normalizados do dataset, sem moeda. Sem entrega ou pagamento.
+            <Info size={15} /> A base não publica preços em moeda: cada item mostra a faixa dentro da sua culinária. Sem
+            entrega ou pagamento.
           </p>
           <button className="btn btn-primary" style={{ width: "100%" }} onClick={() => setConfirm(true)}>
             Finalizar pedido de demonstração

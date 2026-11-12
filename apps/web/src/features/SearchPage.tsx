@@ -19,7 +19,7 @@ export function SearchPage({ initialQuery, initialCuisine, cuisines, cart, onOpe
 }) {
   const [query, setQuery] = useState(initialQuery);
   const [cuisine, setCuisine] = useState(initialCuisine);
-  const [maxPrice, setMaxPrice] = useState("");
+  const [level, setLevel] = useState("");
   const [result, setResult] = useState<Result | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -31,18 +31,14 @@ export function SearchPage({ initialQuery, initialCuisine, cuisines, cart, onOpe
   }, [initialQuery, initialCuisine]);
 
   useEffect(() => {
-    if (initialQuery || initialCuisine) run(initialQuery || "", initialCuisine, maxPrice);
+    if (initialQuery || initialCuisine) run(initialQuery || "", initialCuisine, level);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initialQuery, initialCuisine]);
 
-  async function run(text: string, selectedCuisine: string, max: string) {
+  async function run(text: string, selectedCuisine: string, band: string) {
     const value = text.trim();
     if (!value && !selectedCuisine) return;
-    const bound = max === "" ? null : Number(max.replace(",", "."));
-    if (bound !== null && (!Number.isFinite(bound) || bound < 0)) {
-      setError("Use um preço máximo maior ou igual a zero.");
-      return;
-    }
+    const priceLevel = band === "" ? null : Number(band);
     const seq = ++sequence.current;
     setLoading(true);
     setError("");
@@ -52,14 +48,14 @@ export function SearchPage({ initialQuery, initialCuisine, cuisines, cart, onOpe
         // Browsing a cuisine: show what people actually ordered most, not a keyword match.
         const data = await api<{ items: Item[] }>("/v1/recommendations", {
           method: "POST",
-          body: JSON.stringify({ cuisine: selectedCuisine, max_price: bound, limit: 24 }),
+          body: JSON.stringify({ cuisine: selectedCuisine, price_level: priceLevel, limit: 24 }),
         });
         next = { items: data.items, total: data.items.length, label: `Mais pedidos de ${selectedCuisine}`,
                  translatedFrom: null, message: "" };
       } else {
         const params = new URLSearchParams({ query: value, limit: "24" });
         if (selectedCuisine) params.set("cuisine", selectedCuisine);
-        if (bound !== null) params.set("max_price", String(bound));
+        if (priceLevel !== null) params.set("price_level", String(priceLevel));
         const data = await api<Discovery>("/v1/discovery/search?" + params);
         const resolved = data.resolved_query ?? value;
         next = { items: data.result?.items ?? [], total: data.result?.total_matches ?? 0,
@@ -78,7 +74,7 @@ export function SearchPage({ initialQuery, initialCuisine, cuisines, cart, onOpe
   function submit(event: FormEvent) {
     event.preventDefault();
     window.location.hash = href("search", { q: query.trim(), culinaria: cuisine });
-    run(query, cuisine, maxPrice);
+    run(query, cuisine, level);
   }
 
   const items = result?.items ?? [];
@@ -109,7 +105,7 @@ export function SearchPage({ initialQuery, initialCuisine, cuisines, cart, onOpe
               value={cuisine}
               onChange={(event) => {
                 setCuisine(event.target.value);
-                run(query, event.target.value, maxPrice);
+                run(query, event.target.value, level);
               }}
             >
               <option value="">Todas as culinárias</option>
@@ -121,22 +117,25 @@ export function SearchPage({ initialQuery, initialCuisine, cuisines, cart, onOpe
             </select>
           </label>
           <label className="chip">
-            Até
-            <input
-              inputMode="decimal"
-              value={maxPrice}
-              onChange={(event) => setMaxPrice(event.target.value)}
-              onBlur={() => run(query, cuisine, maxPrice)}
-              placeholder="u.n."
-              aria-label="Preço máximo normalizado"
-            />
+            <span className="sr-only">Faixa de preço</span>
+            <select
+              value={level}
+              onChange={(event) => {
+                setLevel(event.target.value);
+                run(query, cuisine, event.target.value);
+              }}
+            >
+              <option value="">Qualquer preço</option>
+              <option value="1">$ · Barato</option>
+              <option value="2">Até $$ · Médio</option>
+            </select>
           </label>
-          {(cuisine || maxPrice) && (
+          {(cuisine || level) && (
             <button
               className="chip"
               onClick={() => {
                 setCuisine("");
-                setMaxPrice("");
+                setLevel("");
                 run(query, "", "");
               }}
             >

@@ -149,7 +149,8 @@ def create_app(index: Path | None = None) -> FastAPI:
         params = RecommendationParams.model_validate(arguments)
         result = recommend(application.state.serving_index,
                          [(seed.vendor_id, seed.product_id) for seed in params.seeds],
-                         cuisine=params.cuisine, min_price=params.min_price, max_price=params.max_price, limit=params.limit)
+                         cuisine=params.cuisine, min_price=params.min_price, max_price=params.max_price,
+                         price_level=params.price_level, limit=params.limit)
         if result["provenance"]["source_database_sha256"] != application.state.catalog_reader.metadata()["source_database_sha256"]:
             raise CatalogUnavailable("Recommendation and catalog sources differ")
         return result

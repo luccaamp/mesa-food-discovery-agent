@@ -34,11 +34,13 @@ MAX_TOOL_CALLS = 2
 
 TOOL_SPECS = [
     ToolSpec("search_catalog",
-             "Search the real historical food catalog. Returns matching dishes or drinks with normalized prices.",
+             "Search the real historical food catalog. Returns matching dishes or drinks with a price band.",
              {"type": "object", "properties": {
                  "query": {"type": "string", "description": "1-5 concise English dish or drink keywords"},
                  "max_price": {"type": ["number", "null"],
-                               "description": "Maximum normalized price only if the user states one; otherwise null"}},
+                               "description": "Maximum normalized price only if the user states a number; otherwise null"},
+                 "price_level": {"type": ["integer", "null"], "enum": [1, 2, None],
+                                 "description": "1 if the user wants cheap options, 2 for not too expensive; otherwise null"}},
               "required": ["query"]}),
     ToolSpec("recommend_items",
              "Suggest items frequently bought together with the user's selected items, "
@@ -92,9 +94,11 @@ def guard(state: AgentState, config) -> dict:
                 "answer": result.answer, "status": "ok" if result.items else "no_results"}
     summary = {"message": outcome.planning_message, "context": {
         "previous_search": outcome.context.last_query, "max_price": outcome.context.max_price,
+        "price_level": outcome.context.price_level,
         "min_price": outcome.context.min_price, "cuisine": outcome.context.cuisine,
         "selected_items": len(outcome.context.selected_items),
-        "price_filter_changed_this_turn": outcome.context.max_price != state["context"].max_price}}
+        "price_filter_changed_this_turn": (outcome.context.max_price, outcome.context.price_level)
+        != (state["context"].max_price, state["context"].price_level)}}
     # The deterministic PT->EN glossary is the catalog's own vocabulary; offering it as a hint keeps the
     # model's keywords aligned with item names (e.g. "macarrão" -> "noodles", not "pasta").
     expanded, changed = expand_query(outcome.planning_message[:200])
@@ -138,6 +142,9 @@ def run_tools(state: AgentState, config) -> dict:
             bound = call.arguments.get("max_price")
             if isinstance(bound, (int, float)) and not isinstance(bound, bool) and 0 <= bound < 1e6:
                 context.max_price = float(bound)
+            level = call.arguments.get("price_level")
+            if level in (1, 2) and not isinstance(level, bool):
+                context.price_level = level
             result = tools.search(deps["reader"], context, str(call.arguments.get("query", ""))[:200])
         elif call.name == "recommend_items":
             result = tools.recommend(deps["recommender"], context)

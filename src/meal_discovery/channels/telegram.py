@@ -151,7 +151,8 @@ def main():
     def recommender(arguments):
         params = RecommendationParams.model_validate(arguments)
         return recommend(args.serving, [(s.vendor_id, s.product_id) for s in params.seeds], cuisine=params.cuisine,
-                         min_price=params.min_price, max_price=params.max_price, limit=params.limit)
+                         min_price=params.min_price, max_price=params.max_price, price_level=params.price_level,
+                         limit=params.limit)
 
     worker = Worker(MemoryKV(), lambda request: run_agent(request, reader, recommender), telegram=client)
     me = client.call("getMe", {})

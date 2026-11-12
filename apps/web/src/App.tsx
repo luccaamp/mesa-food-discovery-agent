@@ -110,7 +110,7 @@ export default function App() {
 
       <footer className="footer">
         mesa. Projeto independente sobre o dataset público DHRD (Delivery Hero, RecSys 2023), sem vínculo com a empresa.
-        Preços normalizados, sem moeda. Nomes não comprovam ingredientes ou alérgenos.
+        Preço em faixas ($, $$, $$$) dentro de cada culinária: a base não publica moeda. Nomes não comprovam ingredientes ou alérgenos.
       </footer>
 
       {!assistantOpen && (

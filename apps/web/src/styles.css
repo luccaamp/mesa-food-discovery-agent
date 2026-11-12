@@ -565,6 +565,8 @@ a {
   gap: 8px;
 }
 .price {
+  /* Contains the screen-reader text so it cannot widen a scrolling rail. */
+  position: relative;
   font-weight: 700;
   font-variant-numeric: tabular-nums;
 }
@@ -572,7 +574,16 @@ a {
   font-weight: 500;
   color: var(--ink-3);
   font-size: 11px;
-  margin-left: 2px;
+  margin-left: 4px;
+}
+.price-band {
+  letter-spacing: 1px;
+  color: var(--ink-3);
+  opacity: 0.45;
+}
+.price-band b {
+  color: var(--ink);
+  opacity: 1;
 }
 .add-btn {
   display: inline-grid;

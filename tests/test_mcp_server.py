@@ -67,7 +67,7 @@ class McpServerTests(unittest.TestCase):
             return found, item, recs, missing
         found, item, recs, missing = self.session(steps)
         self.assertGreater(found["total_matches"], 0)
-        self.assertIn("normalizados", found["disclosure"])
+        self.assertIn("faixas", found["disclosure"])
         self.assertEqual(item["item"]["name"], found["items"][0]["name"])
         self.assertTrue(all(row["reason"] in {"basket_association", "historical_popularity"} for row in recs["items"]))
         self.assertEqual(missing, {"found": False})

@@ -10,6 +10,7 @@ import sqlite3
 import tempfile
 
 from .dataset import file_hash, open_dataset
+from .pricing import annotate, level_clause
 
 
 class CatalogUnavailable(ValueError):
@@ -59,7 +60,7 @@ def catalog_item(index: Path, vendor_id: str, product_id: str, *, allow_test_dat
     try:
         row = connection.execute("SELECT vendor_id,product_id,name,unit_price,primary_cuisine FROM items WHERE vendor_id=? AND product_id=?",
                                  (vendor_id, product_id)).fetchone()
-        return {"item": dict(row), "provenance": manifest} if row else None
+        return {"item": annotate([dict(row)])[0], "provenance": manifest} if row else None
     finally:
         connection.close()
 
@@ -118,7 +119,7 @@ def build_catalog(database: Path, output: Path, *, allow_test_data=False) -> dic
 
 
 def search_catalog(index: Path, query: str, *, cuisine=None, min_price=None, max_price=None,
-                   limit=10, allow_test_data=False) -> dict:
+                   price_level=None, limit=10, allow_test_data=False) -> dict:
     if not isinstance(query, str) or not 1 <= len(query.strip()) <= 200:
         raise ValueError("Query must contain 1 to 200 characters")
     tokens = re.findall(r"[^\W_]+", query, flags=re.UNICODE)
@@ -133,6 +134,7 @@ def search_catalog(index: Path, query: str, *, cuisine=None, min_price=None, max
         raise ValueError("Minimum price exceeds maximum price")
     if cuisine is not None and (not isinstance(cuisine, str) or not cuisine.strip() or len(cuisine) > 200):
         raise ValueError("Cuisine must be a nonempty catalog label")
+    band = level_clause(price_level) if price_level is not None else None
     connection, manifest = open_catalog(index, allow_test_data=allow_test_data)
     try:
         conditions = ["item_search MATCH ?"]
@@ -141,6 +143,9 @@ def search_catalog(index: Path, query: str, *, cuisine=None, min_price=None, max
             if value is not None:
                 conditions.append(condition)
                 parameters.append(value)
+        if band:
+            conditions.append(band[0])
+            parameters += band[1]
         base = " FROM item_search JOIN items i ON i.id=item_search.rowid WHERE " + " AND ".join(conditions)
         total = connection.execute("SELECT COUNT(*)" + base, parameters).fetchone()[0]
         rows = connection.execute("SELECT i.vendor_id,i.product_id,i.name,i.unit_price,i.primary_cuisine,"
@@ -149,8 +154,8 @@ def search_catalog(index: Path, query: str, *, cuisine=None, min_price=None, max
                                   # official catalog records 0, which would otherwise win ties arbitrarily.
                                   " ORDER BY lexical_score,i.unit_price=0,i.vendor_id,i.product_id LIMIT ?",
                                   parameters + [limit])
-        return {"query": query, "total_matches": total, "items": [dict(row) for row in rows],
-                "filters": {"cuisine": cuisine, "min_price": min_price, "max_price": max_price},
+        return {"query": query, "total_matches": total, "items": annotate([dict(row) for row in rows]),
+                "filters": {"cuisine": cuisine, "min_price": min_price, "max_price": max_price, "price_level": price_level},
                 "provenance": manifest, "ranking": "BM25 lexical; lower scores rank first; not a probability"}
     finally:
         connection.close()

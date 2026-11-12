@@ -61,7 +61,7 @@ class WorkerTests(unittest.TestCase):
         self.assertEqual(self.worker.run_once(block_ms=10), ["ok"])
         to, text, buttons = self.client.sent[0]
         self.assertEqual(to, PHONE)
-        self.assertIn("1. Chicken Rice · chinese · 0,004 u.n.", text)
+        self.assertIn("1. Chicken Rice · chinese · $$ · mais barato que 51% dos itens de chinese", text)
         self.assertEqual(buttons, ["Me recomende algo", "Nova busca"])
         self.assertEqual(self.redis.xlen(STREAM), 0)  # processed entries are deleted
         self.assertEqual(ConversationStore(self.redis).load(PHONE).last_query, "chicken rice")
@@ -113,8 +113,8 @@ class FormattingAndClientTests(unittest.TestCase):
     def test_reply_lists_items_with_disclosure_and_fallback_notice(self):
         text = format_reply({"answer": "Achei.", "items": [ITEM, {**ITEM, "name": "Zero", "unit_price": 0}],
                              "fallback_reason": "quota"})
-        self.assertIn("2. Zero · chinese · 0 na fonte", text)
-        self.assertIn("sem moeda", text)
+        self.assertIn("2. Zero · chinese · preço não informado", text)
+        self.assertIn("não publica moeda", text)
         self.assertIn("glossário", text)
         self.assertEqual(format_reply({"answer": "Qual prato?", "items": []}), "Qual prato?")
 

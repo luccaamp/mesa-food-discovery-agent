@@ -27,4 +27,4 @@ mesa-mcp = "meal_discovery.mcp_server:main"
 where = ["src"]
 
 [tool.setuptools.package-data]
-meal_discovery = ["prompts/*.txt"]
+meal_discovery = ["prompts/*.txt", "data/*.json"]

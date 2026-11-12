@@ -18,6 +18,13 @@ GREETING = re.compile(r"(?:oi|ola|bom dia|boa tarde|boa noite|hello|hi)[.!?\s]*"
 INJECTION = re.compile(r"ignore.*(instruc|regra)|system prompt|execute.*(sql|python|codigo)|https?://")
 PRICE_BOUND = re.compile(r"(?:ate|no maximo)\s*(\d+(?:[.,]\d+)?)")
 PRICE_PHRASE = r"(?:ate|no maximo)\s*\d+(?:[.,]\d+)?(?:\s+unidades?(?:\s+normalizadas?)?)?"
+# Price bands are relative to each cuisine ($ = cheapest third), so "barato" means something real.
+MID_BAND = re.compile(r"\b(?:nao\s+(?:muito|tao)\s+car[oa]s?|preco\s+(?:medio|razoavel|justo)|not\s+too\s+expensive|mid[- ]range)\b")
+LOW_BAND = re.compile(r"\b(?:(?:mais\s+)?barat(?:o|a|os|as|inho|inha|issimo|issima)|em\s+conta|economic[oa]s?|"
+                      r"preco\s+baixo|menos\s+car[oa]s?|cheap(?:er|est)?|budget|affordable)\b")
+ANY_BAND = re.compile(r"\b(?:qualquer\s+preco|pode\s+ser\s+car[oa]|sem\s+limite\s+de\s+preco|any\s+price)\b")
+FILLER = {"algo", "alguma", "algum", "coisa", "opcao", "opcoes", "quero", "agora", "mais", "e", "um", "uma", "so", "mostre",
+          "me", "tem", "outra", "outras", "something", "show", "options", "please", "por", "favor", "isso", "entao"}
 EXPLICIT_RECOMMENDATION = re.compile(
     r"(?:me )?(?:recomende|sugira|mostre)(?: me)? (?:algo|sugestoes|recomendacoes|opcoes)"
     r"(?: (?:para mim|da minha selecao|com os itens selecionados))?[.!?]*")
@@ -44,8 +51,23 @@ def apply(message, context: AssistantContext) -> PolicyResult:
     return result
 
 
+def price_band(text):
+    """(level, text without the phrase): 1 for "barato", 2 for "não muito caro", 0 to clear, None if absent."""
+    for pattern, level in ((ANY_BAND, 0), (MID_BAND, 2), (LOW_BAND, 1)):
+        if pattern.search(text):
+            return level, re.sub(r"\s+", " ", pattern.sub(" ", text)).strip()
+    return None, text
+
+
 def _apply(message, context: AssistantContext) -> PolicyResult:
     context = context.model_copy(deep=True)
+    level, without_band = price_band(fold(message))
+    if level is not None:
+        # "menos caro" and "não muito caro" are price requests, not exclusions of an ingredient.
+        message = without_band
+        context.price_level = level or None
+        if level == 0:
+            context.max_price = None
     constraint = guarded_constraint(message)
     if constraint:
         return PolicyResult(context, answer=constraint)
@@ -69,6 +91,13 @@ def _apply(message, context: AssistantContext) -> PolicyResult:
     if bound and re.fullmatch(PRICE_PHRASE + r"[.!?\s]*", text.strip()) and context.last_query:
         return PolicyResult(context, planning_message=planning_message, planner="explicit_filter_refinement",
                             plan=IntentPlan(action="search_catalog", query=context.last_query))
+    only_price = level is not None and not set(re.findall(r"[^\W_]+", text)) - FILLER
+    if only_price and context.last_query:
+        return PolicyResult(context, planning_message=planning_message, planner="explicit_filter_refinement",
+                            plan=IntentPlan(action="search_catalog", query=context.last_query))
+    if only_price:
+        return PolicyResult(context, planning_message=planning_message, planner="explicit_recommendation",
+                            plan=IntentPlan(action="recommend_items", query=None))
     if EXPLICIT_RECOMMENDATION.fullmatch(text.strip()):
         return PolicyResult(context, planning_message=planning_message, planner="explicit_recommendation",
                             plan=IntentPlan(action="recommend_items", query=None))

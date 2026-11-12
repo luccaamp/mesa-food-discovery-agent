@@ -35,7 +35,8 @@ def serving_path():
 
 
 def _item(row):
-    return {key: row[key] for key in ("vendor_id", "product_id", "name", "unit_price", "primary_cuisine") if key in row}
+    return {key: row[key] for key in ("vendor_id", "product_id", "name", "unit_price", "primary_cuisine", "price_band")
+            if key in row}
 
 
 def build_server(*, catalog=None, serving=None, allow_test_data=False):
@@ -56,6 +57,7 @@ def build_server(*, catalog=None, serving=None, allow_test_data=False):
     def search_catalog_items(
         query: Annotated[str, Field(min_length=1, max_length=200, description="Dish or drink, e.g. 'chicken rice'")],
         max_price: Annotated[float | None, Field(ge=0, description="Maximum normalized price")] = None,
+        price_level: Annotated[int | None, Field(ge=1, le=3, description="1 = cheapest third of each cuisine, 2 = up to mid-range")] = None,
         cuisine: Annotated[str | None, Field(max_length=80, description="Exact cuisine name from list_cuisines")] = None,
         limit: Annotated[int, Field(ge=1, le=20)] = 8,
     ) -> dict:
@@ -64,7 +66,8 @@ def build_server(*, catalog=None, serving=None, allow_test_data=False):
             return {"items": [], "notice": "The catalog cannot certify diets or allergens; search by dish name instead.",
                     "disclosure": DISCLOSURE}
         expanded, _ = expand_query(query)
-        params = SearchParams(query=expanded or query, cuisine=cuisine, max_price=max_price, limit=limit)
+        params = SearchParams(query=expanded or query, cuisine=cuisine, max_price=max_price,
+                              price_level=price_level, limit=limit)
         result = search_catalog(catalog, **params.model_dump(), **options)
         return {"query": params.query, "total_matches": result["total_matches"],
                 "items": [_item(row) for row in result["items"]], "disclosure": DISCLOSURE}
@@ -84,12 +87,13 @@ def build_server(*, catalog=None, serving=None, allow_test_data=False):
     def recommend_items(
         seeds: Annotated[list[ItemRef] | None, Field(max_length=5, description="Up to five items the user liked")] = None,
         max_price: Annotated[float | None, Field(ge=0)] = None,
+        price_level: Annotated[int | None, Field(ge=1, le=3)] = None,
         limit: Annotated[int, Field(ge=1, le=20)] = 6,
     ) -> dict:
         """Items frequently bought together with the seeds in real baskets, completed by popularity."""
-        params = RecommendationParams(seeds=seeds or [], max_price=max_price, limit=limit)
+        params = RecommendationParams(seeds=seeds or [], max_price=max_price, price_level=price_level, limit=limit)
         result = recommend(serving, [(seed.vendor_id, seed.product_id) for seed in params.seeds],
-                           max_price=params.max_price, limit=params.limit, **options)
+                           max_price=params.max_price, price_level=params.price_level, limit=params.limit, **options)
         return {"items": [{**_item(row), "reason": row.get("reason"), "training_baskets": row.get("training_baskets")}
                           for row in result["items"]], "disclosure": DISCLOSURE}
 

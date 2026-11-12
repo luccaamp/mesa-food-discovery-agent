@@ -32,8 +32,8 @@ class TelegramRoutingTests(unittest.TestCase):
         enqueue(self.redis, "Quero arroz com frango", "wamid.9")
         self.assertEqual(self.worker.run_once(block_ms=10), ["ok", "ok"])
         self.assertEqual(self.telegram.sent[0][0], "5551234")
-        self.assertNotIn("_Preços", self.telegram.sent[0][1])  # no WhatsApp markdown on Telegram
-        self.assertIn("_Preços", self.whatsapp.sent[0][1])
+        self.assertNotIn("_Preço em faixas", self.telegram.sent[0][1])  # no WhatsApp markdown on Telegram
+        self.assertIn("_Preço em faixas", self.whatsapp.sent[0][1])
         keys = [key.decode() for key in self.redis.keys("mesa:ctx:*")]
         self.assertEqual(len(keys), 2)  # same id on two channels never shares context
         self.assertFalse(any("5551234" in key for key in keys))

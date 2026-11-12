@@ -5,7 +5,7 @@ import { CuisineIcon, ItemCard, SkeletonCards, cuisineStyle } from "../component
 import { href } from "../lib/route";
 import { seedsOf, type Cart } from "../lib/store";
 
-const SUGGESTIONS = ["Algo leve até 0,005", "Arroz com frango", "Chá com leite gelado", "Me recomende algo"];
+const SUGGESTIONS = ["Pizza barata", "Arroz com frango", "Chá com leite gelado", "Me recomende algo"];
 
 type Cuisine = { name: string; products: number };
 

@@ -30,7 +30,8 @@ def guarded_constraint(message):
     if re.search(r"alerg|allerg|intoler|celiac|coeliac|sem\s+(gluten|lactose|amendoim)|vegano|vegan|vegetarian|sem\s+carne|without|free\s+of|\b(?:gluten|lactose|dairy|egg|nut|peanut)[-\s]+free\b|\bno\s+(?:nuts?|peanuts?|dairy|eggs?|gluten|lactose)\b", text):
         return "O catálogo não informa ingredientes completos nem certificações alimentares. Não consigo garantir essa restrição. Posso buscar pelo nome de um prato, mas a composição precisa ser confirmada com o estabelecimento."
     if re.search(r"r\$|\breais\b|\breal\b|\bdolares\b|\bdollars\b", text):
-        return "Os preços desta base são normalizados e não têm moeda. Não posso converter um orçamento em reais. Use os filtros de preço normalizado para comparar itens do catálogo."
+        return ("A base não publica preços em moeda, então não consigo aplicar um valor em reais. "
+                "Posso mostrar os mais baratos de cada culinária: diga, por exemplo, “pizza barata”.")
     if re.search(r"\bsem\b|\bnao\b|\bmenos\b", text):
         return "Essa preferência envolve excluir algo. O catálogo não permite confirmar ingredientes ausentes. Diga o nome do prato que deseja explorar; mantenho essa limitação explícita."
     return None
@@ -58,7 +59,8 @@ def expand_query(query):
     return " ".join(dict.fromkeys(expanded)) or query, True
 
 
-def discover(index, query, *, cuisine=None, min_price=None, max_price=None, limit=10, allow_test_data=False):
+def discover(index, query, *, cuisine=None, min_price=None, max_price=None, price_level=None, limit=10,
+             allow_test_data=False):
     warning = guarded_constraint(query)
     if warning:
         # Constraints are not silently stripped to force a match.
@@ -66,6 +68,6 @@ def discover(index, query, *, cuisine=None, min_price=None, max_price=None, limi
                 "expansion_version": GLOSSARY_VERSION, "result": None}
     resolved, changed = expand_query(query)
     result = search_catalog(index, resolved, cuisine=cuisine, min_price=min_price, max_price=max_price,
-                            limit=limit, allow_test_data=allow_test_data)
+                            price_level=price_level, limit=limit, allow_test_data=allow_test_data)
     return {"status": "ok", "message": "Busca por termos do catálogo, com expansão explícita de vocabulário." if changed else "Busca textual no catálogo.",
             "query": query, "resolved_query": resolved, "expansion_version": GLOSSARY_VERSION, "result": result}

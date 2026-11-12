@@ -37,10 +37,13 @@ test("search translates, filters and adds to the bag", async ({ page }) => {
 
 test("item sheet shows evidence and pairs, and returns focus on Escape", async ({ page }) => {
   await page.goto("/#/buscar?q=milk%20tea");
-  const open = page.getByRole("button", { name: /Ver detalhes de/ }).first();
+  // Open an item with a recorded price: its sheet compares it with the rest of its cuisine.
+  const priced = page.getByRole("article").filter({ hasNot: page.getByText("Preço não informado") }).first();
+  const open = priced.getByRole("button", { name: /Ver detalhes de/ });
   await open.click();
   const sheet = page.getByRole("dialog");
-  await expect(sheet.getByText("Preço normalizado")).toBeVisible();
+  await expect(sheet.getByText("Faixa de preço", { exact: true })).toBeVisible();
+  await expect(sheet.getByText(/^Mais (barato|caro) que \d+% dos itens de /)).toBeVisible();
   await expect(sheet.getByRole("heading", { name: "Costuma ser pedido junto" })).toBeVisible();
   await shots(page, "item");
   await axe(page);

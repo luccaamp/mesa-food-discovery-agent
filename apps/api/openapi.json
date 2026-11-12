@@ -246,6 +246,26 @@
             "description": "Dataset-normalized price, not currency"
           },
           {
+            "name": "price_level",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer",
+                  "maximum": 3,
+                  "minimum": 1
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Keep items up to this price band of their cuisine: 1 = $, 2 = $$, 3 = any priced item",
+              "title": "Price Level"
+            },
+            "description": "Keep items up to this price band of their cuisine: 1 = $, 2 = $$, 3 = any priced item"
+          },
+          {
             "name": "limit",
             "in": "query",
             "required": false,
@@ -366,6 +386,26 @@
               "title": "Max Price"
             },
             "description": "Dataset-normalized price, not currency"
+          },
+          {
+            "name": "price_level",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer",
+                  "maximum": 3,
+                  "minimum": 1
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Keep items up to this price band of their cuisine: 1 = $, 2 = $$, 3 = any priced item",
+              "title": "Price Level"
+            },
+            "description": "Keep items up to this price band of their cuisine: 1 = $, 2 = $$, 3 = any priced item"
           },
           {
             "name": "limit",
@@ -818,6 +858,20 @@
             ],
             "title": "Max Price"
           },
+          "price_level": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 3.0,
+                "minimum": 1.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Price Level",
+            "description": "Keep items up to this price band of their cuisine: 1 = $, 2 = $$, 3 = any priced item"
+          },
           "selected_items": {
             "items": {
               "$ref": "#/components/schemas/ItemRef"
@@ -1135,6 +1189,17 @@
               }
             ],
             "title": "Max Price"
+          },
+          "price_level": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Price Level"
           }
         },
         "type": "object",
@@ -1218,11 +1283,22 @@
                 "type": "null"
               }
             ],
-            "title": "Unit Price"
+            "title": "Unit Price",
+            "description": "Dataset-normalized price, not currency; 0 means not recorded"
           },
           "primary_cuisine": {
             "type": "string",
             "title": "Primary Cuisine"
+          },
+          "price_band": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PriceBand"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "type": "object",
@@ -1273,6 +1349,81 @@
           "provenance"
         ],
         "title": "ItemResult"
+      },
+      "PriceBand": {
+        "properties": {
+          "level": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "enum": [
+                  1,
+                  2,
+                  3
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Level",
+            "description": "Third of the item's cuisine by price; None when the source has no price"
+          },
+          "symbol": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "$",
+                  "$$",
+                  "$$$"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Symbol"
+          },
+          "label": {
+            "type": "string",
+            "title": "Label"
+          },
+          "pricier_share": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 1.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pricier Share",
+            "description": "Share of priced items of the same cuisine that cost more"
+          },
+          "reference": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reference"
+          }
+        },
+        "type": "object",
+        "required": [
+          "level",
+          "symbol",
+          "label",
+          "pricier_share",
+          "reference"
+        ],
+        "title": "PriceBand"
       },
       "Provenance": {
         "properties": {
@@ -1392,6 +1543,20 @@
             ],
             "title": "Max Price"
           },
+          "price_level": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 3.0,
+                "minimum": 1.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Price Level",
+            "description": "Keep items up to this price band of their cuisine: 1 = $, 2 = $$, 3 = any priced item"
+          },
           "limit": {
             "type": "integer",
             "maximum": 20.0,
@@ -1461,11 +1626,22 @@
                 "type": "null"
               }
             ],
-            "title": "Unit Price"
+            "title": "Unit Price",
+            "description": "Dataset-normalized price, not currency; 0 means not recorded"
           },
           "primary_cuisine": {
             "type": "string",
             "title": "Primary Cuisine"
+          },
+          "price_band": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PriceBand"
+              },
+              {
+                "type": "null"
+              }
+            ]
           },
           "score": {
             "anyOf": [
@@ -1532,11 +1708,22 @@
                 "type": "null"
               }
             ],
-            "title": "Unit Price"
+            "title": "Unit Price",
+            "description": "Dataset-normalized price, not currency; 0 means not recorded"
           },
           "primary_cuisine": {
             "type": "string",
             "title": "Primary Cuisine"
+          },
+          "price_band": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PriceBand"
+              },
+              {
+                "type": "null"
+              }
+            ]
           },
           "lexical_score": {
             "type": "number",

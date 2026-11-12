@@ -9,8 +9,8 @@ type Turn =
   | { role: "user"; text: string }
   | { role: "bot"; text: string; steps: AgentEvent[]; response?: Chat; pending: boolean; error?: boolean };
 
-const EMPTY: Context = { last_query: null, cuisine: null, min_price: null, max_price: null, selected_items: [] };
-const QUICK = ["Me recomende algo", "Algo com frango", "Bebida gelada", "Até 0,005"];
+const EMPTY: Context = { last_query: null, cuisine: null, min_price: null, max_price: null, price_level: null, selected_items: [] };
+const QUICK = ["Me recomende algo", "Algo com frango", "Bebida gelada", "Mais barato"];
 
 const PROVIDERS: Record<string, string> = { gemini: "Gemini", groq: "Groq", local: "Qwen local", openai: "OpenAI" };
 

@@ -11,6 +11,7 @@ class SearchParams(BaseModel):
     cuisine: str | None = Field(default=None, min_length=1, max_length=200)
     min_price: float | None = Field(default=None, ge=0, description="Dataset-normalized price, not currency")
     max_price: float | None = Field(default=None, ge=0, description="Dataset-normalized price, not currency")
+    price_level: int | None = Field(default=None, ge=1, le=3, description="Keep items up to this price band of their cuisine: 1 = $, 2 = $$, 3 = any priced item")
     limit: int = Field(default=10, ge=1, le=50)
 
     @model_validator(mode="after")
@@ -34,12 +35,21 @@ class Provenance(BaseModel):
     limitations: list[str]
 
 
+class PriceBand(BaseModel):
+    level: Literal[1, 2, 3] | None = Field(description="Third of the item's cuisine by price; None when the source has no price")
+    symbol: Literal["$", "$$", "$$$"] | None
+    label: str
+    pricier_share: float | None = Field(ge=0, le=1, description="Share of priced items of the same cuisine that cost more")
+    reference: str | None
+
+
 class Item(BaseModel):
     vendor_id: str
     product_id: str
     name: str
-    unit_price: float | None
+    unit_price: float | None = Field(description="Dataset-normalized price, not currency; 0 means not recorded")
     primary_cuisine: str
+    price_band: PriceBand | None = None
 
 
 class SearchItem(Item):
@@ -50,6 +60,7 @@ class Filters(BaseModel):
     cuisine: str | None
     min_price: float | None
     max_price: float | None
+    price_level: int | None = None
 
 
 class SearchResult(BaseModel):
@@ -109,6 +120,7 @@ class RecommendationParams(BaseModel):
     cuisine: str | None = Field(default=None, min_length=1, max_length=200)
     min_price: float | None = Field(default=None, ge=0)
     max_price: float | None = Field(default=None, ge=0)
+    price_level: int | None = Field(default=None, ge=1, le=3, description="Keep items up to this price band of their cuisine: 1 = $, 2 = $$, 3 = any priced item")
     limit: int = Field(default=10, ge=1, le=20)
 
     @model_validator(mode="after")
@@ -149,6 +161,7 @@ class AssistantContext(BaseModel):
     cuisine: str | None = Field(default=None, min_length=1, max_length=200)
     min_price: float | None = Field(default=None, ge=0)
     max_price: float | None = Field(default=None, ge=0)
+    price_level: int | None = Field(default=None, ge=1, le=3, description="Keep items up to this price band of their cuisine: 1 = $, 2 = $$, 3 = any priced item")
     selected_items: list[ItemRef] = Field(default_factory=list, max_length=5)
 
     @model_validator(mode="after")

@@ -11,7 +11,7 @@ from .api_models import AssistantContext, SearchParams
 from .discovery import guarded_constraint
 from .observability import tool_span
 
-DISCLOSURE = ("Catálogo histórico. Preços normalizados, sem moeda. "
+DISCLOSURE = ("Catálogo histórico. Preço em faixas ($, $$, $$$) dentro de cada culinária: a base não publica moeda. "
               "Sem garantia de estoque, entrega ou composição alimentar.")
 VAGUE_QUERY = ("Preciso de um nome de prato ou bebida mais específico, "
                "sem prometer restrições que o catálogo não comprova.")
@@ -33,8 +33,8 @@ def search(reader, context: AssistantContext, query: str) -> ToolOutcome:
         return ToolOutcome(answer=VAGUE_QUERY, rejected=True)
     started = perf_counter()
     params = SearchParams(query=query, cuisine=context.cuisine, min_price=context.min_price,
-                          max_price=context.max_price, limit=RESULT_LIMIT)
-    with tool_span("search_catalog", filtered=context.max_price is not None) as span:
+                          max_price=context.max_price, price_level=context.price_level, limit=RESULT_LIMIT)
+    with tool_span("search_catalog", filtered=context.max_price is not None or context.price_level is not None) as span:
         try:
             result = reader.search(params)
         except ValueError:  # e.g. a model-generated query with no searchable terms
@@ -50,14 +50,15 @@ def search(reader, context: AssistantContext, query: str) -> ToolOutcome:
                   "Os cards abaixo preservam os nomes originais.")
     else:
         answer = (f"Não encontrei correspondências para “{query}” com esses filtros. "
-                  "Tente um nome mais simples ou amplie o limite de preço.")
+                  "Tente um nome mais simples ou amplie a faixa de preço.")
     return ToolOutcome(items=items, trace=trace, answer=answer)
 
 
 def recommend(recommender, context: AssistantContext) -> ToolOutcome:
     started = perf_counter()
     args = {"seeds": [item.model_dump() for item in context.selected_items], "cuisine": context.cuisine,
-            "min_price": context.min_price, "max_price": context.max_price, "limit": RESULT_LIMIT}
+            "min_price": context.min_price, "max_price": context.max_price, "price_level": context.price_level,
+            "limit": RESULT_LIMIT}
     with tool_span("recommend_items", seeds=len(context.selected_items)) as span:
         result = recommender(args)
         span.set_attribute("mesa.result_count", len(result["items"]))
@@ -66,7 +67,7 @@ def recommend(recommender, context: AssistantContext) -> ToolOutcome:
              "duration_ms": (perf_counter() - started) * 1000, "result_count": len(items)}
     if not items:
         answer = ("Não encontrei sugestões com esses filtros. "
-                  "Amplie o intervalo de preço normalizado ou escolha outra culinária.")
+                  "Amplie a faixa de preço ou escolha outra culinária.")
     elif any(item.get("reason") == "basket_association" for item in items):
         answer = ("Estas sugestões usam associações de compra dos itens que você selecionou, "
                   "com complemento por popularidade histórica.")

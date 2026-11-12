@@ -25,6 +25,7 @@ from urllib.request import Request, urlopen
 
 from ..api_models import AssistantContext, AssistantRequest
 from ..discovery import fold
+from ..pricing import describe, price_band
 
 logger = logging.getLogger("meal_discovery.whatsapp")
 
@@ -72,11 +73,11 @@ def format_reply(response, channel="whatsapp") -> str:
     italic = (lambda s: f"_{s}_") if channel == "whatsapp" else (lambda s: s)
     lines = [response["answer"]]
     for index, item in enumerate(response.get("items", [])[:5], start=1):
-        price = item.get("unit_price")
-        price_text = "sem preço" if price is None else "0 na fonte" if price == 0 else f"{price:g}".replace(".", ",") + " u.n."
-        lines.append(f"{index}. {item['name']} · {item['primary_cuisine']} · {price_text}")
+        band = item.get("price_band") or price_band(item.get("unit_price"), item.get("primary_cuisine"))
+        lines.append(f"{index}. {item['name']} · {item['primary_cuisine']} · {describe(band)}")
     if response.get("items"):
-        lines.append(italic("Preços normalizados do catálogo histórico, sem moeda. Nomes não garantem ingredientes."))
+        lines.append(italic("Preço em faixas dentro de cada culinária ($ barato, $$ médio, $$$ mais caro): "
+                            "a base não publica moeda. Nomes não garantem ingredientes."))
     if response.get("fallback_reason"):
         lines.append(italic("IA indisponível agora: usei o glossário do catálogo."))
     return "\n".join(lines)[:4000]

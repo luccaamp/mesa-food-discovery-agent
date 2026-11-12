@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Plus, ShieldCheck } from "lucide-react";
-import { api, count, keyOf, priceLabel, type Item } from "../api";
+import { api, count, keyOf, priceComparison, priceLabel, type Item } from "../api";
 import { ItemArt, ItemCard, Sheet, SkeletonCards } from "../components/ui";
 import type { Cart } from "../lib/store";
 
@@ -40,13 +40,25 @@ export function ItemSheet({ item, cart, onClose, onOpen }: {
             </div>
             <dl className="facts">
               <div>
-                <dt>Preço normalizado</dt>
-                <dd>{priceLabel(item.unit_price)}</dd>
+                <dt>Faixa de preço</dt>
+                <dd>
+                  {item.price_band?.level
+                    ? `${item.price_band.symbol} · ${item.price_band.label}`
+                    : "Não registrado na fonte"}
+                </dd>
               </div>
               <div>
                 <dt>Origem</dt>
                 <dd>Delivery Hero · Singapura</dd>
               </div>
+              {priceComparison(item.price_band) && (
+                <div className="wide">
+                  <dt>Comparação de preço</dt>
+                  <dd>
+                    {priceComparison(item.price_band)}. Valor no dataset: {priceLabel(item.unit_price)}.
+                  </dd>
+                </div>
+              )}
               {item.reason && (
                 <div className="wide">
                   <dt>Por que apareceu</dt>

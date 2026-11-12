@@ -1,9 +1,18 @@
+/** Position of the price within the item's cuisine; the dataset publishes no currency. */
+export type PriceBand = {
+  level: 1 | 2 | 3 | null;
+  symbol: "$" | "$$" | "$$$" | null;
+  label: string;
+  pricier_share: number | null;
+  reference: string | null;
+};
 export type Item = {
   vendor_id: string;
   product_id: string;
   name: string;
   unit_price: number | null;
   primary_cuisine: string;
+  price_band?: PriceBand | null;
   reason?: string;
   training_baskets?: number;
   supporting_co_baskets?: number;
@@ -35,6 +44,7 @@ export type Context = {
   cuisine: string | null;
   min_price: number | null;
   max_price: number | null;
+  price_level?: number | null;
   selected_items: { vendor_id: string; product_id: string }[];
 };
 export type Chat = {
@@ -207,10 +217,14 @@ export const amount = (value: number) =>
     maximumSignificantDigits: 6,
   }).format(value);
 export const priceLabel = (value: number | null) =>
-  value === null
-    ? "Não informado"
-    : value === 0
-      ? "Zero na fonte"
-      : `${amount(value)} u.n.`;
+  value === null || value === 0 ? "Não registrado na fonte" : `${amount(value)} (unidade do dataset, sem moeda)`;
+/** "Mais barato que 72% dos itens de pizza", or null when the price is unknown. */
+export const priceComparison = (band?: PriceBand | null) => {
+  if (!band || band.level === null || band.pricier_share === null) return null;
+  const share = band.pricier_share;
+  return share >= 0.5
+    ? `Mais barato que ${Math.round(share * 100)}% dos itens de ${band.reference}`
+    : `Mais caro que ${Math.round((1 - share) * 100)}% dos itens de ${band.reference}`;
+};
 export const count = (value: number) =>
   new Intl.NumberFormat("pt-BR").format(value);

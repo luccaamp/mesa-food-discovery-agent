@@ -20,7 +20,7 @@ import {
   X,
   type LucideIcon,
 } from "lucide-react";
-import { amount, type Item } from "../api";
+import { priceComparison, type Item, type PriceBand } from "../api";
 
 const PALETTE = [
   ["#c2502f", "#e3864f"],
@@ -82,17 +82,18 @@ export function ItemArt({ item, size = 40, label = true, className = "" }: {
   );
 }
 
-export function Price({ value }: { value: number | null }) {
-  if (value === null) return <span className="price muted">Sem preço</span>;
-  if (value === 0)
-    return (
-      <span className="price" title="Zero registrado na fonte; não significa gratuito">
-        0 <small>na fonte</small>
-      </span>
-    );
+/** Price band within the item's cuisine: the dataset has no currency, so no amount is shown. */
+export function Price({ band }: { band?: PriceBand | null }) {
+  if (!band || band.level === null) return <span className="price muted">Preço não informado</span>;
+  const comparison = priceComparison(band);
   return (
-    <span className="price" title="Preço normalizado do dataset, sem moeda">
-      {amount(value)} <small>u.n.</small>
+    <span className="price" title={comparison ? comparison + ". A base não publica moeda." : undefined}>
+      <span className="price-band" aria-hidden="true">
+        <b>{"$".repeat(band.level)}</b>
+        {"$".repeat(3 - band.level)}
+      </span>
+      <small>{band.label}</small>
+      <span className="sr-only">{`Faixa de preço ${band.level} de 3: ${band.label}`}</span>
     </span>
   );
 }
@@ -124,7 +125,7 @@ export function ItemCard({ item, inCart, onOpen, onAdd, compact = false }: {
       <div className="item-body">
         <h3 className="item-name">{item.name}</h3>
         <div className="item-meta">
-          <Price value={item.unit_price} />
+          <Price band={item.price_band} />
           <button
             className="add-btn"
             aria-pressed={inCart}
