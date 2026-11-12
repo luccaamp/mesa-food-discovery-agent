@@ -98,7 +98,7 @@ def recommend(index: Path, seeds, *, cuisine=None, min_price=None, max_price=Non
                 raise ValueError("Selected seed item is absent from the real catalog")
         conditions = []
         params = []
-        for value, clause in ((cuisine, "i.primary_cuisine=?"), (min_price, "i.unit_price>=?"), (max_price, "i.unit_price<=?")):
+        for value, clause in ((cuisine, "i.primary_cuisine=?"), (min_price, "i.unit_price>=?"), (max_price, "i.unit_price>0 AND i.unit_price<=?")):
             if value is not None:
                 conditions.append(clause)
                 params.append(value)

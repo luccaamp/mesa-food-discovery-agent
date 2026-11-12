@@ -52,6 +52,8 @@ class CatalogTests(unittest.TestCase):
         items = self.search("Test")["items"]
         self.assertEqual(items[0]["lexical_score"], items[1]["lexical_score"])
         self.assertEqual([item["product_id"] for item in items], ["p2", "p1"])
+        # A recorded 0 means the price is missing, so a ceiling must not match it.
+        self.assertEqual([item["product_id"] for item in self.search("Test", max_price=5)["items"]], ["p2"])
 
     def test_fts_syntax_and_sql_are_literal_search_terms(self):
         self.assertEqual(self.search('Test OR absent')["items"], [])

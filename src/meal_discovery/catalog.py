@@ -137,7 +137,7 @@ def search_catalog(index: Path, query: str, *, cuisine=None, min_price=None, max
     try:
         conditions = ["item_search MATCH ?"]
         parameters = [' AND '.join('"' + token + '"' for token in tokens)]
-        for value, condition in ((cuisine, "i.primary_cuisine=?"), (min_price, "i.unit_price>=?"), (max_price, "i.unit_price<=?")):
+        for value, condition in ((cuisine, "i.primary_cuisine=?"), (min_price, "i.unit_price>=?"), (max_price, "i.unit_price>0 AND i.unit_price<=?")):
             if value is not None:
                 conditions.append(condition)
                 parameters.append(value)

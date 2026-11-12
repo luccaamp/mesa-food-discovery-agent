@@ -87,6 +87,16 @@ class ProductTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             recommend(self.serving, [])
 
+    def test_price_ceiling_never_matches_an_unknown_price(self):
+        from contextlib import closing
+        import sqlite3
+        with closing(sqlite3.connect(self.serving)) as connection, connection:
+            connection.execute("UPDATE items SET unit_price=0 WHERE product_id='p2'")
+        bounded = recommend(self.serving, [], max_price=5, allow_test_data=True)["items"]
+        self.assertEqual([item["product_id"] for item in bounded], ["p1"])
+        unbounded = recommend(self.serving, [], allow_test_data=True)["items"]
+        self.assertIn("p2", [item["product_id"] for item in unbounded])
+
     def test_glossary_is_explicit_and_does_not_remove_negations(self):
         self.assertEqual(expand_query("Cheese pizza please")[0], "cheese pizza")
         self.assertEqual(expand_query("arroz com frango")[0], "rice chicken")
