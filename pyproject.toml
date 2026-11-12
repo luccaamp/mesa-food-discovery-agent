@@ -17,7 +17,6 @@ api = ["fastapi==0.162.0", "uvicorn==0.54.0", "langgraph==1.2.20", "prometheus-c
 mcp = ["mcp==2.3.0"]
 channels = ["redis==6.4.0"]
 test = ["httpx2==2.16.0", "fakeredis==2.40.0"]
-semantic = ["numpy==2.3.5", "onnxruntime==1.31.1", "tokenizers==0.23.3"]
 analysis = ["pandas==3.1.1", "matplotlib==3.11.2", "lightgbm==4.7.0"]
 
 [project.scripts]

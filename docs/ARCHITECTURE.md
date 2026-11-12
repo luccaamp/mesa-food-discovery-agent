@@ -24,11 +24,12 @@ Aplicação                agent/       grafo LangGraph + grounding  ◄─┘
 Adaptadores LLM          llm/        Catálogo e recomendação
   gemini.py                            catalog.py   SQLite FTS5/BM25
   openai_compatible.py                 serving.py   coocorrência + popularidade
-    (Groq, Qwen local, OpenAI)         discovery.py glossário PT/EN
-  resilience.py, registry.py
+    (Groq, OpenAI)                     discovery.py glossário PT/EN
+  resilience.py, registry.py           pricing.py   faixas de preço por culinária
+                                       context_popularity.py  região × horário
       │
 Transversal              observability.py  métricas Prometheus, traces OpenTelemetry
-Dados offline            dataset.py, singapore.py, benchmark.py, deployment.py
+Dados offline            dataset.py, singapore.py, benchmark.py, deployment.py; analysis/ (análise e experimentos)
 ```
 
 ## Fluxo de uma mensagem
@@ -87,8 +88,8 @@ Protocol para clientes externos. [Uso e configuração](MCP.md).
   em todos os provedores.
 - `gemini.py` traduz para a API do Gemini, incluindo as *thought signatures*
   que o Gemini 3 exige devolver entre turnos com ferramentas.
-- `openai_compatible.py` atende Groq, o servidor llama.cpp local (Qwen) e a
-  OpenAI pela API Chat Completions. O endpoint local só aceita loopback.
+- `openai_compatible.py` atende Groq e OpenAI pela API Chat Completions, e
+  qualquer servidor compatível em loopback.
 - `resilience.py` aplica, por provedor: no máximo duas tentativas dentro de 45
   segundos, retry só para HTTP transitório e um timeout, cota local por minuto
   e por dia, e pausa de 60 segundos após duas falhas seguidas (com uma única
@@ -106,7 +107,7 @@ ZIPs oficiais do DHRD conferidos por SHA-256 → normalização com quarentena
 por pedido → SQLite somente leitura → perfis de treino (dias 0–61) → índices de
 serviço. O teste oficial (dias 76–90) fica fisicamente separado e não foi usado
 para ajustar modelos; ele foi avaliado uma única vez, no
-[Experimento 004](EXPERIMENT_004.md). Os artefatos públicos contêm só
+[Experimento de descoberta](EXPERIMENT_DISCOVERY.md). Os artefatos públicos contêm só
 catálogo, popularidade (geral e por região × horário), faixas de preço e
 vizinhança entre itens: nenhuma tabela individual de pedido ou cliente.
 
@@ -144,7 +145,7 @@ Telegram/Meta ──► Gateway Go ──XADD──► Redis Stream ──XREADG
 - No plano gratuito os serviços hibernam: depois de enfileirar, o gateway faz
   um `GET` no app para acordar o worker (`wake.go`).
 
-Detalhes em [WHATSAPP.md](WHATSAPP.md).
+Detalhes em [CHANNELS.md](CHANNELS.md).
 
 ## Privacidade e observabilidade
 

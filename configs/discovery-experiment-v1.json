@@ -72,6 +72,8 @@
   ],
   "restaurant_models": {
     "popular_global": "most ordered restaurants in the city",
+    "popular_city_recent": "most ordered restaurants in the city over the last 14 days of history (reference added after an external review of the test results; no model, feature or parameter changed, and every earlier number reproduces exactly)",
+    "random": "10 restaurants drawn uniformly from those with orders in the history (chance level) (reference added after an external review of the test results; no model, feature or parameter changed, and every earlier number reproduces exactly)",
     "popular_region": "most ordered restaurants in the order's geohash, backed off to the city",
     "popular_region_slot": "most ordered in the geohash and time slot, backed off to region then city",
     "repeat_then_region_slot": "restaurants the customer used (visits, then recency), filled with popular_region_slot",
@@ -80,6 +82,7 @@
   },
   "item_models": {
     "popular_global": "most ordered items in the city (the v2 popularity baseline)",
+    "popular_city_recent": "most ordered items in the city over the last 14 days of history (reference added after an external review of the test results; no model, feature or parameter changed, and every earlier number reproduces exactly)",
     "repeat_then_global": "items the customer bought (count, then recency), filled with city popularity (the v2 repeat baseline)",
     "popular_region_slot": "most ordered items in the geohash and time slot, backed off to region then city",
     "repeat_then_region_slot": "the customer's items, filled with popular_region_slot",
@@ -101,5 +104,6 @@
       "city": 10
     }
   },
-  "limitations": "Offline replay of historical choices: it measures whether the real next order would have been shown, not conversion, revenue or satisfaction. Restaurants the customer never saw may still have been ordered elsewhere in the app."
+  "limitations": "Offline replay of historical choices: it measures whether the real next order would have been shown, not conversion, revenue or satisfaction. Restaurants the customer never saw may still have been ordered elsewhere in the app.",
+  "uncertainty": "Bootstrap over customers (1000 resamples, percentile 95%); paired for differences (reference added after an external review of the test results; no model, feature or parameter changed, and every earlier number reproduces exactly)"
 }

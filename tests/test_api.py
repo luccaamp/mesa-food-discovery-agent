@@ -63,17 +63,6 @@ class ApiTests(unittest.TestCase):
         with patch.dict(os.environ, {"RENDER_GIT_COMMIT": "invalid-do-not-echo", "LLM_PROVIDER": "disabled"}):
             self.assertIsNone(self.client.get("/v1/system").json()["deployment_commit"])
 
-    def test_latest_relevance_decision_replaces_prior_failed_judge(self):
-        reports = self.root / "reports"
-        reports.mkdir()
-        old = {"judge_admitted": False, "controls_correct": 28, "controls_total": 40}
-        new = {"judge_admitted": True, "controls_correct": 32, "controls_total": 32}
-        (reports / "relevance-decision-v1.json").write_text(json.dumps(old), encoding="utf-8")
-        with patch.dict(os.environ, {"MEAL_EVALUATIONS_DIR": str(reports)}):
-            self.assertEqual(self.client.get("/v1/evaluations").json()["relevance_evaluation"], old)
-            (reports / "relevance-decision-v2.json").write_text(json.dumps(new), encoding="utf-8")
-            self.assertEqual(self.client.get("/v1/evaluations").json()["relevance_evaluation"], new)
-
     def test_empty_unknown_and_injection_queries_never_fabricate_items(self):
         for query in ("absent", "Test OR absent", "'; DROP TABLE items;--"):
             response = self.client.get("/v1/catalog/search", params={"query": query})
@@ -83,23 +72,16 @@ class ApiTests(unittest.TestCase):
         self.assertEqual(response.status_code, 404)
         self.assertEqual(response.json()["error"]["code"], "not_found")
 
-    def test_evaluations_exposes_recorded_local_contracts_without_claiming_gemini(self):
+    def test_evaluations_expose_the_current_results_and_nothing_when_missing(self):
         directory = Path(__file__).parents[1] / "evaluations/results"
         with patch.dict(os.environ, {"MEAL_EVALUATIONS_DIR": str(directory)}):
             payload = self.client.get("/v1/evaluations").json()
-        self.assertEqual(len(payload["reports"]), 2)
-        recorded = payload["assistant_evaluation"]
-        self.assertEqual(recorded["passed"], 13)
-        self.assertEqual(recorded["catalog_items_checked"], 48)
-        self.assertFalse(recorded["live_gemini_tested"])
-        self.assertIn("Qwen", recorded["model"])
-        conversation = payload["conversation_evaluation"]
-        self.assertEqual(conversation["episodes"], 120)
-        self.assertEqual(conversation["catalog_items_checked"], 702)
-        self.assertEqual(payload["ai_evaluation"]["simulator_requested"], 8)
-        self.assertEqual(payload["ai_evaluation"]["judge_controls_passed"], 32)
-        latest_public = json.loads((directory / "public-assistant-summary-v3.json").read_text(encoding="utf-8"))
-        self.assertEqual(payload["public_assistant_evaluation"], latest_public)
+        discovery = payload["discovery"]
+        self.assertEqual(discovery["stage"], "final_test")
+        self.assertTrue(payload["official_test_evaluated"])
+        self.assertIn("popular_city_recent", discovery["restaurants"])
+        self.assertEqual(payload["agent_comparison"]["split"], "reserved")
+        self.assertLess(payload["retrieval"]["queries"], 50)
         red_team = {row["provider"]: row for row in payload["red_team"]}
         self.assertEqual(set(red_team), {"gemini", "groq"})
         for row in red_team.values():
@@ -108,12 +90,10 @@ class ApiTests(unittest.TestCase):
             self.assertIn("LLM01", {risk["owasp"] for risk in row["by_risk"]})
         with patch.dict(os.environ, {"MEAL_EVALUATIONS_DIR": str(self.root)}):
             payload = self.client.get("/v1/evaluations").json()
-        self.assertEqual(payload["reports"], [])
-        self.assertIsNone(payload["assistant_evaluation"])
-        self.assertIsNone(payload["conversation_evaluation"])
-        self.assertIsNone(payload["ai_evaluation"])
-        self.assertIsNone(payload["public_assistant_evaluation"])
+        for key in ("discovery", "agent_discovery", "agent_comparison", "retrieval"):
+            self.assertIsNone(payload[key])
         self.assertEqual(payload["red_team"], [])
+        self.assertFalse(payload["official_test_evaluated"])
 
     def test_invalid_queries_have_consistent_errors_and_request_ids(self):
         for params in ({}, {"query": " "}, {"query": "---"}, {"query": "x" * 201},

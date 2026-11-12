@@ -735,6 +735,7 @@
           "evaluations"
         ],
         "summary": "Evaluations",
+        "description": "The results the lab page shows; each one links to its raw report in evaluations/results.",
         "operationId": "evaluations_v1_evaluations_get",
         "responses": {
           "200": {

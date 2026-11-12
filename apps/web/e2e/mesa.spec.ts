@@ -84,7 +84,8 @@ test("assistant streams agent steps and shows grounded items", async ({ page }) 
 test("lab presents evaluations", async ({ page }) => {
   await page.goto("/#/lab");
   await expect(page.getByRole("heading", { name: "Como sabemos que funciona" })).toBeVisible();
-  await expect(page.getByRole("heading", { name: /Recomendação/ })).toBeVisible();
+  await expect(page.getByRole("region", { name: "Tabela de restaurantes" })).toContainText("Região × horário");
+  await expect(page.getByRole("region", { name: "Tabela do experimento do agente" })).toContainText("Agente");
   const redTeam = page.getByRole("region", { name: "Tabela do red team" });
   await expect(redTeam).toContainText("LLM01");
   await expect(redTeam.getByRole("row").last()).toContainText("24/24");

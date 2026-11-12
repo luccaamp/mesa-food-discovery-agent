@@ -16,7 +16,7 @@ novo" significa "sem pedidos nos 30 dias anteriores".
 | # | Achado | Número | O que o produto faz com isso |
 | --- | --- | --- | --- |
 | 1 | A maioria dos pedidos de quem já é cliente é **exploração** | **63%** vão a um restaurante que a pessoa nunca usou | Recomendar só "peça de novo" atende a minoria; o produto precisa ajudar a descobrir |
-| 2 | **A popularidade é local** | Em 24 regiões, o top-20 regional tem **0%** de sobreposição mediana com o top-20 da cidade; 68% dos pedidos são de restaurantes da própria região | O ranking da região supera o ranking da cidade |
+| 2 | **A demanda é local e não tem campeões** | 68% dos pedidos são de restaurantes da própria região; os 10 restaurantes mais pedidos da cidade somam só 0,37% dos pedidos, e saíram do topo durante o período | Um ranking da cidade quase não serve; o da região serve |
 | 3 | **O horário muda o que se pede** | Café sai **3,7×** mais de manhã; noodles 3,0× de madrugada; bubble tea 1,8× à tarde | A sugestão depende da hora |
 | 4 | **Cliente novo é frágil** | **58%** dos novos não voltam em 30 dias; 41% de todos os clientes pediram uma única vez | Para quem não tem histórico, só região e horário estão disponíveis |
 | 5 | **Cauda longa** | **77%** do catálogo nunca foi pedido; 10% dos itens pedidos somam metade da demanda | Busca e recomendação precisam ir além do topo, mas com evidência |
@@ -32,19 +32,33 @@ fatia ainda é 61,0%, então não é efeito de filial. A fatia cai com o histór
 e continua alta: **43% mesmo para quem já fez 10 pedidos ou mais**. No nível de
 item, só 22,9% dos itens pedidos já tinham sido comprados pela pessoa.
 
-Isso explica um resultado anterior. No [Experimento 001](EXPERIMENT_001.md), o
+Isso explica um resultado anterior: na validação temporal (protocolo v2), o
 melhor modelo era "repetir o que a pessoa já pediu", com Recall@10 de 14%. Ele
 vence porque o resto é difícil de prever, não porque as pessoas só repetem. A
 maior parte da demanda é descoberta, e é ela que o app precisa servir.
 
-## 2. A popularidade é local
+## 2. A demanda é local e não tem campeões
 
 68,1% dos pedidos saem de um restaurante na mesma célula geográfica do cliente
-(geohash de cerca de 5 km). Para medir o quanto isso muda o ranking, comparei o
-top-20 de restaurantes de cada uma das 24 regiões com mais de 5.000 pedidos com
-o top-20 da cidade. A sobreposição mediana é **0%** e a máxima é 10%. Um
-"mais pedidos de Singapura" mostra quase sempre restaurantes que ninguém da
-região pede.
+(geohash de cerca de 5 km).
+
+Ao mesmo tempo, **a demanda entre restaurantes é plana**:
+- **Cidade:** os 10 restaurantes mais pedidos de Singapura somam só **0,37%** dos
+  pedidos, de 626 a 645 pedidos cada em 76 dias. Contagens tão parecidas podem
+  ser efeito da amostragem do DHRD; é hipótese, não fato.
+- **Regiões:** comparei o top-20 de cada uma das 24 regiões com mais de 5.000
+  pedidos com o top-20 da cidade. A sobreposição mediana é 0%. Isso diz menos
+  sobre "gosto local" e mais sobre a falta de restaurantes dominantes.
+
+**O topo da cidade também envelhece.** Esses 10 restaurantes caem de 0,47% dos
+pedidos nos dias 0–20 para 0,15% nos dias 62–75. Três deles pararam de receber
+pedidos nos dias 49, 54 e 56, e nenhum está no top-10 das duas últimas semanas.
+No teste oficial, quase não recebem pedidos.
+
+**Consequência para qualquer comparação:** "mais pedidos da cidade em todo o
+período" é uma referência fraca demais, porque acerta menos que um sorteio.
+O experimento usa como referência justa os mais pedidos **das últimas duas
+semanas** e informa também o acaso.
 
 ## 3. O horário muda o que se pede
 
@@ -91,10 +105,10 @@ Detalhes em [ARCHITECTURE.md](ARCHITECTURE.md#preço-em-faixas).
 ## Do achado ao modelo
 
 Os achados 1 a 4 viraram uma hipótese testável: **para decidir o que mostrar,
-região e horário valem mais que a popularidade da cidade, e um ranker que
-combine histórico e contexto supera cada sinal isolado**. O teste, feito com o
+região e horário valem mais que a popularidade da cidade, e um ranker
+que combine histórico e contexto supera cada sinal isolado**. O teste, feito com o
 protocolo congelado antes de rodar e avaliado uma única vez no teste oficial do
-DHRD, está no [Experimento 004](EXPERIMENT_004.md).
+DHRD, está no [experimento de descoberta](EXPERIMENT_DISCOVERY.md).
 
 ## Limites
 

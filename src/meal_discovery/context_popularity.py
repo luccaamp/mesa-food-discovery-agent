@@ -71,7 +71,7 @@ def popular_here(region=None, slot=None):
     return scope, slot, [tuple(entry) for entry in entries]
 
 
-def build(database: Path, output: Path, *, last_day=75, per_list=40, min_region_orders=2000):
+def build(database: Path, output: Path, *, last_day=75, per_list=40, min_region_orders=2000, vendors_per_list=300):
     """Write the artifact from the official training orders (days 0..last_day)."""
     import sqlite3
     from collections import Counter, defaultdict
@@ -93,21 +93,52 @@ def build(database: Path, output: Path, *, last_day=75, per_list=40, min_region_
             counts[(CITY, slot)][(vendor, product)] += 1
             if region_orders[geohash] >= min_region_orders:
                 counts[(geohash, slot)][(vendor, product)] += 1
+        # Orders per restaurant in each region and slot, to rank search results by local demand.
+        vendor_counts = defaultdict(Counter)
+        rows = connection.execute("""SELECT c.geohash, CAST(substr(o.order_time,1,2) AS INTEGER), MIN(i.vendor_id)
+                                     FROM orders o JOIN order_context c USING(order_id) JOIN order_items i USING(order_id)
+                                     WHERE o.order_day<=? GROUP BY o.order_id""", (last_day,))
+        for geohash, hour, vendor in rows:
+            if region_orders[geohash] >= min_region_orders:
+                slot = next(name for name, first, last in SLOTS if first <= hour <= last)
+                vendor_counts[(geohash, slot)][vendor] += 1
     finally:
         connection.close()
     lists = defaultdict(dict)
     for (scope, slot), counter in counts.items():
         ranked = sorted(counter.items(), key=lambda pair: (-pair[1], pair[0]))[:per_list]
         lists[scope][slot] = [[vendor, product, count] for (vendor, product), count in ranked]
+    restaurants = defaultdict(dict)
+    for (scope, slot), counter in vendor_counts.items():
+        restaurants[scope][slot] = dict(sorted(counter.items(), key=lambda pair: (-pair[1], pair[0]))[:vendors_per_list])
     data = {"artifact_version": "context-popularity-v1", "data_kind": manifest["data_kind"], "city": manifest["city"],
             "source_database_sha256": file_hash(database), "order_days": [0, last_day],
             "method": "Item presence in orders per DHRD order geohash and Singapore time slot; regions with at least "
                       f"{min_region_orders} orders; '{CITY}' is the whole city.",
             "region_orders": {key: region_orders[key] for key in lists if key != CITY},
-            "regions": dict(sorted(lists.items()))}
+            "regions": dict(sorted(lists.items())),
+            "restaurant_orders": dict(sorted(restaurants.items()))}
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(json.dumps(data, separators=(",", ":")), encoding="utf-8")
     return {"regions": len(lists) - 1, "slots": len(SLOTS)}
+
+
+def local_demand(region, slot=None):
+    """Orders per restaurant in a region and time slot (top restaurants only); empty when the region is unknown."""
+    data = _artifact()
+    return data.get("restaurant_orders", {}).get(region, {}).get(slot or slot_at(), {})
+
+
+def rank_by_local_demand(items, region, slot=None):
+    """Reorder search results by how often their restaurant is ordered here and now; ties keep the BM25 order.
+
+    Experiment "agent" (docs/EXPERIMENT_AGENT.md): on 36,766 new customers, reordering keyword search results
+    this way raised the share whose real restaurant was shown from 2.3% to 12.1%.
+    """
+    demand = local_demand(region, slot)
+    if not demand:
+        return items
+    return sorted(items, key=lambda item: -demand.get(item["vendor_id"], 0))
 
 
 def recommend_here(index, *, region=None, slot=None, cuisine=None, min_price=None, max_price=None, price_level=None,

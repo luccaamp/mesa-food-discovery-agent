@@ -133,7 +133,26 @@ def context(orders):
         "regions_with_5000_orders": len(overlaps),
         "regional_top20_overlap_with_city_top20": {"median": float(np.median(overlaps)), "min": float(min(overlaps)),
                                                     "max": float(max(overlaps))},
+        **demand_concentration(orders),
     }, lift
+
+
+def demand_concentration(orders):
+    """How flat restaurant demand is, and whether the all-time top restaurants keep their demand over time."""
+    counts = orders.vendor_id.value_counts()
+    top10 = set(counts.head(10).index)
+    periods = [(0, 20), (21, 40), (41, 61), (62, 75)]
+    recent_top10 = set(orders[orders.order_day >= 62].vendor_id.value_counts().head(10).index)
+    return {
+        "top10_restaurants_order_share": float(counts.head(10).sum() / counts.sum()),
+        "top10_restaurant_orders_each": [int(counts.iloc[0]), int(counts.iloc[9])],
+        "all_time_top10_share_by_period": {f"{first}-{last}": round(float(
+            orders[(orders.order_day >= first) & (orders.order_day <= last)].vendor_id.isin(top10).mean()), 5)
+            for first, last in periods},
+        "all_time_top10_last_order_day": sorted(int(day) for day in orders[orders.vendor_id.isin(top10)]
+                                                .groupby("vendor_id").order_day.max()),
+        "top10_last_14_days_overlap_with_all_time_top10": len(top10 & recent_top10),
+    }
 
 
 def catalog(items, products, orders):

@@ -8,6 +8,7 @@ import argparse
 from collections import Counter
 from datetime import datetime, timezone
 import json
+import os
 import math
 from pathlib import Path
 import statistics
@@ -139,7 +140,7 @@ def run(base, suite_path, index, repetitions, output):
               "implementation_sha256": {name: file_hash(Path("src/meal_discovery") / name)
                                           for name in ("assistant.py", "api.py", "serving.py", "discovery.py")},
               "prompt_sha256": file_hash(Path("src/meal_discovery/prompts/intent_v1.txt")),
-              "model_configuration": json.loads(Path("configs/local-llm-v1.json").read_text(encoding="utf-8")),
+              "model_configuration": {"provider": os.environ.get("LLM_PROVIDER"), "model": os.environ.get("LLM_MODEL")},
               "official_test_orders_used": False, "commercial_api_calls": 0,
               "qualitative_judge": "unscored; no qualified judge", "episodes": rows,
               "limitations": "Scripted AI-authored behavioral contracts, not free-form LLM simulation, human preference or population estimates. Development cases are not held out."}

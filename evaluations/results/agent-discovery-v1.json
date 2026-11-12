@@ -1,0 +1,529 @@
+{
+  "schema_version": 1,
+  "protocol_version": "agent-discovery-v1",
+  "protocol_sha256": "c6680165c43a66375c1bfc70f0920e8ec0f79259c013c8e3cc077a47c4e59dfe",
+  "implementation_sha256": "03661b08260f860678040c328b171a2ba41b0136c11e433096b5f5e10072a3b0",
+  "created_at_utc": "2026-11-12T06:04:40+00:00",
+  "provider": "groq",
+  "model": "openai/gpt-oss-120b",
+  "cases": {
+    "new_customers": 36766,
+    "llm_sample": 120
+  },
+  "arms": {
+    "all_new_customers": {
+      "home": {
+        "restaurant_hit": {
+          "mean": 0.03647,
+          "ci95": [
+            0.03454,
+            0.03832
+          ]
+        },
+        "item_hit": {
+          "mean": 0.0244,
+          "ci95": [
+            0.02296,
+            0.02614
+          ]
+        },
+        "cuisine_match": {
+          "mean": 0.04,
+          "ci95": [
+            0.03898,
+            0.0411
+          ]
+        },
+        "empty": {
+          "mean": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "cases": 36766
+      },
+      "search_pt": {
+        "restaurant_hit": {
+          "mean": 0.01115,
+          "ci95": [
+            0.01006,
+            0.01221
+          ]
+        },
+        "item_hit": {
+          "mean": 0.00155,
+          "ci95": [
+            0.00117,
+            0.00196
+          ]
+        },
+        "cuisine_match": {
+          "mean": 0.31794,
+          "ci95": [
+            0.31372,
+            0.32222
+          ]
+        },
+        "empty": {
+          "mean": 0.39947,
+          "ci95": [
+            0.39447,
+            0.40461
+          ]
+        },
+        "cases": 36766
+      },
+      "search_pt_local": {
+        "restaurant_hit": {
+          "mean": 0.0612,
+          "ci95": [
+            0.05872,
+            0.06357
+          ]
+        },
+        "item_hit": {
+          "mean": 0.00835,
+          "ci95": [
+            0.00743,
+            0.00927
+          ]
+        },
+        "cuisine_match": {
+          "mean": 0.32094,
+          "ci95": [
+            0.31685,
+            0.32505
+          ]
+        },
+        "empty": {
+          "mean": 0.39947,
+          "ci95": [
+            0.39493,
+            0.40396
+          ]
+        },
+        "cases": 36766
+      },
+      "search_en": {
+        "restaurant_hit": {
+          "mean": 0.02309,
+          "ci95": [
+            0.02162,
+            0.02462
+          ]
+        },
+        "item_hit": {
+          "mean": 0.0019,
+          "ci95": [
+            0.00147,
+            0.00237
+          ]
+        },
+        "cuisine_match": {
+          "mean": 0.67107,
+          "ci95": [
+            0.66714,
+            0.67496
+          ]
+        },
+        "empty": {
+          "mean": 0.00898,
+          "ci95": [
+            0.00805,
+            0.00987
+          ]
+        },
+        "cases": 36766
+      },
+      "search_en_local": {
+        "restaurant_hit": {
+          "mean": 0.12057,
+          "ci95": [
+            0.11731,
+            0.124
+          ]
+        },
+        "item_hit": {
+          "mean": 0.01148,
+          "ci95": [
+            0.01039,
+            0.01259
+          ]
+        },
+        "cuisine_match": {
+          "mean": 0.6649,
+          "ci95": [
+            0.66079,
+            0.66887
+          ]
+        },
+        "empty": {
+          "mean": 0.00898,
+          "ci95": [
+            0.00802,
+            0.00995
+          ]
+        },
+        "cases": 36766
+      }
+    },
+    "llm_sample": {
+      "home": {
+        "restaurant_hit": {
+          "mean": 0.04167,
+          "ci95": [
+            0.00833,
+            0.07521
+          ]
+        },
+        "item_hit": {
+          "mean": 0.01667,
+          "ci95": [
+            0.0,
+            0.04167
+          ]
+        },
+        "cuisine_match": {
+          "mean": 0.03667,
+          "ci95": [
+            0.02,
+            0.05667
+          ]
+        },
+        "empty": {
+          "mean": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "cases": 120
+      },
+      "search_pt": {
+        "restaurant_hit": {
+          "mean": 0.025,
+          "ci95": [
+            0.0,
+            0.05833
+          ]
+        },
+        "item_hit": {
+          "mean": 0.00833,
+          "ci95": [
+            0.0,
+            0.03333
+          ]
+        },
+        "cuisine_match": {
+          "mean": 0.265,
+          "ci95": [
+            0.19333,
+            0.33333
+          ]
+        },
+        "empty": {
+          "mean": 0.53333,
+          "ci95": [
+            0.43333,
+            0.625
+          ]
+        },
+        "cases": 120
+      },
+      "search_pt_local": {
+        "restaurant_hit": {
+          "mean": 0.03333,
+          "ci95": [
+            0.00833,
+            0.06667
+          ]
+        },
+        "item_hit": {
+          "mean": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "cuisine_match": {
+          "mean": 0.26167,
+          "ci95": [
+            0.19833,
+            0.34
+          ]
+        },
+        "empty": {
+          "mean": 0.53333,
+          "ci95": [
+            0.44167,
+            0.61687
+          ]
+        },
+        "cases": 120
+      },
+      "search_en": {
+        "restaurant_hit": {
+          "mean": 0.05,
+          "ci95": [
+            0.01667,
+            0.09167
+          ]
+        },
+        "item_hit": {
+          "mean": 0.00833,
+          "ci95": [
+            0.0,
+            0.025
+          ]
+        },
+        "cuisine_match": {
+          "mean": 0.725,
+          "ci95": [
+            0.65829,
+            0.78833
+          ]
+        },
+        "empty": {
+          "mean": 0.00833,
+          "ci95": [
+            0.0,
+            0.025
+          ]
+        },
+        "cases": 120
+      },
+      "search_en_local": {
+        "restaurant_hit": {
+          "mean": 0.15,
+          "ci95": [
+            0.09167,
+            0.21667
+          ]
+        },
+        "item_hit": {
+          "mean": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "cuisine_match": {
+          "mean": 0.70167,
+          "ci95": [
+            0.63333,
+            0.76504
+          ]
+        },
+        "empty": {
+          "mean": 0.00833,
+          "ci95": [
+            0.0,
+            0.025
+          ]
+        },
+        "cases": 120
+      },
+      "agent": {
+        "restaurant_hit": {
+          "mean": 0.04167,
+          "ci95": [
+            0.00833,
+            0.08333
+          ]
+        },
+        "item_hit": {
+          "mean": 0.00833,
+          "ci95": [
+            0.0,
+            0.025
+          ]
+        },
+        "cuisine_match": {
+          "mean": 0.47667,
+          "ci95": [
+            0.39663,
+            0.56004
+          ]
+        },
+        "empty": {
+          "mean": 0.15,
+          "ci95": [
+            0.09167,
+            0.21667
+          ]
+        },
+        "cases": 120
+      },
+      "agent_local": {
+        "restaurant_hit": {
+          "mean": 0.09167,
+          "ci95": [
+            0.04167,
+            0.14167
+          ]
+        },
+        "item_hit": {
+          "mean": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "cuisine_match": {
+          "mean": 0.45333,
+          "ci95": [
+            0.36667,
+            0.535
+          ]
+        },
+        "empty": {
+          "mean": 0.15,
+          "ci95": [
+            0.08333,
+            0.21667
+          ]
+        },
+        "cases": 120
+      }
+    }
+  },
+  "paired_on_llm_sample": {
+    "agent_vs_search_pt": {
+      "restaurant_hit": {
+        "difference": 0.01667,
+        "ci95": [
+          0.0,
+          0.04167
+        ]
+      },
+      "cuisine_match": {
+        "difference": 0.21167,
+        "ci95": [
+          0.12167,
+          0.30004
+        ]
+      },
+      "empty": {
+        "difference": -0.38333,
+        "ci95": [
+          -0.5,
+          -0.275
+        ]
+      }
+    },
+    "agent_vs_search_en": {
+      "restaurant_hit": {
+        "difference": -0.00833,
+        "ci95": [
+          -0.04167,
+          0.01667
+        ]
+      },
+      "cuisine_match": {
+        "difference": -0.24833,
+        "ci95": [
+          -0.32671,
+          -0.17167
+        ]
+      },
+      "empty": {
+        "difference": 0.14167,
+        "ci95": [
+          0.08333,
+          0.20021
+        ]
+      }
+    },
+    "agent_local_vs_home": {
+      "restaurant_hit": {
+        "difference": 0.05,
+        "ci95": [
+          -0.00833,
+          0.11667
+        ]
+      },
+      "cuisine_match": {
+        "difference": 0.41667,
+        "ci95": [
+          0.33167,
+          0.50004
+        ]
+      },
+      "empty": {
+        "difference": 0.15,
+        "ci95": [
+          0.09167,
+          0.21667
+        ]
+      }
+    },
+    "agent_local_vs_agent": {
+      "restaurant_hit": {
+        "difference": 0.05,
+        "ci95": [
+          0.00833,
+          0.09187
+        ]
+      },
+      "cuisine_match": {
+        "difference": -0.02333,
+        "ci95": [
+          -0.07167,
+          0.02167
+        ]
+      },
+      "empty": {
+        "difference": 0.0,
+        "ci95": [
+          0.0,
+          0.0
+        ]
+      }
+    },
+    "search_en_local_vs_search_en": {
+      "restaurant_hit": {
+        "difference": 0.1,
+        "ci95": [
+          0.04167,
+          0.15833
+        ]
+      },
+      "cuisine_match": {
+        "difference": -0.02333,
+        "ci95": [
+          -0.07671,
+          0.03
+        ]
+      },
+      "empty": {
+        "difference": 0.0,
+        "ci95": [
+          0.0,
+          0.0
+        ]
+      }
+    }
+  },
+  "llm_usage": {
+    "provider_attempts": 184,
+    "tokens": 163481,
+    "fallbacks": 39,
+    "tools": {
+      "recommend_items": 23,
+      "search_catalog": 86
+    },
+    "latency_seconds_p50": 1.06
+  },
+  "messages_example": [
+    "Estou com vontade de algo de padaria",
+    "Estou com vontade de algo de padaria, algo barato",
+    "Estou com vontade de algo saudável",
+    "Estou com vontade de algo saudável, algo barato",
+    "Estou com vontade de arroz com frango",
+    "Estou com vontade de arroz com frango, algo barato",
+    "Estou com vontade de arroz frito",
+    "Estou com vontade de arroz frito, algo barato"
+  ],
+  "limitations": "Code-generated intents, not people; one turn; the region is known to the home and the agent but plain search has no region input, which is the product as built. Offline replay: measures whether the real choice would have been shown, not satisfaction."
+}

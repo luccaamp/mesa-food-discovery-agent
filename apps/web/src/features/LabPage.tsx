@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { ExternalLink, FlaskConical, Send } from "lucide-react";
-import { api, count, type Evaluation, type Meta, type PublicAssistantEvaluation, type ConversationEvaluation } from "../api";
+import { api, count, type Meta } from "../api";
 
 const REPO = "https://github.com/luccaamp/mesa-food-discovery-agent/blob/main/";
 
@@ -55,7 +55,9 @@ const SEGMENTS: [string, string][] = [
   ["warm_repeat", "Recorrente, volta ao restaurante"],
 ];
 const DISCOVERY_MODELS: Record<string, string> = {
-  popular_global: "Mais pedidos da cidade",
+  popular_global: "Mais pedidos da cidade, período todo",
+  random: "Sorteio de 10 restaurantes (acaso)",
+  popular_city_recent: "Mais pedidos da cidade, últimas 2 semanas",
   popular_region: "Mais pedidos da região",
   popular_region_slot: "Região × horário",
   repeat_then_global: "Repetição + cidade (baseline v2)",
@@ -86,7 +88,7 @@ function DiscoveryTable({ label, rows, metric }: { label: string; rows: Record<s
           </tr>
         </thead>
         <tbody>
-          {Object.entries(rows).map(([model, row]) => (
+          {Object.keys(DISCOVERY_MODELS).filter((model) => rows[model]).map((model) => [model, rows[model]] as const).map(([model, row]) => (
             <tr key={model}>
               <td>{DISCOVERY_MODELS[model] ?? model}</td>
               {SEGMENTS.map(([segment]) => (
@@ -102,27 +104,74 @@ function DiscoveryTable({ label, rows, metric }: { label: string; rows: Record<s
   );
 }
 
+type ArmScore = { mean: number; ci95: [number, number] | null };
+type ArmScores = Record<string, ArmScore> & { cases: number };
+type AgentDiscovery = {
+  report: string;
+  cases: { new_customers: number; llm_sample: number };
+  arms: { all_new_customers: Record<string, ArmScores>; llm_sample: Record<string, ArmScores> };
+};
+const AGENT_ARMS: Record<string, string> = {
+  home: "Home: região × horário (ignora a mensagem)",
+  search_pt: "Busca com a culinária em português",
+  search_en: "Busca com a palavra do catálogo (inglês)",
+  search_pt_local: "Busca em português, reordenada pela região",
+  search_en_local: "Busca em inglês, reordenada pela região",
+  agent: "Agente (LLM com ferramentas)",
+  agent_local: "Agente, reordenado pela região",
+};
+
+function AgentTable({ data }: { data: AgentDiscovery }) {
+  const all = data.arms.all_new_customers;
+  const sample = data.arms.llm_sample;
+  const arms = Object.keys(AGENT_ARMS).filter((arm) => all[arm] || sample[arm]);
+  const cell = (score?: ArmScore) => (score ? pct(score.mean) : "—");
+  return (
+    <div className="table-wrap" tabIndex={0} role="region" aria-label="Tabela do experimento do agente">
+      <table>
+        <thead>
+          <tr>
+            <th>Braço</th>
+            <th className="num">Restaurante real entre 5, todos os novos</th>
+            <th className="num">Restaurante real entre 5, amostra com LLM</th>
+            <th className="num">Itens da culinária pedida</th>
+            <th className="num">Sem resposta</th>
+          </tr>
+        </thead>
+        <tbody>
+          {arms.map((arm) => (
+            <tr key={arm}>
+              <td>{AGENT_ARMS[arm]}</td>
+              <td className="num">{cell(all[arm]?.restaurant_hit)}</td>
+              <td className="num">{cell(sample[arm]?.restaurant_hit)}</td>
+              <td className="num">{cell((sample[arm] ?? all[arm])?.cuisine_match)}</td>
+              <td className="num">{cell((sample[arm] ?? all[arm])?.empty)}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+type Retrieval = { products: number; queries: number; report: string; models: Record<string, { all: { ndcg: number } }> };
 type Evaluations = {
-  reports: Evaluation[];
   red_team?: RedTeamSummary[];
   discovery?: Discovery | null;
-  conversation_evaluation?: ConversationEvaluation | null;
-  public_assistant_evaluation?: PublicAssistantEvaluation | null;
+  agent_discovery?: AgentDiscovery | null;
+  retrieval?: Retrieval | null;
   agent_comparison?: { created_at: string; split: "reserved" | "development"; summaries: ComparisonSummary[] } | null;
 };
 
 const LABELS: Record<string, string> = {
-  popularity: "Popularidade global",
-  repeat: "Repetição pessoal",
-  basket_cosine: "Similaridade por cesta",
   lexical: "Busca lexical",
   semantic: "Embeddings E5",
   hybrid: "Busca híbrida",
 };
-const PROVIDERS: Record<string, string> = { gemini: "Gemini 3.1 Flash-Lite", groq: "Groq · gpt-oss-120b", local: "Qwen 2.5 local" };
+const PROVIDERS: Record<string, string> = { gemini: "Gemini 3.1 Flash-Lite", groq: "Groq · gpt-oss-120b" };
 
-function Bars({ report }: { report: Evaluation }) {
-  const value = (model: Record<string, any>) => (report.id === "recommendation" ? model.ndcg : model.all.ndcg);
+function Bars({ report }: { report: Retrieval }) {
+  const value = (model: { all: { ndcg: number } }) => model.all.ndcg;
   const best = Math.max(Number.EPSILON, ...Object.values(report.models).map(value));
   return (
     <div>
@@ -151,9 +200,9 @@ export function LabPage({ meta }: { meta: Meta | null }) {
   const bestAgent = comparison.filter((row) => row.mode === "agent").sort((a, b) => b.pass_rate - a.pass_rate)[0];
   const redTeam = data?.red_team ?? [];
   const risks = Array.from(new Set(redTeam.flatMap((run) => run.by_risk.map((risk) => risk.owasp)))).sort();
-  const recommendation = data?.reports.find((report) => report.id === "recommendation");
   const discovery = data?.discovery;
-  const retrieval = data?.reports.find((report) => report.id === "retrieval");
+  const agentDiscovery = data?.agent_discovery;
+  const retrieval = data?.retrieval;
 
   return (
     <div className="page" style={{ display: "grid", gap: 28 }}>
@@ -184,8 +233,8 @@ export function LabPage({ meta }: { meta: Meta | null }) {
         <div className="kpi">
           <strong>{discovery ? pct(discovery.restaurants.popular_region_slot.cold["hit@10"]) : "—"}</strong>
           <span>
-            restaurante certo entre 10 para cliente novo, com região × horário (cidade:{" "}
-            {discovery ? pct(discovery.restaurants.popular_global.cold["hit@10"]) : "—"})
+            restaurante certo entre 10 para cliente novo, com região × horário (mais pedidos recentes da cidade:{" "}
+            {discovery ? pct(discovery.restaurants.popular_city_recent.cold["hit@10"]) : "—"})
           </span>
         </div>
       </section>
@@ -207,11 +256,34 @@ export function LabPage({ meta }: { meta: Meta | null }) {
           <DiscoveryTable label="Tabela de itens" rows={discovery.items} metric="recall@10" />
           <p className="muted" style={{ fontSize: 12 }}>
             Protocolo congelado antes de rodar.{" "}
-            <a href={REPO + "docs/EXPERIMENT_004.md"} target="_blank" rel="noreferrer">
+            <a href={REPO + "docs/EXPERIMENT_DISCOVERY.md"} target="_blank" rel="noreferrer">
               Experimento 004 <ExternalLink size={12} />
             </a>{" "}
             ·{" "}
             <a href={REPO + "evaluations/results/" + discovery.report} target="_blank" rel="noreferrer">
+              dados brutos <ExternalLink size={12} />
+            </a>
+          </p>
+        </section>
+      )}
+
+      {agentDiscovery && (
+        <section aria-labelledby="agent-title" style={{ display: "grid", gap: 12 }}>
+          <div>
+            <h2 id="agent-title">O agente ajuda o cliente novo a achar o que ele pediu?</h2>
+            <p className="muted">
+              Para cada cliente novo do teste oficial, uma mensagem gerada por código diz a culinária do pedido real
+              (sem nome de item). {count(agentDiscovery.cases.new_customers)} clientes nos braços sem LLM;{" "}
+              {agentDiscovery.cases.llm_sample} numa amostra com o agente, pela cota do provedor.
+            </p>
+          </div>
+          <AgentTable data={agentDiscovery} />
+          <p className="muted" style={{ fontSize: 12 }}>
+            <a href={REPO + "docs/EXPERIMENT_AGENT.md"} target="_blank" rel="noreferrer">
+              Experimento do agente <ExternalLink size={12} />
+            </a>{" "}
+            ·{" "}
+            <a href={REPO + "evaluations/results/" + agentDiscovery.report} target="_blank" rel="noreferrer">
               dados brutos <ExternalLink size={12} />
             </a>
           </p>
@@ -361,26 +433,11 @@ export function LabPage({ meta }: { meta: Meta | null }) {
         <p className="muted" style={{ fontSize: 12 }}>
           O WhatsApp usa o mesmo gateway, fila e worker, com assinatura HMAC; o fluxo foi aprovado de ponta a ponta
           com a API da Meta simulada.{" "}
-          <a href={REPO + "docs/WHATSAPP.md"} target="_blank" rel="noreferrer">
+          <a href={REPO + "docs/CHANNELS.md"} target="_blank" rel="noreferrer">
             Canais <ExternalLink size={12} />
           </a>
         </p>
       </section>
-
-      {recommendation && (
-        <section aria-labelledby="rec-title" className="panel" style={{ display: "grid", gap: 10 }}>
-          <h2 id="rec-title">Recomendação: prever a próxima cesta</h2>
-          <p className="muted">
-            Validação temporal com {count(recommendation.users ?? 0)} clientes reais: treino até o dia 61, validação nos dias
-            62–75. NDCG@10, quanto maior melhor.
-          </p>
-          <Bars report={recommendation} />
-          <p className="muted" style={{ fontSize: 12 }}>
-            Repetir o que a pessoa já pediu é a referência mais forte. O site não identifica clientes, então serve
-            associação entre itens e popularidade.
-          </p>
-        </section>
-      )}
 
       {retrieval && (
         <section aria-labelledby="ret-title" className="panel" style={{ display: "grid", gap: 10 }}>
@@ -395,26 +452,13 @@ export function LabPage({ meta }: { meta: Meta | null }) {
 
       <section className="prose" aria-label="Mais evidências">
         <h2>Outras verificações</h2>
-        {data?.public_assistant_evaluation && (
-          <p>
-            Aceitação no site publicado: {data.public_assistant_evaluation.passed}/{data.public_assistant_evaluation.total}{" "}
-            tarefas com {data.public_assistant_evaluation.model}, {data.public_assistant_evaluation.catalog_items_checked}{" "}
-            itens conferidos no catálogo.
-          </p>
-        )}
-        {data?.conversation_evaluation && (
-          <p>
-            Conversas roteirizadas no modelo local: {data.conversation_evaluation.passed}/
-            {data.conversation_evaluation.episodes} episódios aprovados em {data.conversation_evaluation.profiles} perfis.
-          </p>
-        )}
         <p>
           Contingência: 52/52 cenários com o provedor fora do ar continuam respondendo pelo glossário, com cada item
           conferido. Juízes LLM de relevância foram testados e reprovados na calibração; nenhuma nota deles aprova o
           produto.
         </p>
         <p>
-          <a href={REPO + "docs/AUTOMATED_EVALUATION.md"} target="_blank" rel="noreferrer">
+          <a href={REPO + "docs/EVALUATION.md"} target="_blank" rel="noreferrer">
             Protocolo de avaliação <ExternalLink size={12} />
           </a>{" "}
           ·{" "}

@@ -109,6 +109,8 @@ class History:
         self.pop_region = self._ranked(self.pop_region, ["geohash"], "rank_region")
         self.pop_region_slot = self._ranked(self.pop_region_slot, ["geohash", "slot"], "rank_region_slot")
         self.city_order = list(self.pop_city.sort_values(ascending=False, kind="stable").index)
+        # Fair city baseline: popularity over the last 14 days, which follows restaurants that open and close.
+        self.city_recent_order = list(self.pop_recent.sort_values(ascending=False, kind="stable").index)
         if with_items:
             self._items(items, hist)
 
@@ -125,6 +127,8 @@ class History:
             ["customer_id", "count", "last_day", "vendor_id", "product_id"], ascending=[True, False, False, True, True])
         item_city = lines.groupby(["vendor_id", "product_id"]).size().sort_values(ascending=False, kind="stable")
         self.items_city = list(item_city.index[:200])
+        recent = lines[lines.order_day > self.cutoff - 14].groupby(["vendor_id", "product_id"]).size()
+        self.items_city_recent = list(recent.sort_values(ascending=False, kind="stable").index[:200])
         item_region_slot = lines.groupby(["geohash", "slot", "vendor_id", "product_id"]).size().rename("n").reset_index()
         item_region_slot = item_region_slot.sort_values(["geohash", "slot", "n", "vendor_id", "product_id"],
                                                         ascending=[True, True, False, True, True])
@@ -156,6 +160,7 @@ def top_lists(history, targets, config):
         local_slot = region_slot.get((row.geohash, row.slot), [])
         local = region.get(row.geohash, [])
         lists["popular_global"].append(city[:10])
+        lists["popular_city_recent"].append(fill(history.city_recent_order, city))
         lists["popular_region"].append(fill(local, city))
         lists["popular_region_slot"].append(fill(local_slot, local, city))
         lists["repeat_then_region_slot"].append(fill(visited.get(row.customer_id, []), local_slot, local, city))
@@ -232,6 +237,7 @@ def item_lists(history, targets, ranked_vendors):
         local = history.items_region_slot.get((row.geohash, row.slot), [])
         region = history.items_region.get(row.geohash, [])
         lists["popular_global"].append(history.items_city[:10])
+        lists["popular_city_recent"].append(fill(history.items_city_recent, history.items_city))
         lists["repeat_then_global"].append(fill(own, history.items_city))
         lists["popular_region_slot"].append(fill(local, region, history.items_city))
         lists["repeat_then_region_slot"].append(fill(own, local, region, history.items_city))
@@ -259,7 +265,7 @@ def restaurant_scores(ranked, truth, segments):
     for ranking, target in zip(ranked, truth):
         position = ranking[:10].index(target) + 1 if target in ranking[:10] else None
         rows.append((position is not None, 1 / position if position else 0.0))
-    return summarize(rows, segments, ("hit@10", "mrr@10"))
+    return summarize(rows, segments, ("hit@10", "mrr@10")), np.array(rows, dtype=float)[:, 0]
 
 
 def item_scores(ranked, baskets, segments):
@@ -269,7 +275,7 @@ def item_scores(ranked, baskets, segments):
         dcg = sum(hit / log2(index + 2) for index, hit in enumerate(hits))
         ideal = sum(1 / log2(index + 2) for index in range(min(10, len(basket))))
         rows.append((sum(hits) / len(basket), float(any(hits)), dcg / ideal))
-    return summarize(rows, segments, ("recall@10", "hit@10", "ndcg@10"))
+    return summarize(rows, segments, ("recall@10", "hit@10", "ndcg@10")), np.array(rows, dtype=float)[:, 0]
 
 
 def summarize(rows, segments, names):
@@ -280,6 +286,39 @@ def summarize(rows, segments, names):
         result[segment] = {"customers": int(mask.sum()),
                            **{name: round(float(values[mask, i].mean()), 5) for i, name in enumerate(names)}}
     return result
+
+
+def bootstrap(values, rng, reps=1000, batch=100):
+    """95% percentile interval of the mean, resampling customers with replacement."""
+    if len(values) == 0:
+        return None
+    means = []
+    for _ in range(reps // batch):
+        means.append(values[rng.integers(0, len(values), (batch, len(values)))].mean(axis=1))
+    low, high = np.percentile(np.concatenate(means), [2.5, 97.5])
+    return [round(float(low), 5), round(float(high), 5)]
+
+
+def intervals(per_customer, segments, comparisons, seed):
+    """Per-model intervals by segment, and paired intervals for the differences the conclusions rely on."""
+    rng = np.random.default_rng(seed)
+    masks = {"all": np.ones(len(segments), bool), **{name: segments == name for name in ("cold", "warm_repeat", "warm_new")}}
+    models = {name: {segment: bootstrap(values[mask], rng) for segment, mask in masks.items()}
+              for name, values in per_customer.items()}
+    differences = []
+    for first, second, segment in comparisons:
+        delta = per_customer[first][masks[segment]] - per_customer[second][masks[segment]]
+        differences.append({"model": first, "versus": second, "segment": segment,
+                            "difference": round(float(delta.mean()), 5), "ci95": bootstrap(delta, rng)})
+    return {"method": "bootstrap over customers, 1000 resamples, percentile 95%; differences are paired",
+            "models": models, "differences": differences}
+
+
+RESTAURANT_COMPARISONS = [("popular_region_slot", "popular_city_recent", "cold"), ("popular_region_slot", "ranker", "cold"),
+                          ("ranker", "repeat_then_region_slot", "all"), ("ranker_6_plus_discovery_4", "ranker", "cold")]
+ITEM_COMPARISONS = [("repeat_then_region_slot", "repeat_then_global", "all"),
+                    ("popular_region_slot", "popular_city_recent", "cold"),
+                    ("repeat_then_region_slot", "ranker_items", "all")]
 
 
 def run(stage, config, orders, items, test_orders=None, test_items=None, vendors=None, log=print):
@@ -305,16 +344,26 @@ def run(stage, config, orders, items, test_orders=None, test_items=None, vendors
     frame = candidate_frame(history, eval_targets, lists.pop("_candidates"), vendors)
     by_model = ranked_by_model(model, frame)
     lists["ranker"] = [by_model.get(tid, [])[:10] for tid in eval_targets.tid]
+    # Chance level: 10 restaurants drawn uniformly from those with orders in the history.
+    rng = np.random.default_rng(config["ranker"]["seed"])
+    pool = np.array(history.city_order)
+    lists["random"] = [list(dict.fromkeys(pool[rng.integers(0, len(pool), 12)]))[:10] for _ in eval_targets.tid]
     # Product policy: keep 4 of 10 positions for discovery in the region and time slot.
     lists["ranker_6_plus_discovery_4"] = [fill(ranked[:6], local, ranked) for ranked, local in
                                           zip(lists["ranker"], lists["popular_region_slot"])]
     segments = segment_of(eval_targets, history)
     truth = list(eval_targets.vendor_id)
-    restaurants = {name: restaurant_scores(ranked, truth, segments) for name, ranked in lists.items()}
+    scored = {name: restaurant_scores(ranked, truth, segments) for name, ranked in lists.items()}
+    restaurants = {name: summary for name, (summary, _) in scored.items()}
+    restaurant_ci = intervals({name: values for name, (_, values) in scored.items()}, segments,
+                              RESTAURANT_COMPARISONS, config["ranker"]["seed"])
     coverage = frame.groupby("tid").label.max().reindex(eval_targets.tid, fill_value=0)
     items_ranked = item_lists(history, eval_targets, by_model)
     baskets = list(eval_targets["items"])
-    item_results = {name: item_scores(ranked, baskets, segments) for name, ranked in items_ranked.items()}
+    scored_items = {name: item_scores(ranked, baskets, segments) for name, ranked in items_ranked.items()}
+    item_results = {name: summary for name, (summary, _) in scored_items.items()}
+    item_ci = intervals({name: values for name, (_, values) in scored_items.items()}, segments,
+                        ITEM_COMPARISONS, config["ranker"]["seed"])
     importance = dict(sorted(zip(FEATURES, (int(v) for v in model.feature_importance("gain"))),
                              key=lambda pair: -pair[1]))
     return {
@@ -325,6 +374,7 @@ def run(stage, config, orders, items, test_orders=None, test_items=None, vendors
         "ranker": {"fitted_on_history_end_day": fit_history, "fitted_on_targets_days": fit_targets,
                    "fitted_targets_with_positive": fitted_on, "feature_gain": importance},
         "restaurants": restaurants, "items": item_results,
+        "intervals": {"restaurants_hit@10": restaurant_ci, "items_recall@10": item_ci},
         "runtime_seconds": round(perf_counter() - started, 1),
     }
 

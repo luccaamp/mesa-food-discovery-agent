@@ -18,14 +18,14 @@ apps/web/node_modules
 apps/web/dist
 !evaluations/
 !evaluations/results/
-!evaluations/results/singapore-official-validation-v2.json
+# Only the reports the lab page reads (GET /v1/evaluations).
+!evaluations/results/discovery-test-v1.json
+!evaluations/results/discovery-validation-v1.json
+!evaluations/results/agent-discovery-v1.json
+!evaluations/results/agent-provider-reserved-v1.json
+!evaluations/results/red-team-v2-gemini.json
+!evaluations/results/red-team-v2-groq.json
 !evaluations/results/retrieval-development-v1.json
-!evaluations/results/product-flow-v1.json
-!evaluations/results/product-flow-v2.json
-!evaluations/results/conversation-development-summary-v1.json
-!evaluations/results/conversation-development-summary-v2.json
-!evaluations/results/ai-pipeline-summary-v1.json
-!evaluations/results/public-assistant-summary-v1.json
 **/__pycache__
 **/*.pyc
 **/.env*

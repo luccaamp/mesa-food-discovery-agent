@@ -65,3 +65,31 @@ class RecommendToolAnswerTests(unittest.TestCase):
         city = tools.recommend(lambda arguments: {**result, "context": {**result["context"], "region": None}},
                                AssistantContext())
         self.assertIn("em Singapura de manhã", city.answer)
+
+
+class LocalDemandRankingTests(unittest.TestCase):
+    def test_reorders_by_local_demand_and_keeps_bm25_order_on_ties(self):
+        from meal_discovery.context_popularity import local_demand, rank_by_local_demand
+        demand = local_demand("w21zt", "jantar")
+        busiest = max(demand, key=demand.get)
+        items = [{"vendor_id": "unknown-a"}, {"vendor_id": "unknown-b"}, {"vendor_id": busiest}]
+        ranked = rank_by_local_demand(items, "w21zt", "jantar")
+        self.assertEqual([item["vendor_id"] for item in ranked], [busiest, "unknown-a", "unknown-b"])
+        self.assertEqual(rank_by_local_demand(items, None, "jantar"), items)
+
+    def test_search_tool_widens_the_pool_and_reports_the_ranking_only_with_a_region(self):
+        class Reader:
+            def __init__(self):
+                self.limits = []
+
+            def search(self, params):
+                self.limits.append(params.limit)
+                return {"items": [{"vendor_id": "v", "product_id": "p", "name": "Laksa", "unit_price": 0.003,
+                                   "primary_cuisine": "laksa"}], "total_matches": 1}
+        reader = Reader()
+        local = tools.search(reader, AssistantContext(region="w21zt"), "laksa")
+        plain = tools.search(reader, AssistantContext(), "laksa")
+        self.assertEqual(reader.limits, [50, 6])
+        self.assertEqual(local.trace["arguments"]["ranking"], "local_demand")
+        self.assertEqual(plain.trace["arguments"]["ranking"], "bm25")
+        self.assertIn("sua região", local.answer)

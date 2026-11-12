@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "protocol_version": "discovery-experiment-v1",
-  "protocol_sha256": "c962025a3a77b31fb2e742ae4a8920361a0064d0df265173d3565b8c678d3429",
-  "implementation_sha256": "7cdfe71e436308d823f12e50c39aef6e8124f340486f9903192400b1c2c165cf",
-  "created_at_utc": "2026-11-12T05:23:07+00:00",
+  "protocol_sha256": "abfb9d555b42c7054f78ae126ec33000f329dcc6fc804965d6424cbe9deffb2c",
+  "implementation_sha256": "f0b4b4c5243d99e73a15204a01978a08879a7060f6eabccee0d8e6585ae9bc69",
+  "created_at_utc": "2026-11-12T05:50:22+00:00",
   "data_kind": "official_dhrd",
   "city": "Singapore",
   "source_hashes": {
@@ -69,6 +69,28 @@
         "customers": 90582,
         "hit@10": 0.00011,
         "mrr@10": 1e-05
+      }
+    },
+    "popular_city_recent": {
+      "all": {
+        "customers": 171515,
+        "hit@10": 0.00775,
+        "mrr@10": 0.0025
+      },
+      "cold": {
+        "customers": 36766,
+        "hit@10": 0.00895,
+        "mrr@10": 0.00282
+      },
+      "warm_repeat": {
+        "customers": 44167,
+        "hit@10": 0.00457,
+        "mrr@10": 0.00137
+      },
+      "warm_new": {
+        "customers": 90582,
+        "hit@10": 0.00881,
+        "mrr@10": 0.00292
       }
     },
     "popular_region": {
@@ -159,6 +181,28 @@
         "mrr@10": 0.01917
       }
     },
+    "random": {
+      "all": {
+        "customers": 171515,
+        "hit@10": 0.00128,
+        "mrr@10": 0.00037
+      },
+      "cold": {
+        "customers": 36766,
+        "hit@10": 0.00163,
+        "mrr@10": 0.00042
+      },
+      "warm_repeat": {
+        "customers": 44167,
+        "hit@10": 0.00106,
+        "mrr@10": 0.0003
+      },
+      "warm_new": {
+        "customers": 90582,
+        "hit@10": 0.00125,
+        "mrr@10": 0.00039
+      }
+    },
     "ranker_6_plus_discovery_4": {
       "all": {
         "customers": 171515,
@@ -207,6 +251,32 @@
         "recall@10": 0.00196,
         "hit@10": 0.00252,
         "ndcg@10": 0.0009
+      }
+    },
+    "popular_city_recent": {
+      "all": {
+        "customers": 171515,
+        "recall@10": 0.00238,
+        "hit@10": 0.00356,
+        "ndcg@10": 0.00132
+      },
+      "cold": {
+        "customers": 36766,
+        "recall@10": 0.00275,
+        "hit@10": 0.00378,
+        "ndcg@10": 0.0015
+      },
+      "warm_repeat": {
+        "customers": 44167,
+        "recall@10": 0.002,
+        "hit@10": 0.00294,
+        "ndcg@10": 0.00104
+      },
+      "warm_new": {
+        "customers": 90582,
+        "recall@10": 0.00243,
+        "hit@10": 0.00376,
+        "ndcg@10": 0.00138
       }
     },
     "repeat_then_global": {
@@ -340,6 +410,362 @@
       }
     }
   },
-  "runtime_seconds": 288.1,
+  "intervals": {
+    "restaurants_hit@10": {
+      "method": "bootstrap over customers, 1000 resamples, percentile 95%; differences are paired",
+      "models": {
+        "popular_global": {
+          "all": [
+            6e-05,
+            0.00016
+          ],
+          "cold": [
+            3e-05,
+            0.00027
+          ],
+          "warm_repeat": [
+            2e-05,
+            0.0002
+          ],
+          "warm_new": [
+            4e-05,
+            0.00019
+          ]
+        },
+        "popular_city_recent": {
+          "all": [
+            0.00733,
+            0.00816
+          ],
+          "cold": [
+            0.00794,
+            0.00993
+          ],
+          "warm_repeat": [
+            0.00392,
+            0.00523
+          ],
+          "warm_new": [
+            0.00822,
+            0.0094
+          ]
+        },
+        "popular_region": {
+          "all": [
+            0.05336,
+            0.05547
+          ],
+          "cold": [
+            0.05589,
+            0.06098
+          ],
+          "warm_repeat": [
+            0.06281,
+            0.06745
+          ],
+          "warm_new": [
+            0.04616,
+            0.04895
+          ]
+        },
+        "popular_region_slot": {
+          "all": [
+            0.10317,
+            0.10595
+          ],
+          "cold": [
+            0.09936,
+            0.1054
+          ],
+          "warm_repeat": [
+            0.12186,
+            0.12781
+          ],
+          "warm_new": [
+            0.09365,
+            0.09735
+          ]
+        },
+        "repeat_then_region_slot": {
+          "all": [
+            0.30838,
+            0.31264
+          ],
+          "cold": [
+            0.09922,
+            0.10537
+          ],
+          "warm_repeat": [
+            0.98415,
+            0.98646
+          ],
+          "warm_new": [
+            0.0645,
+            0.06764
+          ]
+        },
+        "ranker": {
+          "all": [
+            0.31421,
+            0.31859
+          ],
+          "cold": [
+            0.08671,
+            0.09256
+          ],
+          "warm_repeat": [
+            0.98567,
+            0.98784
+          ],
+          "warm_new": [
+            0.07977,
+            0.08326
+          ]
+        },
+        "random": {
+          "all": [
+            0.00113,
+            0.00146
+          ],
+          "cold": [
+            0.00125,
+            0.0021
+          ],
+          "warm_repeat": [
+            0.00079,
+            0.00136
+          ],
+          "warm_new": [
+            0.00102,
+            0.00149
+          ]
+        },
+        "ranker_6_plus_discovery_4": {
+          "all": [
+            0.30969,
+            0.31396
+          ],
+          "cold": [
+            0.09566,
+            0.1017
+          ],
+          "warm_repeat": [
+            0.9575,
+            0.96115
+          ],
+          "warm_new": [
+            0.08084,
+            0.08449
+          ]
+        }
+      },
+      "differences": [
+        {
+          "model": "popular_region_slot",
+          "versus": "popular_city_recent",
+          "segment": "cold",
+          "difference": 0.09337,
+          "ci95": [
+            0.09002,
+            0.09699
+          ]
+        },
+        {
+          "model": "popular_region_slot",
+          "versus": "ranker",
+          "segment": "cold",
+          "difference": 0.01273,
+          "ci95": [
+            0.00963,
+            0.01583
+          ]
+        },
+        {
+          "model": "ranker",
+          "versus": "repeat_then_region_slot",
+          "segment": "all",
+          "difference": 0.00585,
+          "ci95": [
+            0.00464,
+            0.00698
+          ]
+        },
+        {
+          "model": "ranker_6_plus_discovery_4",
+          "versus": "ranker",
+          "segment": "cold",
+          "difference": 0.00908,
+          "ci95": [
+            0.00669,
+            0.01134
+          ]
+        }
+      ]
+    },
+    "items_recall@10": {
+      "method": "bootstrap over customers, 1000 resamples, percentile 95%; differences are paired",
+      "models": {
+        "popular_global": {
+          "all": [
+            0.00186,
+            0.00226
+          ],
+          "cold": [
+            0.00168,
+            0.00254
+          ],
+          "warm_repeat": [
+            0.00177,
+            0.00258
+          ],
+          "warm_new": [
+            0.00169,
+            0.00221
+          ]
+        },
+        "popular_city_recent": {
+          "all": [
+            0.00217,
+            0.00259
+          ],
+          "cold": [
+            0.00226,
+            0.00324
+          ],
+          "warm_repeat": [
+            0.00161,
+            0.00242
+          ],
+          "warm_new": [
+            0.00215,
+            0.00271
+          ]
+        },
+        "repeat_then_global": {
+          "all": [
+            0.14356,
+            0.1468
+          ],
+          "cold": [
+            0.00172,
+            0.00256
+          ],
+          "warm_repeat": [
+            0.55624,
+            0.56419
+          ],
+          "warm_new": [
+            0.00073,
+            0.00111
+          ]
+        },
+        "popular_region_slot": {
+          "all": [
+            0.02757,
+            0.02908
+          ],
+          "cold": [
+            0.02719,
+            0.03045
+          ],
+          "warm_repeat": [
+            0.03538,
+            0.03872
+          ],
+          "warm_new": [
+            0.02295,
+            0.02475
+          ]
+        },
+        "repeat_then_region_slot": {
+          "all": [
+            0.15532,
+            0.15859
+          ],
+          "cold": [
+            0.0272,
+            0.03037
+          ],
+          "warm_repeat": [
+            0.55724,
+            0.56561
+          ],
+          "warm_new": [
+            0.01127,
+            0.01259
+          ]
+        },
+        "repeat_6_plus_discovery_4": {
+          "all": [
+            0.14304,
+            0.14612
+          ],
+          "cold": [
+            0.02723,
+            0.03029
+          ],
+          "warm_repeat": [
+            0.50083,
+            0.50941
+          ],
+          "warm_new": [
+            0.01489,
+            0.01635
+          ]
+        },
+        "ranker_items": {
+          "all": [
+            0.15174,
+            0.15483
+          ],
+          "cold": [
+            0.01306,
+            0.01518
+          ],
+          "warm_repeat": [
+            0.56208,
+            0.57035
+          ],
+          "warm_new": [
+            0.00773,
+            0.0088
+          ]
+        }
+      },
+      "differences": [
+        {
+          "model": "repeat_then_region_slot",
+          "versus": "repeat_then_global",
+          "segment": "all",
+          "difference": 0.01185,
+          "ci95": [
+            0.01137,
+            0.01235
+          ]
+        },
+        {
+          "model": "popular_region_slot",
+          "versus": "popular_city_recent",
+          "segment": "cold",
+          "difference": 0.02603,
+          "ci95": [
+            0.02453,
+            0.02762
+          ]
+        },
+        {
+          "model": "repeat_then_region_slot",
+          "versus": "ranker_items",
+          "segment": "all",
+          "difference": 0.0038,
+          "ci95": [
+            0.00294,
+            0.00462
+          ]
+        }
+      ]
+    }
+  },
+  "runtime_seconds": 369.5,
   "limitations": "Offline replay of historical choices: it measures whether the real next order would have been shown, not conversion, revenue or satisfaction. Restaurants the customer never saw may still have been ordered elsewhere in the app."
 }

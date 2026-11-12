@@ -9,7 +9,16 @@ from meal_discovery.dataset import open_dataset
 from meal_discovery.benchmark import validate_singapore
 from meal_discovery.recommendation import Recommender
 from meal_discovery.singapore import parse_day, prepare_official_singapore, prepare_singapore
-from scripts.legacy.fetch_nearbite_sg import FILES
+
+# Column contract of the Singapore CSV layout used to build synthetic test fixtures.
+FILES = {
+    "vendors_sg_clean.csv": {"columns": ["Unnamed: 0", "vendor_id", "chain_id", "geohash", "primary_cuisine",
+                                         "latitude", "longitude"]},
+    "products_sg.csv": {"columns": ["", "vendor_id", "product_id", "name", "unit_price"]},
+    "orders_sg_train_clean.csv": {"columns": ["Unnamed: 0", "customer_id", "geohash", "order_id", "vendor_id",
+                                              "product_id", "day_of_week", "order_time", "order_day", "latitude",
+                                              "longitude"]},
+}
 
 
 def source_fixture(root):

@@ -41,7 +41,7 @@ def main() -> int:
     official.add_argument("--output", type=Path, required=True)
     validate = commands.add_parser("validate-singapore", help="Run the frozen validation protocol without evaluating reserved test days")
     validate.add_argument("--database", type=Path, required=True)
-    validate.add_argument("--protocol", type=Path, default=Path("configs/singapore-experiment-v1.json"))
+    validate.add_argument("--protocol", type=Path, default=Path("configs/singapore-official-experiment-v2.json"))
     validate.add_argument("--output", type=Path, required=True)
     evaluate = commands.add_parser("benchmark", help="Evaluate fixed-origin next-basket recommendation")
     evaluate.add_argument("--database", type=Path, required=True)
@@ -61,36 +61,9 @@ def main() -> int:
     search.add_argument("--min-price", type=float)
     search.add_argument("--max-price", type=float)
     search.add_argument("--limit", type=int, default=10)
-    semantic = commands.add_parser("build-semantic", help="Build a frozen real-catalog semantic pilot using local pinned E5")
-    semantic.add_argument("--index", type=Path, required=True)
-    semantic.add_argument("--output", type=Path, required=True)
-    semantic.add_argument("--protocol", type=Path, default=Path("configs/semantic-pilot-v1.json"))
-    semantic.add_argument("--model-dir", type=Path, default=Path("models/e5-small-onnx-v1"))
-    retrieval = commands.add_parser("search-semantic", help="Compare lexical, semantic or hybrid retrieval on the real pilot subset")
-    retrieval.add_argument("--index", type=Path, required=True)
-    retrieval.add_argument("--model-dir", type=Path, default=Path("models/e5-small-onnx-v1"))
-    retrieval.add_argument("--query", required=True)
-    retrieval.add_argument("--mode", choices=("lexical", "semantic", "hybrid"), default="semantic")
-    retrieval.add_argument("--cuisine")
-    retrieval.add_argument("--min-price", type=float)
-    retrieval.add_argument("--max-price", type=float)
-    retrieval.add_argument("--limit", type=int, default=10)
     args = parser.parse_args()
     try:
-        if args.command in {"build-semantic", "search-semantic"}:
-            try:
-                from .semantic import SemanticSearch, build_semantic
-            except ImportError as error:
-                raise ValueError("Install the semantic extra: pip install -e '.[semantic]'") from error
-            if args.command == "build-semantic":
-                result = build_semantic(args.index, args.output, args.protocol, args.model_dir,
-                                        progress=lambda message: print(message, file=sys.stderr, flush=True))
-            else:
-                engine = SemanticSearch(args.index, args.model_dir)
-                result = engine.search(args.query, mode=args.mode, cuisine=args.cuisine,
-                                       min_price=args.min_price, max_price=args.max_price, limit=args.limit)
-            print(json.dumps(result, ensure_ascii=False, indent=2, allow_nan=False))
-        elif args.command == "build-catalog":
+        if args.command == "build-catalog":
             result = build_catalog(args.database, args.output)
             print(json.dumps(result, ensure_ascii=False, indent=2))
         elif args.command == "search-catalog":

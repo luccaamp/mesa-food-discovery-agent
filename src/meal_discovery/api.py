@@ -257,68 +257,40 @@ def create_app(index: Path | None = None) -> FastAPI:
                                 "cooldown": cooldown} if remote else None,
                 "providers": providers,
                 "openai_configured": any(entry["provider"] == "openai" and entry["configured"] for entry in providers)},
-                "recommendations_ready": application.state.serving_index.is_file(),
-                "semantic_status": "experimental_pilot_not_used_by_product"}
+                "recommendations_ready": application.state.serving_index.is_file()}
 
     @application.get("/v1/evaluations", tags=["evaluations"])
     def evaluations():
+        """The results the lab page shows; each one links to its raw report in evaluations/results."""
         directory = Path(os.environ.get("MEAL_EVALUATIONS_DIR", str(Path(__file__).resolve().parents[2] / "evaluations/results")))
-        reports = []
-        for identifier, filename in (("recommendation", "singapore-official-validation-v2.json"),
-                                     ("retrieval", "retrieval-development-v1.json")):
-            path = directory / filename
-            if not path.is_file():
-                continue
-            report = json.loads(path.read_text(encoding="utf-8"))
-            if identifier == "recommendation":
-                reports.append({"id": identifier, "kind": "offline_next_basket_validation", "users": report["evaluation"]["users"],
-                                "protocol": report["protocol"], "models": report["models"], "limitations": report["limitations"]})
-            else:
-                reports.append({"id": identifier, "kind": report["kind"], "products": report["retrieval_manifest"]["indexed_products"],
-                                "queries": len(report["queries"]), "models": report["summary"], "limitations": report["limitations"]})
-        assistant_report = None
-        path = next((directory / name for name in ("product-flow-v2.json", "product-flow-v1.json") if (directory / name).is_file()), directory / "product-flow-v1.json")
-        if path.is_file():
-            recorded = json.loads(path.read_text(encoding="utf-8"))
-            assistant_report = {key: recorded[key] for key in (
-                "kind", "passed", "total", "catalog_items_checked", "llm_calls", "tokens", "latency_ms", "limitations")}
-            assistant_report["model"] = recorded["local_model_configuration"]["model"]
-            assistant_report["report_version"] = path.stem
-            assistant_report["live_gemini_tested"] = False
-        conversation_report = None
-        path = next((directory / name for name in ("conversation-development-summary-v2.json", "conversation-development-summary-v1.json")
-                     if (directory / name).is_file()), directory / "conversation-development-summary-v1.json")
-        if path.is_file():
-            conversation_report = json.loads(path.read_text(encoding="utf-8"))
-        ai_report = None
-        path = directory / "ai-pipeline-summary-v1.json"
-        if path.is_file():
-            ai_report = json.loads(path.read_text(encoding="utf-8"))
-        public_report = None
-        path = next((directory / name for name in ("public-assistant-summary-v3.json", "public-assistant-summary-v2.json", "public-assistant-summary-v1.json")
-                     if (directory / name).is_file()), directory / "public-assistant-summary-v1.json")
-        if path.is_file():
-            public_report = json.loads(path.read_text(encoding="utf-8"))
-        relevance_report = None
-        path = next((directory / name for name in ("relevance-decision-v2.json", "relevance-decision-v1.json")
-                     if (directory / name).is_file()), directory / "relevance-decision-v1.json")
-        if path.is_file():
-            relevance_report = json.loads(path.read_text(encoding="utf-8"))
-        agent_comparison = None
-        # Held-out contracts first: they were frozen before any tuning of the agent.
-        for name, split in (("agent-provider-reserved-v1.json", "reserved"), ("agent-provider-comparison-v1.json", "development")):
+
+        def load(name):
             path = directory / name
-            if path.is_file():
-                recorded = json.loads(path.read_text(encoding="utf-8"))
-                agent_comparison = {"created_at": recorded["created_at"], "split": split, "summaries": recorded["summaries"]}
+            return json.loads(path.read_text(encoding="utf-8")) if path.is_file() else None
+
+        discovery = None
+        # Experiment 004: the official test run once it exists, otherwise the validation run.
+        for stage in ("test", "validation"):
+            recorded = load(f"discovery-{stage}-v1.json")
+            if recorded:
+                discovery = {"stage": recorded["stage"], "report": f"discovery-{stage}-v1.json",
+                             "created_at": recorded["created_at_utc"], "targets": recorded["targets"],
+                             "restaurants": recorded["restaurants"], "items": recorded["items"],
+                             "intervals": recorded.get("intervals")}
                 break
+        agent_discovery = load("agent-discovery-v1.json")
+        if agent_discovery:
+            agent_discovery = {key: agent_discovery[key] for key in ("arms", "cases", "provider", "model", "created_at_utc")
+                               if key in agent_discovery} | {"report": "agent-discovery-v1.json"}
+        agent_comparison = None
+        recorded = load("agent-provider-reserved-v1.json")
+        if recorded:  # held-out contracts, frozen before any tuning of the agent
+            agent_comparison = {"created_at": recorded["created_at"], "split": "reserved", "summaries": recorded["summaries"]}
         red_team = []
-        # Current suite version only; v1 runs stay in the repository with their documented false positive.
         for provider in ("gemini", "groq"):
-            path = directory / f"red-team-v2-{provider}.json"
-            if not path.is_file():
+            recorded = load(f"red-team-v2-{provider}.json")
+            if not recorded:
                 continue
-            recorded = json.loads(path.read_text(encoding="utf-8"))
             for summary in recorded["summaries"]:
                 by_risk = {}
                 for row in recorded["cases"].get(summary["provider"], []):
@@ -327,22 +299,15 @@ def create_app(index: Path | None = None) -> FastAPI:
                     risk["passed"] += bool(row["passed"])
                 red_team.append({**{k: summary[k] for k in ("provider", "model", "cases", "passed", "model_exercised",
                                                             "model_fallbacks")},
-                                 "created_at": recorded["created_at"], "report": path.name,
+                                 "created_at": recorded["created_at"], "report": f"red-team-v2-{provider}.json",
                                  "by_risk": sorted(by_risk.values(), key=lambda risk: risk["owasp"])})
-        discovery = None
-        # Experiment 004: the official test run once it exists, otherwise the validation run.
-        for stage in ("test", "validation"):
-            path = directory / f"discovery-{stage}-v1.json"
-            if path.is_file():
-                recorded = json.loads(path.read_text(encoding="utf-8"))
-                discovery = {"stage": recorded["stage"], "report": path.name, "created_at": recorded["created_at_utc"],
-                             "targets": recorded["targets"], "restaurants": recorded["restaurants"],
-                             "items": recorded["items"]}
-                break
-        return {"schema_version": 1, "reports": reports, "assistant_evaluation": assistant_report,
-                "agent_comparison": agent_comparison, "red_team": red_team, "discovery": discovery,
-                "conversation_evaluation": conversation_report, "ai_evaluation": ai_report,
-                "public_assistant_evaluation": public_report, "relevance_evaluation": relevance_report,
+        retrieval = load("retrieval-development-v1.json")
+        if retrieval:  # negative result: embeddings did not beat lexical search
+            retrieval = {"products": retrieval["retrieval_manifest"]["indexed_products"],
+                         "queries": len(retrieval["queries"]), "models": retrieval["summary"],
+                         "report": "retrieval-development-v1.json"}
+        return {"schema_version": 2, "discovery": discovery, "agent_discovery": agent_discovery,
+                "agent_comparison": agent_comparison, "red_team": red_team, "retrieval": retrieval,
                 "official_test_evaluated": bool(discovery and discovery["stage"] == "final_test")}
 
     @application.get("/v1/catalog/items/{vendor_id}/{product_id}", response_model=ItemResult,

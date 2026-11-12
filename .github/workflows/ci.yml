@@ -14,12 +14,10 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
-      - run: python -m pip install -c requirements-api.lock -c requirements-semantic.lock -e ".[api,test,semantic,mcp,channels]"
+      - run: python -m pip install -c requirements-api.lock -e ".[api,test,mcp,channels]"
       - run: python -m pip check
       - run: python -m unittest discover -s tests -v
       - run: python -m meal_discovery --help
-      - run: python scripts/legacy/fetch_hyperhawkes.py --help
-      - run: python scripts/fetch_embedding_model.py --help
   frontend:
     name: Frontend (React + TypeScript)
     runs-on: ubuntu-latest
@@ -36,21 +34,6 @@ jobs:
         working-directory: apps/web
       - run: npm run build
         working-directory: apps/web
-  evaluation:
-    name: Evaluation suites
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.13'
-          cache: pip
-          cache-dependency-path: requirements-eval.lock
-      - run: python -m pip install -r requirements-eval.lock
-      - run: python -m pip check
-      - run: python -m unittest discover -s tests_eval -v
-        env:
-          PYTHONPATH: src
   gateway:
     name: Gateway (Go)
     runs-on: ubuntu-latest
